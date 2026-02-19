@@ -4,7 +4,7 @@
 
 Index the project's wiki or documentation in `qmd` so it can be searched in later phases.
 
-> **Command reference:** Load `Cookbook/Qmd.md` for full qmd syntax (install, collection setup, embed commands).
+> **Command reference:** Load `cookbook/qmd/cli.md` for qmd collection setup, context, and embed commands.
 
 ## Setup
 

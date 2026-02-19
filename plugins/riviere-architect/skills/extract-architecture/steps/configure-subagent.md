@@ -153,10 +153,10 @@ variable and its target domain:
 ```markdown
 ## HTTP Clients
 
-| Client Pattern    | Target Domain | Internal/External |
-| ----------------- | ------------- | ----------------- |
-| `ordersApi`       | orders        | internal          |
-| `stripeClient`    | Stripe        | external          |
+| Client Pattern | Target Domain | Internal/External |
+| -------------- | ------------- | ----------------- |
+| `ordersApi`    | orders        | internal          |
+| `stripeClient` | Stripe        | external          |
 ```
 
 **Common patterns:** `*Client`, `*ApiClient`, `*Api`, `*Gateway`, `*Sdk`,

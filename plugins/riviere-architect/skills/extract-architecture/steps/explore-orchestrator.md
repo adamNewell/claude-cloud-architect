@@ -157,13 +157,13 @@ A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 [Conventions that differ per repository — format: "repo-name: override description"]
 
 ## Entry Points
-| Type                | Location | Pattern |
-| ------------------- | -------- | ------- |
-| API routes          |          |         |
-| Event handlers      |          |         |
-| MQTT subscriptions  |          |         |
-| UI pages            |          |         |
-| ...                 |          |         |
+| Type               | Location | Pattern |
+| ------------------ | -------- | ------- |
+| API routes         |          |         |
+| Event handlers     |          |         |
+| MQTT subscriptions |          |         |
+| UI pages           |          |         |
+| ...                |          |         |
 
 ## Notes
 [Any other observations]

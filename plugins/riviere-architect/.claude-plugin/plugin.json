@@ -13,5 +13,8 @@
     "diagrams",
     "adr"
   ],
-  "hooks": "./hooks/hooks.json"
+  "agents": "./agents/",
+  "commands": "./commands/",
+  "hooks": "./hooks/hooks.json",
+  "license": "MIT"
 }

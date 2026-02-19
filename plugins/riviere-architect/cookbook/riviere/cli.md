@@ -26,13 +26,13 @@ riviere extract <command>   # extract components        → cookbook/RiviereExtr
 
 ## Phase Mapping Quick Reference
 
-| Phase              | Commands                                                                                       | Cookbook            |
-| ------------------ | ---------------------------------------------------------------------------------------------- | ------------------- |
-| Extract  | `init`, `add-source`, `add-domain`, `define-custom-type`, `add-component`, `component-summary` | `RiviereBuilder.md` |
-| Connect     | `component-checklist`, `link`, `link-http`, `link-external`                                    | `RiviereBuilder.md` |
-| Annotate   | `component-checklist --type DomainOp`, `enrich`                                                | `RiviereBuilder.md` |
-| Validate | `check-consistency`, `validate`, `finalize`                                                    | `RiviereBuilder.md` |
-| Any phase          | `query domains`, `query components`, `query trace`, `query orphans`                            | `RiviereQuery.md`   |
+| Phase     | Commands                                                                                       | Cookbook     |
+| --------- | ---------------------------------------------------------------------------------------------- | ------------ |
+| Extract   | `init`, `add-source`, `add-domain`, `define-custom-type`, `add-component`, `component-summary` | `builder.md` |
+| Connect   | `component-checklist`, `link`, `link-http`, `link-external`                                    | `builder.md` |
+| Annotate  | `component-checklist --type DomainOp`, `enrich`                                                | `builder.md` |
+| Validate  | `check-consistency`, `validate`, `finalize`                                                    | `builder.md` |
+| Any phase | `query domains`, `query components`, `query trace`, `query orphans`                            | `query.md`   |
 
 ## Concurrency Rules
 

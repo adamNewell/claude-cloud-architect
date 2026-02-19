@@ -206,15 +206,18 @@ bun skills/riviere-architect/tools/generate-link-candidates.ts {REPO_PATHS...}
 ```
 
 This reads all `extract-*.jsonl` files from Extract and produces `.riviere/work/link-candidates.jsonl` — high-confidence links derived from:
+
 - `subscribedEvents` fields on EventHandlers (zero source reading needed)
 - Named component imports found in caller source files
 
 **Apply pre-populated candidates:**
 
 Read `.riviere/work/link-candidates.jsonl`. For each entry call:
+
 ```bash
 riviere builder link --from {from} --to {to} --link-type {linkType}
 ```
+
 sequentially. These are pre-validated HIGH confidence links — apply them without additional source verification.
 
 **Generate checklist for remaining work:**
@@ -307,7 +310,7 @@ Present the final summary:
 
 ## Graph Statistics
 | Metric              | Count |
-|---------------------|-------|
+| ------------------- | ----- |
 | Domains             | N     |
 | APIs                | N     |
 | UseCases            | N     |

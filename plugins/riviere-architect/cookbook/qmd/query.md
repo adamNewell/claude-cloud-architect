@@ -1,62 +1,8 @@
-# Cookbook: qmd
+# Cookbook: qmd query
 
-Complete command reference for `qmd` — on-device hybrid search engine for markdown documentation. Used in **Wiki Build** to index and search the project wiki.
+Search and document retrieval commands for `qmd`. Used in **Explore** to discover architecture from wiki docs.
 
-## Installation
-
-```bash
-npm install -g @tobilu/qmd
-# or
-bun install -g @tobilu/qmd
-```
-
-Verify: `qmd --version`
-
-## Collection Management
-
-```bash
-# Add a directory as a collection
-qmd collection add ./wiki --name wiki
-qmd collection add ./docs --name docs
-qmd collection add . --name project          # current directory
-qmd collection add ~/path/to/docs --name docs --mask "**/*.md"  # custom glob
-
-# List all collections
-qmd collection list
-
-# Remove / rename
-qmd collection remove wiki
-qmd collection rename wiki project-wiki
-```
-
-## Context (Critical for Quality)
-
-Context adds descriptive metadata — search results carry this context, making LLM selection far more accurate.
-
-```bash
-# Add context to a collection
-qmd context add qmd://wiki "Project wiki — architecture, components, decisions"
-qmd context add qmd://docs "Project documentation and guides"
-
-# Add context from inside the directory
-cd ./wiki && qmd context add "GitHub wiki for the project"
-
-# Add global context
-qmd context add / "Knowledge base for my-project"
-
-# List / remove
-qmd context list
-qmd context rm qmd://wiki/old
-```
-
-## Generate Embeddings
-
-Must run after adding collections before semantic search works:
-
-```bash
-qmd embed            # embed all indexed documents
-qmd embed -f         # force re-embed everything
-```
+---
 
 ## Search Commands
 
@@ -84,6 +30,8 @@ qmd query "architecture decisions rationale"
 qmd query "deployment infrastructure cloud"
 ```
 
+---
+
 ## Search Options
 
 ```bash
@@ -97,6 +45,8 @@ qmd query "deployment infrastructure cloud"
 --md                  # markdown output
 ```
 
+---
+
 ## Score Interpretation
 
 | Score   | Meaning             | Action                   |
@@ -105,6 +55,8 @@ qmd query "deployment infrastructure cloud"
 | 0.5–0.8 | Moderately relevant | Skim for key details     |
 | 0.2–0.5 | Somewhat relevant   | Check if missing context |
 | 0.0–0.2 | Low relevance       | Skip                     |
+
+---
 
 ## Document Retrieval
 
@@ -126,6 +78,8 @@ qmd ls wiki
 qmd ls wiki/subfolder
 ```
 
+---
+
 ## Agent-Optimized Output Patterns
 
 ```bash
@@ -140,35 +94,4 @@ qmd get wiki/architecture.md --full
 
 # Batch content load
 qmd multi-get "wiki/*.md" --json
-```
-
-## Maintenance
-
-```bash
-qmd status           # index health and collections
-qmd update           # re-index all collections
-qmd update --pull    # re-index with git pull first
-qmd cleanup          # remove orphaned data
-```
-
-## Wiki Build Workflow Pattern
-
-```bash
-# 1. Add wiki/docs as collection
-qmd collection add ./wiki --name wiki
-qmd context add qmd://wiki "Project wiki — architecture, components, decisions"
-qmd embed
-
-# 2. Architecture discovery queries
-qmd query "architecture overview" --json -n 5
-qmd query "domains components services" --json -n 10
-qmd query "data flow integrations" --json -n 5
-qmd query "technology stack" --json -n 5
-qmd query "architecture decisions why" --json -n 5
-
-# 3. Read high-scoring pages in full
-qmd get wiki/architecture.md --full
-qmd multi-get "wiki/adr-*.md" --json
-
-# 4. Save findings to .riviere/config/discovery-notes.md
 ```

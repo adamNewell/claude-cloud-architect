@@ -78,8 +78,8 @@ Record decisions. Accepted types are appended to `component-definitions.md` as a
 ```markdown
 ## Custom Types
 
-| Name | Description | Required Properties | Optional Properties |
-|------|-------------|---------------------|---------------------|
+| Name          | Description               | Required Properties                         | Optional Properties                    |
+| ------------- | ------------------------- | ------------------------------------------- | -------------------------------------- |
 | BackgroundJob | Scheduled background task | schedule:string:Cron expression or interval | timeout:number:Max run time in seconds |
 ```
 
