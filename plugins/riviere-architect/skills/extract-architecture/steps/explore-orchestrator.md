@@ -116,32 +116,19 @@ Two artifacts produced by this step:
 
 @`.riviere/config/domains.md`
 
-Domain types:
-- `domain` — Core business domain (orders, inventory, shipping)
-- `bff` — Backend-for-frontend, aggregates calls
-- `ui` — User interface layer
-- `other` — Infrastructure, shared libraries
-
 ## Module Inference
 
-Signal priority chain — agents try signals in order and use the first match. Each inferred
-module is tagged with confidence: `[HIGH]`, `[MEDIUM]`, `[LOW]`, or `[?]` (ambiguous).
-
-| Priority | Signal                                          | Confidence | Notes                                                     |
-| -------- | ----------------------------------------------- | ---------- | --------------------------------------------------------- |
-| 1        | [Code-level signal discovered in this codebase] | HIGH       | e.g., package declaration, namespace, `@Module` decorator |
-| 2        | Path rule per component type (see below)        | MEDIUM     | May differ by component type                              |
-| 3        | Class/file name prefix or suffix                | LOW        | e.g., `CheckoutOrderUseCase` → checkout                   |
-| 4        | Domain name as module                           | LOW        | Use only for single-module domains                        |
-| —        | No signal matches                               | [?]        | Flag for review — do not guess                            |
+| Priority | Signal                                          | Confidence | Notes |
+| -------- | ----------------------------------------------- | ---------- | ----- |
+| 1        | [Code-level signal discovered in this codebase] | HIGH       |       |
+| 2        | [Path rule per component type]                  | MEDIUM     |       |
+| 3        | [Class/file name prefix or suffix]              | LOW        |       |
+| 4        | Domain name as module                           | LOW        |       |
 
 **Path rules by component type:**
 | Component Type | Path Rule                | Example                                 |
 | -------------- | ------------------------ | --------------------------------------- |
 | [type]         | [nth segment under root] | `src/orders/checkout/Foo.ts` → checkout |
-
-**Cross-check:** After inferring a module, verify it is consistent with the component name.
-A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 
 ## Frameworks
 | Category        | Name | Version |
@@ -149,7 +136,6 @@ A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 | Web framework   |      |         |
 | Event/messaging |      |         |
 | Database        |      |         |
-| ...             |      |         |
 
 ## Conventions
 - File naming: [pattern]
@@ -163,17 +149,25 @@ A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 [Conventions that differ per repository — format: "repo-name: override description"]
 
 ## Entry Points
-| Type               | Location | Pattern |
-| ------------------ | -------- | ------- |
-| API routes         |          |         |
-| Event handlers     |          |         |
-| MQTT subscriptions |          |         |
-| UI pages           |          |         |
-| ...                |          |         |
-
-## Notes
-[Any other observations]
+| Type           | Location | Pattern |
+| -------------- | -------- | ------- |
+| API routes     |          |         |
+| Event handlers |          |         |
 ```
+
+## Module Inference Reference
+
+When filling the Module Inference section above, prioritize signals in this order:
+
+1. **Code Signal (High Confidence):** Explicit declarations like `@Module` decorators, package.json `name` fields (in monorepos), or namespace declarations.
+2. **Path Rule (Medium Confidence):** Directory structure mapping.
+   - Example: `src/orders/checkout/` -> `checkout` module.
+   - Rule: "2nd directory segment after src/"
+3. **Name Convention (Low Confidence):** Prefixes/suffixes.
+   - Example: `CheckoutOrderUseCase` -> `checkout` module.
+4. **Fallback (Low Confidence):** If no module structure exists, map to the domain name.
+
+**Cross-check:** A `CheckoutOrder` class inferred to belong to the `shipping` module is a signal to re-examine your rules.
 
 ## Error Recovery
 

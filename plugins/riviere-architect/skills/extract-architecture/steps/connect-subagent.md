@@ -36,6 +36,19 @@ Each line must be one JSON object in one of these forms:
 {"command":"link-external","from":"core:mod:usecase:sync-payments","targetName":"Stripe","targetDomain":"payments","targetUrl":"https://api.stripe.com","linkType":"sync"}
 ```
 
+## Link Type Decision Matrix
+
+When tracing a dependency, use this table to choose the correct command:
+
+| Scenario                                                                                                                         | Command         | Example                                          |
+| -------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------ |
+| **Internal Code Reference** (Same Repo)<br>Direct import, function call, class usage.                                            | `link`          | `UserService` imports `UserRepository`           |
+| **Internal HTTP Call** (Same or Different Repo)<br>Call to an API endpoint managed within this system (even if in another repo). | `link-http`     | `Frontend` calls `POST /api/users`               |
+| **External System Call**<br>Call to a third-party API (Stripe, AWS, Twilio) or a system outside the graph scope.                 | `link-external` | `PaymentService` calls `https://api.stripe.com`  |
+| **Message/Event Publication**<br>Publishing to a queue or topic (target is the Event component).                                 | `link`          | `OrderService` publishes to `OrderCreated` event |
+
+**Note on HTTP:** If you see an HTTP client wrapper (e.g., `UserApiClient`) calling an endpoint, link the *caller* (e.g., `OrderUseCase`) to the *endpoint* (`POST /users`) using `link-http`. Do not link the client wrapper itself unless it has significant logic.
+
 ## Process
 
 **Prefix every message with:** `[Staging step-4 links and marking checklist items done]`

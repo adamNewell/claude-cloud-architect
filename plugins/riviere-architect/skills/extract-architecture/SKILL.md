@@ -36,17 +36,27 @@ Load only the cookbook you need — do not load all unless working across tools.
 
 Run all tools from the **skill root** (the directory containing SKILL.md), not the target repository root.
 
-| Tool                                 | Purpose                                                                                                                               | Key flags / notes                                                                                                   |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `tools/init-graph.ts`                | Initialize graph from domains.md and component-definitions.md; runs add-source, add-domain, define-custom-type CLI calls sequentially | `--dry-run` (preview without executing), `--source-url repo=url` (supply GitHub URL if git remote resolution fails) |
-| `tools/replay-staged-links.ts`       | Execute staged link JSONL sequentially; reads `.riviere/work/link-staged-*.jsonl`                                                     | Outputs `.riviere/work/link-replay-report.json` with pass/fail per command                                          |
-| `tools/replay-staged-enrichments.ts` | Execute staged enrichment JSONL sequentially; reads `.riviere/work/annotate-staged-*.jsonl`                                           | Outputs `.riviere/work/enrich-replay-report.json` with pass/fail per command                                        |
-| `tools/replay-staged-components.ts`  | Execute staged component JSONL sequentially; reads `.riviere/work/extract-*.jsonl`                                                    | Outputs `.riviere/work/component-replay-report.json`; handles all 6 type-specific flag sets                         |
-| `tools/split-checklist.ts`           | Split master checklist into per-repo sub-checklists using repo roots from meta files                                                  | `--checklist <path>` required, `--prefix <string>` for output naming                                                |
-| `tools/merge-domains.ts`             | Merge per-repo domain discoveries into canonical registry with collision detection                                                    | `--add-to-graph` runs `add-domain` for new entries; `--dry-run` to preview                                          |
-| `tools/ingest-wiki.ts`               | Index wiki content into qmd; detects shape automatically (directory, single file, multi-wiki parent, git URL)                         | `<path-or-url>` required, `[collection-name]` optional                                                              |
-| `tools/validate-graph.ts`            | Run JSON schema validation on the generated graph file                                                                                | No flags required                                                                                                   |
-| `tools/generate-link-candidates.ts`  | Generate link candidate suggestions for Step 4 review                                                                                 | No flags required                                                                                                   |
+| Tool                                 | Purpose                                    | Example Usage                                                     |
+| ------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| `tools/init-graph.ts`                | Initialize graph from config files         | `bun tools/init-graph.ts --dry-run`                               |
+| `tools/replay-staged-links.ts`       | Execute staged link commands               | `bun tools/replay-staged-links.ts`                                |
+| `tools/replay-staged-enrichments.ts` | Execute staged enrichment commands         | `bun tools/replay-staged-enrichments.ts`                          |
+| `tools/replay-staged-components.ts`  | Execute staged component commands          | `bun tools/replay-staged-components.ts`                           |
+| `tools/split-checklist.ts`           | Split master checklist into per-repo files | `bun tools/split-checklist.ts --checklist .riviere/work/check.md` |
+| `tools/merge-domains.ts`             | Merge per-repo domain discoveries          | `bun tools/merge-domains.ts --add-to-graph`                       |
+| `tools/ingest-wiki.ts`               | Index wiki content into qmd                | `bun tools/ingest-wiki.ts ./wiki "Project Wiki"`                  |
+| `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts`                                     |
+| `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts`                           |
+
+## Troubleshooting & Recovery
+
+| Symptom                                      | Recovery Action                                              | Reference Step              |
+| -------------------------------------------- | ------------------------------------------------------------ | --------------------------- |
+| **Step 4 Linking:** High orphan count (>20%) | **Stop.** Fix `component-definitions.md`. Restart Step 3.    | `configure-orchestrator.md` |
+| **Step 4 Linking:** Missing targets          | **Stop.** Fix `domains.md` or `metadata.md`. Restart Step 1. | `explore-orchestrator.md`   |
+| **Step 3 Extract:** Empty components         | **Stop.** Debug `rules-*.md`. Re-run Step 2 for that type.   | `configure-subagent.md`     |
+| **Step 1 Explore:** Domain collision         | **Stop.** Manually resolve in `domains.md`. Restart Step 1.  | `explore-orchestrator.md`   |
+| **Any Step:** Corrupted `graph.json`         | **Restore.** `cp -r .riviere-backup-* .riviere/`             | See "Catastrophic Recovery" |
 
 ## Variables
 
@@ -90,20 +100,27 @@ Do not proceed past catastrophic failure without explicit user direction.
 | No wiki, user wants to generate one | `steps/wiki-build.md` -> `steps/wiki-index.md` -> Explore    |
 | No wiki, skip / wiki already exists | Explore directly                                             |
 
+### Execution Mode Matrix
+
+| Mode        | Repository Count | Step Behavior                                                                                |
+| ----------- | ---------------- | -------------------------------------------------------------------------------------------- |
+| Single-Repo | 1                | **Orchestrator acts as Subagent.** Do not spawn; execute subagent steps directly.            |
+| Multi-Repo  | 2+               | **Orchestrator spawns Subagents.** One subagent per repo (Step 1) or per type/repo (Step 2). |
+
 ### Wiki Build — Generate Wiki (Optional)
 
-Read `steps/wiki-build.md`
+**MANDATORY:** Read `steps/wiki-build.md`
 
 ### Wiki Index - Register Wiki via qmd (Optional)
 
-Read `steps/wiki-index.md`
+**MANDATORY:** Read `steps/wiki-index.md`
 
 ### Setup (Required First Run)
 
-Read `steps/setup.md` to verify prerequisites before beginning.
+**MANDATORY:** Read `steps/setup.md` to verify prerequisites before beginning.
 
 ### Entry Point
 
-Read `steps/explore-orchestrator.md` to begin.
+**MANDATORY:** Read `steps/explore-orchestrator.md` to begin.
 
 Steps are self-chaining — each step document tells you what to load next.

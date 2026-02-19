@@ -36,8 +36,8 @@ Before spawning subagents, internalize these common misclassification patterns s
 **When reviewing worker output:** If a worker proposes a custom type, evaluate whether 3+ instances exist across the codebase before accepting. One-off patterns do not warrant a custom type.
 
 > **Small / single-repo codebases:** Follow `steps/configure-subagent.md` directly
-> for each component type in sequence — you are both orchestrator and subagent. The repo
-> dimension is implicit; output files use `rules-{type}.md`.
+> for each component type in sequence — you are both orchestrator and subagent. Use `local`
+> as the repository name for file outputs: `rules-local-{type}.md`.
 
 ## Spawn Subagents
 
@@ -56,8 +56,7 @@ PREREQUISITE: Read .riviere/config/metadata.md AND .riviere/config/domains.md
 
 Spawn for every (type × repo) pair across: API, UseCase, DomainOp, Event, EventHandler, UI.
 
-> **Single-repository codebases:** Spawn one worker per type only — the repo dimension
-> is implicit.
+> **Single-repository codebases:** Spawn one worker per type only — use `local` as the repo name.
 
 If Explore metadata suggests custom type candidates (e.g., background jobs, scheduled
 tasks, sagas), spawn one extra worker per (candidate × repo) with a brief description
@@ -69,7 +68,7 @@ After all subagents complete:
 
 ### 1. Consolidate custom type proposals
 
-Read all `.riviere/work/rules-{type}.md` files. Collect every "Proposed Custom Types"
+Read all `.riviere/work/rules-*-*.md` files. Collect every "Proposed Custom Types"
 section. Present a single consolidated list to the user — one conversation, not N:
 
 > "Workers found these patterns that may warrant custom component types. Please decide:

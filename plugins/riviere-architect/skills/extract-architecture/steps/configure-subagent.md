@@ -215,6 +215,7 @@ Write one file: `.riviere/work/rules-{repo}-{type}.md`
 
 Use `{repo}` = repository name (lowercase, no spaces) and `{type}` = component type
 lowercased (e.g., `rules-orders-service-domainop.md`, `rules-payments-api.md`).
+**For single-repo setups:** Use `local` as the repository name (`rules-local-api.md`).
 
 The file must contain (in order):
 
