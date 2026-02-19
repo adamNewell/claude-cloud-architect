@@ -13,10 +13,13 @@ Explore an existing codebase or system and produce a comprehensive, structured a
 
 When you need command syntax or options during any phase, load the relevant cookbook:
 
-| Need                                                                 | Load                        |
-| -------------------------------------------------------------------- | --------------------------- |
-| qmd search, collections, embeddings (Phase 0B)                       | `Cookbook/Qmd.md`           |
-| riviere-cli init, add-component, link, enrich, validate (Phases 3–6) | `Cookbook/RiviereCli.md`    |
+| Need                                                              | Load                           |
+| ----------------------------------------------------------------- | ------------------------------ |
+| qmd search, collections, embeddings (Phase 0B)                    | `cookbook/Qmd.md`              |
+| builder commands: init, add-component, link, enrich, validate     | `cookbook/RiviereBuilder.md`   |
+| query commands: domains, components, trace, orphans, search       | `cookbook/RiviereQuery.md`     |
+| extract commands                                                  | `cookbook/RiviereExtract.md`   |
+| command index, exit codes, concurrency rules, phase mapping       | `cookbook/RiviereCli.md`       |
 
 Load only the cookbook you need — do not load all unless working across tools.
 
@@ -32,6 +35,7 @@ WIKI_DATA: $1 -- Default: NONE
     Ask user if they would like to generate wiki data from the system.
     - If yes: Read `references/phase-0a-orchestrator.md` (Generate Wiki), then `references/phase-0b-orchestrator.md` (Register with qmd), then proceed to Phase 1.
     - If no or wiki already exists: Proceed to Phase 1.
+<ENDIF>
 
 ### Phase 0A - Generate Wiki (Optional) [IGNORE PHASE 0A]
 

@@ -1,0 +1,99 @@
+# arch-deconstruct — composable architecture documentation toolkit
+# Built on riviere-architect (living-architecture.dev)
+
+# ─── Layer 1: Skill (Direct tool invocations) ─────────────────────────────
+
+# Ingest a wiki or docs folder into qmd for semantic search
+arch-ingest-wiki path:
+    bun skills/riviere-architect/tools/ingest-wiki.ts {{path}}
+
+# Initialize riviere graph from Phase 2 artifacts (requires .riviere/config/)
+arch-init-graph:
+    bun skills/riviere-architect/tools/init-graph.ts
+
+# Validate the current graph state
+arch-validate:
+    bun skills/riviere-architect/tools/validate-graph.ts
+
+# ─── Layer 2: Subagent (Single-agent invocations) ─────────────────────────
+
+# Run Phase 1 subagent for a single repo (understand codebase)
+arch-understand-repo path:
+    claude --dangerously-skip-permissions --model opus \
+        "You are a Phase 1 subagent. Read skills/riviere-architect/references/phase-1-subagent.md. REPO_PATH={{path}}"
+
+# Run Phase 3 extraction subagent for a single repo (writes JSONL only)
+arch-extract-repo path:
+    claude --dangerously-skip-permissions --model opus \
+        "You are a Phase 3 subagent. Read skills/riviere-architect/references/phase-3-subagent.md. REPO_PATH={{path}}"
+
+# Run Phase 4 linking subagent for a single repo
+arch-link-repo path:
+    claude --dangerously-skip-permissions --model opus \
+        "You are a Phase 4 subagent. Read skills/riviere-architect/references/phase-4-subagent.md. REPO_PATH={{path}}"
+
+# Run Phase 5 enrichment subagent for a single repo (writes JSONL only — never enrich directly)
+arch-enrich-repo path:
+    claude --dangerously-skip-permissions --model opus \
+        "You are a Phase 5 subagent. Read skills/riviere-architect/references/phase-5-subagent.md. REPO_PATH={{path}}"
+
+# ─── Layer 3: Command (Orchestration) ─────────────────────────────────────
+
+# Quick pre-flight scan — no external CLIs, 1-page result, < 10 min
+arch-quick path=".":
+    claude --dangerously-skip-permissions --model opus "/arch-quick {{path}}"
+
+# Full 6-phase architecture extraction (will ask about wiki setup)
+arch-full path=".":
+    CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 \
+    claude --dangerously-skip-permissions --model opus "/arch-deconstruct {{path}}"
+
+# Full extraction, skip wiki phases (fastest path to a complete graph)
+arch-full-no-wiki path=".":
+    CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 \
+    claude --dangerously-skip-permissions --model opus "/arch-deconstruct {{path}} --skip-wiki"
+
+# Full extraction with an existing wiki folder
+arch-full-wiki path="." wiki-path:
+    CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 \
+    claude --dangerously-skip-permissions --model opus "/arch-deconstruct {{path}} --wiki-path={{wiki-path}}"
+
+# Multi-repo extraction (pass space-separated paths quoted as one argument)
+arch-multi paths:
+    CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 \
+    claude --dangerously-skip-permissions --model opus "/arch-deconstruct {{paths}}"
+
+# ─── Layer 4: Just (Reusability recipes) ──────────────────────────────────
+
+# Standard workflow: no wiki, no enrichment (fastest complete graph)
+arch-standard path=".":
+    just arch-full-no-wiki {{path}} --skip-enrich
+
+# Deep workflow: no wiki, with enrichment (recommended for medium codebases)
+arch-deep path=".":
+    just arch-full-no-wiki {{path}}
+
+# Quick then full: scan first, then decide whether to run the full workflow
+arch-then-full path=".":
+    #!/usr/bin/env bash
+    echo "Running quick pre-flight scan..."
+    just arch-quick "{{path}}"
+    echo ""
+    read -p "Proceed with full 6-phase extraction? (y/n): " answer
+    if [ "$answer" = "y" ]; then
+        just arch-deep "{{path}}"
+    fi
+
+# Query the graph after extraction
+arch-query component-id:
+    riviere query trace {{component-id}}
+
+arch-query-entry-points:
+    riviere query entry-points
+
+arch-query-orphans:
+    riviere query orphans
+
+# List existing graph files in .riviere/
+arch-graphs:
+    ls -lh .riviere/*.json 2>/dev/null || echo "No graphs found. Run 'just arch-full .' first."
