@@ -29,7 +29,7 @@ Before spawning subagents, internalize these common misclassification patterns s
 
 **NEVER** accept a `DomainOp` classification for a class that coordinates multiple domain services — that is a `UseCase`.
 
-**NEVER** accept one domain per repository as a default. Verify against business concepts, not code boundaries.
+**NEVER** accept one domain per repository as a default — production codebases commonly split a single business domain across 2-3 repos (e.g., `orders-service` and `orders-worker`); a one-to-one assumption produces a structurally incorrect graph that cannot be fixed without restarting from Step 1. Verify against business concepts, not code boundaries.
 
 **NEVER** accept a saga or process manager as a `UseCase` — flag it as a custom type candidate.
 

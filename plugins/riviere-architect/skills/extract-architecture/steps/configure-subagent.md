@@ -16,8 +16,6 @@ the end of your output file — do not define rules for them.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read these files before beginning:
 
 - `.riviere/config/metadata.md` — codebase conventions, frameworks, module inference rules
@@ -203,7 +201,7 @@ If this component type must always connect to certain other types, define a rule
 
 **NEVER** classify a class that delegates to multiple domain services as a `DomainOp` — if it coordinates other domain services or use cases, it is a `UseCase`.
 
-**NEVER** create a domain per repository. If two repositories serve the same business concept (e.g., both `orders-service` and `orders-worker` handle order processing), they belong to the same domain. Check `domains.md` first.
+**NEVER** create a domain per repository — production codebases commonly split a single business domain across 2-3 repos (e.g., `orders-service` and `orders-worker`); a one-to-one assumption produces a structurally incorrect graph that cannot be fixed without restarting from Step 1. If two repositories serve the same business concept, they belong to the same domain. Check `domains.md` first.
 
 **NEVER** infer module from utility, infrastructure, or shared library classes — names like `DatabaseHelper`, `HttpClient`, `EventBus` are infrastructure and do not reliably express a business module.
 

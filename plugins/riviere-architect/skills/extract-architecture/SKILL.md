@@ -13,21 +13,45 @@ Explore an existing codebase or system and produce a comprehensive, structured a
 
 When you need command syntax or options during any phase, load the relevant cookbook:
 
-| Need                                                        | Load                      |
-| ----------------------------------------------------------- | ------------------------- |
+| Need                                                        | Load                            |
+| ----------------------------------------------------------- | ------------------------------- |
 | qmd collections, context, embeddings (Wiki Index)           | `../../cookbook/qmd/cli.md`     |
 | command index, exit codes, concurrency rules, phase mapping | `../../cookbook/riviere/cli.md` |
 
 Load only the cookbook you need — do not load all unless working across tools.
 
+**Do NOT load — phase guide:**
+
+| Phase              | Load riviere/cli.md?           | Load qmd/cli.md?                            |
+| ------------------ | ------------------------------ | ------------------------------------------- |
+| Setup              | No — no CLI calls yet          | No — no CLI calls yet                       |
+| Explore (Step 1)   | No — no builder calls          | Only if wiki was indexed in Wiki Index step |
+| Configure (Step 2) | No — no builder calls          | Only if wiki was indexed in Wiki Index step |
+| Extract (Step 3)   | Yes — before any builder calls | Only if running qmd queries                 |
+| Connect (Step 4)   | Yes — before any builder calls | Only if running qmd queries                 |
+| Annotate (Step 5)  | Yes — before enrich calls      | Only if running qmd queries                 |
+| Validate (Step 6)  | Yes — before validate call     | No — not needed                             |
+
+## Tools Reference
+
+Run all tools from the **skill root** (the directory containing SKILL.md), not the target repository root.
+
+| Tool                                | Purpose                                                                                                                               | Key flags / notes                                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `tools/init-graph.ts`               | Initialize graph from domains.md and component-definitions.md; runs add-source, add-domain, define-custom-type CLI calls sequentially | `--dry-run` (preview without executing), `--source-url repo=url` (supply GitHub URL if git remote resolution fails) |
+| `tools/replay-staged-links.ts`      | Execute staged link JSONL sequentially; reads `.riviere/work/link-staged-*.jsonl`                                                     | Outputs `.riviere/work/link-replay-report.json` with pass/fail per command                                          |
+| `tools/ingest-wiki.ts`              | Index wiki content into qmd; detects shape automatically (directory, single file, multi-wiki parent, git URL)                         | `<path-or-url>` required, `[collection-name]` optional                                                              |
+| `tools/validate-graph.ts`           | Run JSON schema validation on the generated graph file                                                                                | No flags required                                                                                                   |
+| `tools/generate-link-candidates.ts` | Generate link candidate suggestions for Step 4 review                                                                                 | No flags required                                                                                                   |
+
 ## Variables
 
-WIKI_DATA: $1 -- Default: NONE
+WIKI_DATA: <path_to_wiki_or_url> (optional — pass as first argument; omit to skip wiki steps. Accepts: directory path, single .md file, multi-repo wikis/ parent directory, or .wiki.git URL)
 
 **NEVER** call any `riviere builder` write command from subagents. Concurrency is treated as untenable for graph writes. Subagents stage output only; the coordinator executes all writes sequentially.
 **NEVER** invent domain names — always check `.riviere/config/domains.md` first.
-**NEVER** use plan mode in extraction steps — execute directly.
-**NEVER** proceed to the next step without user confirmation.
+**NEVER** use plan mode in extraction steps — execute directly. Plan mode pauses for user approval at each step, breaking the self-chaining progression; the configuration files (domains.md, metadata.md, component-definitions.md) already replace the need for exploratory codebase analysis that plan mode provides.
+**NEVER** proceed to the next step without user confirmation — domain names defined in Steps 1–2 propagate through the entire graph; a wrong boundary discovered after Step 3 requires re-running all downstream steps.
 
 ## What Makes This Hard
 

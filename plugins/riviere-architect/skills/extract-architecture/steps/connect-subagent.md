@@ -18,8 +18,6 @@ domain names from `domains.md`, but you do not read their source files.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read these files before starting:
 
 - `.riviere/config/linking-rules.md` — cross-domain patterns and validation rules

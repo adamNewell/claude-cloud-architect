@@ -6,7 +6,6 @@ Check the graph for orphans and schema compliance.
 
 ## Prerequisites
 
-- **Do not use plan mode.** Execute directly.
 - Graph with enriched components from Step 5.
 - Read `.riviere/config/domains.md` — cross-domain orphan patterns may indicate a cross-repo link was missed.
 

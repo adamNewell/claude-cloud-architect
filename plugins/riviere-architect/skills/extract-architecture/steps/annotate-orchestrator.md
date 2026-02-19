@@ -6,7 +6,6 @@ Add semantic information to DomainOps — state changes, business rules, and ope
 
 ## Prerequisites
 
-- **Do not use plan mode.** Execute directly.
 - Graph with linked components from Step 4.
 
 > **Single-repository codebases:** Follow `steps/annotate-subagent.md` directly —

@@ -6,7 +6,6 @@ Coordinate component extraction across repositories and populate the graph.
 
 ## Prerequisites
 
-- **Do not use plan mode.** Execute directly.
 - Read `.riviere/config/metadata.md` for conventions
 - Read `.riviere/config/domains.md` for canonical domain names
 - Read `.riviere/config/component-definitions.md` for extraction rules

@@ -18,8 +18,6 @@ When your output files are written, report completion to the orchestrator.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read these files before scanning:
 
 - `.riviere/config/metadata.md` — conventions and module inference rules for this repo

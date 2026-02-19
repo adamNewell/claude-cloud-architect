@@ -19,8 +19,6 @@ When your findings file is written, report completion to the orchestrator.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read these files before starting:
 
 - `.riviere/work/orphans.json` — full orphan list; filter to your assigned type

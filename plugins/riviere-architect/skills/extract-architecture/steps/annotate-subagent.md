@@ -19,8 +19,6 @@ When your staged output file is written, report completion to the orchestrator.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read your assigned checklist before starting:
 
 - `.riviere/work/enrich-{repo}.md` — your assigned DomainOp checklist

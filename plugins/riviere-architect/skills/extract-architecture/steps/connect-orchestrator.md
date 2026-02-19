@@ -6,7 +6,6 @@ Trace operational connections between components to create the flow graph.
 
 ## Prerequisites
 
-- **Do not use plan mode.** Execute directly.
 - Graph with extracted components from Step 3.
 - Read `.riviere/config/linking-rules.md` for cross-domain patterns.
 - Read `.riviere/config/domains.md` — use canonical domain names when resolving cross-repo links.

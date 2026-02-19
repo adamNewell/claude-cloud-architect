@@ -17,8 +17,6 @@ completion to the orchestrator.
 
 ## Prerequisites
 
-Read `steps/constraints.md` before starting.
-
 Read `.riviere/config/domains.md` **before** scanning. You will need canonical domain names
 when reporting what you find. If the file is empty or missing, that is expected — proceed
 with scanning and stage all discovered domains as new.
