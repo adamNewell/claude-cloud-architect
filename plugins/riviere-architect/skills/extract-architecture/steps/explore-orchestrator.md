@@ -33,6 +33,15 @@ Rules:
 EOF
 ```
 
+## Domain Boundary Thinking Framework
+
+Before finalizing domain discoveries, ask:
+
+- **Do any two discovered domains always change together?** If yes, they may be one domain split artificially by repo boundaries.
+- **Does a domain name reflect a business concept or a technical layer?** Technical layers (`infrastructure`, `shared`, `common`) are rarely true domains — they're likely `other` type.
+- **Can you explain this domain's purpose in one sentence to a non-technical person?** If not, the boundary is unclear and needs user confirmation.
+- **Are there components that don't fit any discovered domain?** These are signals of a missing domain or a miscategorized component.
+
 ## Spawn Subagents
 
 Spawn one subagent per repository. Each subagent receives `steps/explore-subagent.md`
@@ -168,6 +177,12 @@ A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 ## Notes
 [Any other observations]
 ```
+
+## Error Recovery
+
+- **Subagent returns incomplete output (missing meta or domains file):** Re-spawn that subagent for the affected repository only. Do not re-run all subagents.
+- **Domain name collision between subagents (same concept, different names):** Do NOT pick one automatically — present both names to the user with the discovered evidence and ask them to decide.
+- **`domains.md` merge produces duplicate rows:** Deduplicate by canonical name before presenting to user. If truly duplicate, keep the one with more repositories listed.
 
 ## Completion
 

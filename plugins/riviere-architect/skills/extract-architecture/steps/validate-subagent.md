@@ -1,5 +1,10 @@
 # Step 6 Subagent: Orphan Analysis
 
+## Critical Constraints
+
+**NEVER** use plan mode — execute directly.
+**NEVER** mark an orphan as "intentionally orphaned" without checking for a cross-repo link that was missed in Step 4.
+
 ## Role
 
 You are a subagent assigned to analyze orphan components of **one type**. You read the

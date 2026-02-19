@@ -1,5 +1,11 @@
 # Step 5 Subagent: Enrich Components
 
+## Critical Constraints
+
+**NEVER** call `enrich` directly — write to staged JSONL only. Concurrent enrich calls corrupt the graph. The coordinator serializes all enrich CLI calls.
+**NEVER** invent domain names — always check `.riviere/config/domains.md` first.
+**NEVER** use plan mode — execute directly.
+
 ## Role
 
 You are a subagent assigned to enrich DomainOps within **one repository**. You read

@@ -11,6 +11,11 @@ feed into the orchestrator's merge step. You do not interact with the user.
 Do not proceed to Configure. When your output files are written, you are done — report
 completion to the orchestrator.
 
+## Critical Constraints
+
+**NEVER** invent domain names — check `.riviere/config/domains.md` before naming any domain.
+**NEVER** report back to orchestrator before writing both output files (`.riviere/work/meta-{repo}.md` and `.riviere/work/domains-{repo}.md`).
+
 ## Prerequisites
 
 Read `.riviere/config/domains.md` **before** scanning. You will need canonical domain names

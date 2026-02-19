@@ -120,6 +120,13 @@ with corrected patterns and re-extract.
 
 Graph: `.riviere/[project-name]-[commit].json`
 
+## Error Recovery
+
+- **`bun tools/init-graph.ts` fails:** Run with `--dry-run` first to preview commands. If the tool itself errors, check that `bun` is installed and that you are running from the skill root directory. Verify `tools/init-graph.ts` exists.
+- **`add-component` CLI call fails for a specific component:** Log the failure and continue with remaining components. After all workers complete, re-attempt failed components individually. Do not re-run the entire extract step.
+- **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.md` and `.riviere/config/component-definitions.md` before scanning.
+- **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.md` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.
+
 ## Completion
 
 Present extraction summary showing component counts by domain and type.

@@ -1,5 +1,11 @@
 # Step 3 Subagent: Extract Components
 
+## Critical Constraints
+
+**NEVER** call `add-component` directly — write to JSONL only. Concurrent writes corrupt the graph (tested: 45–60% data loss per round when calls run simultaneously). The coordinator serializes all CLI calls.
+**NEVER** invent domain names — always check `.riviere/config/domains.md` first. Use the canonical name exactly as written.
+**NEVER** use plan mode — execute directly.
+
 ## Role
 
 You are a subagent assigned to extract components from **one repository**. Your output

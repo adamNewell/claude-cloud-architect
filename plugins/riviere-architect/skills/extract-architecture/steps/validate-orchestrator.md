@@ -64,6 +64,12 @@ AGENT INSTRUCTIONS: Read steps/validate-subagent.md and follow its instructions 
 ORPHAN TYPE: {OrphanType}   (e.g., Event, UseCase, DomainOp, EventHandler)
 ```
 
+## Error Recovery
+
+- **`validate` command reports schema errors:** Fix schema errors completely before running orphan analysis. Do not proceed to orphan analysis with schema violations present.
+- **Orphan fix loop does not converge after 3 rounds:** Stop looping. The remaining orphans likely indicate a structural issue with `linking-rules.md` patterns — present the persistent orphans to the user with a recommendation to update Step 4 patterns and re-run linking for affected domains only.
+- **Worker subagent reports orphan type but provides no actionable fixes:** The orphan type may represent external consumers (events consumed by systems outside this graph). Ask the user to confirm before marking as intentionally orphaned.
+
 ## Orphan Fix Loop
 
 After workers complete (or after direct analysis for small counts):
@@ -85,3 +91,23 @@ Present final stats:
 - Domains covered
 
 **Graph extraction complete.**
+
+## What You Now Have
+
+Your extracted graph is at: `.riviere/[project-name]-[commit].json`
+
+This file is a structured, queryable architecture graph containing:
+
+- All discovered components (APIs, UseCases, DomainOps, Events, EventHandlers, UI)
+- Operational links between them (sync HTTP calls and async event flows)
+- Semantic enrichment on DomainOps (state changes, business rules)
+
+### What to Do Next
+
+| Goal                   | How                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| Query the graph        | Use `npx riviere query` — see `cookbook/riviere/cli.md` for query patterns                               |
+| Visualize architecture | Upload to [living-architecture.dev](https://living-architecture.dev)                                     |
+| Impact analysis        | Query which components are upstream/downstream of a given component                                      |
+| Onboarding             | Share the graph file — new team members can navigate the system without reading code                     |
+| Keep it current        | Re-run extraction (starting from Step 3) after major feature work; the graph is versioned by commit hash |

@@ -34,9 +34,16 @@ using canonical names from `domains.md`.
 
 ```bash
 mkdir -p .riviere/work/
-grep "orders-service/" .riviere/connect-checklist.md > .riviere/work/checklist-orders-service.md
-grep "inventory-service/" .riviere/connect-checklist.md > .riviere/work/checklist-inventory-service.md
-# repeat for each repository
+# Split checklist by repository — one file per repo
+# For each repository listed in .riviere/config/metadata.md, extract its entries:
+while IFS= read -r repo_path; do
+  repo_name=$(basename "$repo_path")
+  grep "$repo_path" .riviere/connect-checklist.md > ".riviere/work/checklist-${repo_name}.md"
+done < <(grep -oP '(?<=Root: ).*' .riviere/work/meta-*.md)
+
+# Verify: each per-repo checklist should be non-empty
+# If a checklist is empty, check that the repo root path in metadata.md matches
+# the file paths recorded during extract step
 ```
 
 2. Spawn one worker per repository. Each receives `steps/connect-subagent.md` as its
@@ -74,6 +81,12 @@ components that violate the rules so the user can review.
 
 If user reports problems or missing elements, identify the root cause, update the relevant
 config files, and re-run the affected step.
+
+## Error Recovery
+
+- **Worker sub-checklist is empty after grep-split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Open `.riviere/connect-checklist.md` and inspect actual path prefixes — update the grep pattern accordingly.
+- **`link` or `link-http` CLI call fails:** Retry once. If it fails again, log the failed link with source/target details and continue. Present unresolved links to the user at the end.
+- **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
 
 ## Completion
 

@@ -34,9 +34,11 @@ showed 45–60% data loss per round when calls run simultaneously. Workers must 
 
 ```bash
 mkdir -p .riviere/work/
-grep "orders-service/" .riviere/step-5-checklist.md > .riviere/work/enrich-orders-service.md
-grep "inventory-service/" .riviere/step-5-checklist.md > .riviere/work/enrich-inventory-service.md
-# repeat for each repository
+# Split enrichment checklist by repository
+while IFS= read -r repo_path; do
+  repo_name=$(basename "$repo_path")
+  grep "$repo_path" .riviere/step-5-checklist.md > ".riviere/work/enrich-${repo_name}.md"
+done < <(grep -oP '(?<=Root: ).*' .riviere/work/meta-*.md)
 ```
 
 2. Spawn one worker per repository. Each receives `steps/annotate-subagent.md` as its
@@ -73,6 +75,12 @@ cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
 
 If user reports problems or missing elements, identify the root cause, update the relevant
 config files, and re-run the affected step.
+
+## Error Recovery
+
+- **`enrich` CLI call fails:** Do NOT retry in parallel. Retry sequentially, one at a time. Log any that fail twice and present to user.
+- **Worker staged JSONL contains malformed JSON:** Skip the malformed line, log it, and continue. After all workers complete, present malformed lines to user for manual review.
+- **DomainOp checklist items remain unchecked after merge:** Re-inspect the source file for that component — the subagent may have been unable to locate business logic. Flag as `[NEEDS-REVIEW]` rather than leaving blank.
 
 ## Completion
 

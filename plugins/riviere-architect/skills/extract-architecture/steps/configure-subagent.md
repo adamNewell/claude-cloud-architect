@@ -1,5 +1,10 @@
 # Step 2 Subagent: Define Extraction Rules
 
+## Critical Constraints
+
+**NEVER** invent domain names — use canonical names from `.riviere/config/domains.md` in all examples.
+**NEVER** use plan mode — execute directly.
+
 ## Role
 
 You are a subagent assigned to define extraction rules for **one component type in one
@@ -33,6 +38,15 @@ Scan only within your assigned **REPOSITORY ROOT**. Do not read files outside it
 | DomainOp     | Business logic — aggregate methods, domain services |
 | Event        | Domain event published after something happens      |
 | EventHandler | Subscriber that reacts to an event                  |
+
+## Classification Thinking Framework
+
+Before classifying any component, ask yourself:
+
+- **Decision vs. coordination?** Does this class make a business decision itself, or does it coordinate decisions made by other classes? Decision → `DomainOp`. Coordination → `UseCase`.
+- **Who calls it?** If it's called by an HTTP controller, it's likely a `UseCase`. If called by a `UseCase`, it's likely a `DomainOp`.
+- **Does it cross domain boundaries?** A class calling into multiple domains is almost certainly a `UseCase`, not a `DomainOp`.
+- **Is the name misleading?** Infrastructure names (`Service`, `Manager`, `Helper`) do not determine type — look at what the class actually does.
 
 ## Define the Extraction Rule
 
@@ -187,6 +201,18 @@ If this component type must always connect to certain other types, define a rule
 - [this component type] must link to [expected target]
 - BFF APIs must link to backend or external (not just internal UseCase)
 ```
+
+## Classification Anti-Patterns
+
+**NEVER** classify a class that delegates to multiple domain services as a `DomainOp` — if it coordinates other domain services or use cases, it is a `UseCase`.
+
+**NEVER** create a domain per repository. If two repositories serve the same business concept (e.g., both `orders-service` and `orders-worker` handle order processing), they belong to the same domain. Check `domains.md` first.
+
+**NEVER** infer module from utility, infrastructure, or shared library classes — names like `DatabaseHelper`, `HttpClient`, `EventBus` are infrastructure and do not reliably express a business module.
+
+**NEVER** classify a saga orchestrator or process manager as a `UseCase` — if it manages long-running state across multiple steps or services, propose a custom type `Saga` instead.
+
+**NEVER** mark a component as a `DomainOp` if it only reads data without making a business decision — read-only queries are domain operations only if they enforce business rules (e.g., eligibility checks).
 
 ## Output
 

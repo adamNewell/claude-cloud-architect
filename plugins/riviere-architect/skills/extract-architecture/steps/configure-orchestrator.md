@@ -23,6 +23,18 @@ Steps 3 and 4 to extract and link components.
 
 Custom types may also be discovered — handled in the merge step below.
 
+## Classification Anti-Patterns
+
+Before spawning subagents, internalize these common misclassification patterns so you can recognize them in worker output during the merge step:
+
+**NEVER** accept a `DomainOp` classification for a class that coordinates multiple domain services — that is a `UseCase`.
+
+**NEVER** accept one domain per repository as a default. Verify against business concepts, not code boundaries.
+
+**NEVER** accept a saga or process manager as a `UseCase` — flag it as a custom type candidate.
+
+**When reviewing worker output:** If a worker proposes a custom type, evaluate whether 3+ instances exist across the codebase before accepting. One-off patterns do not warrant a custom type.
+
 > **Small / single-repo codebases:** Follow `steps/configure-subagent.md` directly
 > for each component type in sequence — you are both orchestrator and subagent. The repo
 > dimension is implicit; output files use `rules-{type}.md`.
@@ -128,6 +140,12 @@ Write to `.riviere/config/linking-rules.md`.
 **`.riviere/config/component-definitions.md`** — extraction rules per component type.
 
 **`.riviere/config/linking-rules.md`** — HTTP client mappings and non-HTTP linking patterns.
+
+## Error Recovery
+
+- **Subagent produces empty or missing `rules-{repo}-{type}.md`:** Re-spawn that worker for the affected type/repo pair only.
+- **Workers propose conflicting patterns for the same type across repos:** Present the conflict to the user rather than choosing — different patterns mean different extraction strategies and the user must decide which is canonical.
+- **Custom type proposals exceed 5:** Present all to user as a consolidated list and recommend accepting only those with 3+ clear instances.
 
 ## Completion
 

@@ -1,5 +1,10 @@
 # Step 4 Subagent: Link Components
 
+## Critical Constraints
+
+**NEVER** invent domain names when resolving cross-repo links — always use canonical names from `.riviere/config/domains.md`.
+**NEVER** use plan mode — execute directly.
+
 ## Role
 
 You are a subagent assigned to link components within **one repository**. You call the
