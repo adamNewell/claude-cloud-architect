@@ -15,6 +15,10 @@ arch-init-graph:
 arch-validate:
     bun skills/riviere-architect/tools/validate-graph.ts
 
+# Generate high-confidence link candidates from Phase 3 JSONL (run between Phase 3 and Phase 4)
+arch-gen-links *repopaths:
+    bun skills/riviere-architect/tools/generate-link-candidates.ts {{repopaths}}
+
 # ─── Layer 2: Subagent (Single-agent invocations) ─────────────────────────
 
 # Run Phase 1 subagent for a single repo (understand codebase)

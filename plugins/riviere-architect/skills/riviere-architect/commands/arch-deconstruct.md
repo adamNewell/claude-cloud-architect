@@ -199,9 +199,31 @@ Wait for all Phase 3 subagents to complete.
 
 ### Step 5: Phase 4 — Link Components
 
-Generate checklist: `riviere builder component-checklist > .riviere/step-4-checklist.md`
+**Pre-populate link candidates first:**
 
-Split checklist by repo. Spawn one subagent per repo (concurrent linking is safe):
+```bash
+bun skills/riviere-architect/tools/generate-link-candidates.ts {REPO_PATHS...}
+```
+
+This reads all `extract-*.jsonl` files from Phase 3 and produces `.riviere/work/link-candidates.jsonl` — high-confidence links derived from:
+- `subscribedEvents` fields on EventHandlers (zero source reading needed)
+- Named component imports found in caller source files
+
+**Apply pre-populated candidates:**
+
+Read `.riviere/work/link-candidates.jsonl`. For each entry call:
+```bash
+riviere builder link --from {from} --to {to} --link-type {linkType}
+```
+sequentially. These are pre-validated HIGH confidence links — apply them without additional source verification.
+
+**Generate checklist for remaining work:**
+
+```bash
+riviere builder component-checklist > .riviere/work/step-4-checklist.md
+```
+
+Split the checklist by repo. Spawn one subagent per repo for the remainder (concurrent linking is safe):
 
 Agent prompt template:
 
@@ -211,8 +233,13 @@ You are a Phase 4 subagent for the riviere-architect workflow.
 Read: skills/riviere-architect/references/phase-4-subagent.md
 
 Your assigned repository: {REPO_PATH}
-Your checklist: {REPO_SECTION of .riviere/step-4-checklist.md}
+Your checklist: {REPO_SECTION of .riviere/work/step-4-checklist.md}
 Linking rules: .riviere/config/linking-rules.md
+
+Note: High-confidence links were pre-applied from link-candidates.jsonl before you
+were spawned. Focus on checklist items that remain unchecked — these are the
+ambiguous cases (HTTP cross-service, DI container patterns, external links) that
+require your judgment.
 
 You MAY call riviere builder link/link-http/link-external directly.
 Mark each checklist item [x] when linked.
