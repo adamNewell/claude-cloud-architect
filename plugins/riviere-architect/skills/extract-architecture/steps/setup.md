@@ -43,8 +43,8 @@ Subagents may analyze in parallel, but all write commands must be executed seque
 
 The workflow loads cookbooks on demand — do not load all upfront:
 
-| Cookbook                  | Covers                                                      | Load when                                 |
-| ------------------------- | ----------------------------------------------------------- | ----------------------------------------- |
+| Cookbook                        | Covers                                                      | Load when                                 |
+| ------------------------------- | ----------------------------------------------------------- | ----------------------------------------- |
 | `../../cookbook/riviere/cli.md` | Command index, exit codes, concurrency rules, phase mapping | Any step using `npx riviere builder`      |
 | `../../cookbook/qmd/cli.md`     | qmd collections, context queries, embedding lookups         | Wiki Index step or qmd-based repo queries |
 

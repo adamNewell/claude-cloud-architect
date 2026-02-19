@@ -32,6 +32,7 @@ Write staged JSONL to: `.riviere/work/annotate-staged-{repo-name}.jsonl`
 Each line is one JSON object representing one `enrich` call. Do not call `riviere builder` — write the file only.
 
 When done, report:
+
 ```
 ANNOTATE_DONE: {repo-name} | {N} enrichments staged | File: .riviere/work/annotate-staged-{repo-name}.jsonl
 ```

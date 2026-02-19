@@ -32,6 +32,7 @@ Write staged JSONL to: `.riviere/work/extract-{repo-name}.jsonl`
 Each line is one JSON object representing one `add-component` call. Do not call `riviere builder` — write the file only.
 
 When done, report:
+
 ```
 EXTRACT_DONE: {repo-name} | {N} components staged | File: .riviere/work/extract-{repo-name}.jsonl
 ```

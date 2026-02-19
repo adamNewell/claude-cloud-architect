@@ -86,6 +86,35 @@ The tool reads `.riviere/work/link-staged-*.jsonl`, validates each JSON line, an
 .riviere/work/link-replay-report.json
 ```
 
+### Concrete Cross-Repository Example
+
+Scenario:
+
+- Source repo: `orders-api`
+- Target repo: `payments-service`
+- `orders-api` endpoint `POST /orders/{id}/pay` triggers payments `UseCase` `capture-payment`
+
+Worker for `orders-api` stages this line in `.riviere/work/link-staged-orders-api.jsonl`:
+
+```json
+{"command":"link-http","path":"/orders/{id}/pay","method":"POST","toDomain":"payments","toModule":"checkout","toType":"UseCase","toName":"capture-payment","linkType":"sync"}
+```
+
+If source component ID is already known from checklist context, worker may stage a direct link:
+
+```json
+{"command":"link","from":"orders:api:api:post-orders-pay","toDomain":"payments","toModule":"checkout","toType":"UseCase","toName":"capture-payment","linkType":"sync"}
+```
+
+Coordinator then runs:
+
+```bash
+bun tools/replay-staged-links.ts
+```
+
+This applies the cross-repo link sequentially, exactly like in-repo links, using canonical
+domain/module/type/name targeting (not repository names).
+
 ## Validate
 
 After linking, check the validation rules in `.riviere/config/linking-rules.md`. List any

@@ -9,6 +9,7 @@ argument-hint: <repo-path> [--save=<output-file>]
 ## Purpose
 
 Lightweight architecture scan using only Bash, Glob, Grep, and Read. No riviere CLI, no qmd, no external dependencies. Produces a 1-page summary sufficient to:
+
 - Understand the tech stack and primary pattern
 - Identify entry points and key components
 - Decide if the full arch-deconstruct workflow is needed
@@ -88,6 +89,7 @@ ls {REPO_PATH}/Dockerfile {REPO_PATH}/docker-compose.yml 2>/dev/null
 ### Step 5: Key External Dependencies (30 seconds)
 
 From the manifest, classify the top 10 dependencies by role:
+
 - **Web framework:** express / fastapi / gin / axum / koa
 - **Database:** prisma / drizzle / sqlalchemy / gorm
 - **Auth:** clerk / jose / passport
@@ -165,6 +167,7 @@ graph TD
 ## Recommendation
 
 {One of:}
+
 - **Run `/arch-deconstruct {REPO_PATH}`** — codebase complexity justifies full 6-phase riviere extraction
 - **Run `/arch-deconstruct {REPO_PATH} --skip-wiki --skip-enrich`** — moderate complexity; skip optional phases
 - **This scan is sufficient** — small/simple codebase; full extraction may be overkill
@@ -172,6 +175,7 @@ graph TD
 ---
 
 *For full architecture extraction: `/arch-deconstruct {REPO_PATH}`*
+
 ```
 
 If SAVE_PATH provided: write report to that path. Otherwise print to conversation.
@@ -184,10 +188,14 @@ See Step 6 above.
 
 ### Quick scan of current directory
 ```
+
 /arch-quick .
+
 ```
 
 ### Scan a specific repo and save results
 ```
+
 /arch-quick /projects/my-api --save=./arch-summary.md
+
 ```

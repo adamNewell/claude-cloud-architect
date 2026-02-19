@@ -106,7 +106,7 @@ This file is a structured, queryable architecture graph containing:
 
 | Goal                   | How                                                                                                      |
 | ---------------------- | -------------------------------------------------------------------------------------------------------- |
-| Query the graph        | Use `npx riviere query` — see `../../cookbook/riviere/cli.md` for query patterns                               |
+| Query the graph        | Use `npx riviere query` — see `../../cookbook/riviere/cli.md` for query patterns                         |
 | Visualize architecture | Upload to [living-architecture.dev](https://living-architecture.dev)                                     |
 | Impact analysis        | Query which components are upstream/downstream of a given component                                      |
 | Onboarding             | Share the graph file — new team members can navigate the system without reading code                     |
