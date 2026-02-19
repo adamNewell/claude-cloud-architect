@@ -24,7 +24,7 @@ echo "=== extract-architecture prerequisites ===" && \
   (npx riviere --version > /dev/null 2>&1 && echo "PASS  riviere-cli" || echo "FAIL  riviere-cli — run: npm install -g @living-architecture/riviere-cli") && \
   (bun --version > /dev/null 2>&1 && echo "PASS  bun" || echo "FAIL  bun — install at https://bun.sh") && \
   (ls SKILL.md > /dev/null 2>&1 && echo "PASS  working directory" || echo "FAIL  working directory — cd to the skill root (directory containing SKILL.md)") && \
-  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts tools/replay-staged-links.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
+  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts tools/replay-staged-links.ts tools/replay-staged-enrichments.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
   (ls ../../cookbook/riviere/cli.md ../../cookbook/qmd/cli.md > /dev/null 2>&1 && echo "PASS  cookbooks" || echo "FAIL  cookbooks — ../../cookbook/riviere/cli.md or ../../cookbook/qmd/cli.md missing") && \
   ([ -f "SKILL.md" ] && echo "PASS  skill root (SKILL.md found in current directory)" || echo "FAIL  skill root — run this script from the extract-architecture/ directory containing SKILL.md")
 ```

@@ -5,13 +5,6 @@
 Coordinate repository scanning to understand codebase structure, conventions, and domain
 boundaries. Produce canonical reference documents for subsequent steps.
 
-## Principles
-
-- **Accuracy over speed** — Take time to find evidence, don't guess
-- **Ask when uncertain** — If domain boundaries are unclear, ask the user
-- **Domains span repositories** — A domain may have code in multiple repos; the domain
-  registry is the single source of truth
-
 ## Setup
 
 Create the staging directory and initialize the domain registry:

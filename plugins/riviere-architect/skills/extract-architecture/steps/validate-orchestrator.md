@@ -30,7 +30,8 @@ npx riviere builder check-consistency --json
 **Loop condition:** Repeat the check → analyze → fix cycle until one of:
 
 - Zero orphans remain, **or**
-- All remaining orphans are diagnosed as intentionally orphaned (external consumers, standalone utilities)
+- All remaining orphans are diagnosed as intentionally orphaned (external consumers, standalone utilities), **or**
+- 3 rounds completed without convergence — stop looping; remaining orphans likely indicate a structural issue with `linking-rules.md` patterns. Present persistent orphans to the user and recommend updating Step 4 patterns before retrying.
 
 **Common causes:**
 

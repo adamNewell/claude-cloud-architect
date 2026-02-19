@@ -60,12 +60,17 @@ After all workers complete:
 cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
 ```
 
-2. Read all `.riviere/work/annotate-staged-{repo}.jsonl` files. For each line, run the
-   `enrich` call sequentially:
+2. Replay staged enrichment commands sequentially:
 
 ```bash
-# Each staged line is a JSON object with the full enrich args
-# Run one at a time — do NOT parallelize
+bun tools/replay-staged-enrichments.ts
+```
+
+The tool reads `.riviere/work/annotate-staged-*.jsonl`, validates each JSON line, and executes
+`enrich` sequentially. Report output:
+
+```text
+.riviere/work/enrich-replay-report.json
 ```
 
 3. Verify all checklist items are checked.
