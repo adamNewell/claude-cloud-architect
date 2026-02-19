@@ -38,6 +38,22 @@ Before diving into steps, understand the non-obvious challenges this workflow is
 - **Module inference fragility** — Inferring which module a component belongs to requires a priority chain (code signal -> path rule -> name convention -> fallback). Skipping straight to name guessing produces noisy, unreliable graphs.
 - **Orphans as diagnostic signal** — Orphaned components (>20% of total) almost always indicate a systematic linking failure in Step 4, not individual missed links. Fixing orphans one-by-one when the root cause is a pattern gap wastes significant time.
 
+## Catastrophic Recovery
+
+When a phase fails in a way that may have corrupted the graph or broken the CLI state:
+
+1. **Save state** — Run immediately before any further writes:
+   ```bash
+   cp -r .riviere/ .riviere-backup-$(date +%Y%m%d-%H%M%S)/
+   ```
+2. **Report to user** — State which phase failed, the exact error(s) observed, and what recovery was attempted. Do not guess or paper over the failure.
+3. **User decides** — Present three options:
+   - **Rollback** — Restore from the backup and retry the failed phase from its beginning
+   - **Restart phase** — Discard partial output and re-run the failed phase from scratch against the current graph
+   - **Abort** — Stop entirely; the backup preserves all work to date
+
+Do not proceed past catastrophic failure without explicit user direction.
+
 ## Workflow
 
 | Situation                           | Action                                                       |

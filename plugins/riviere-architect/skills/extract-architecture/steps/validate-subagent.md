@@ -2,7 +2,6 @@
 
 ## Critical Constraints
 
-**NEVER** use plan mode — execute directly.
 **NEVER** mark an orphan as "intentionally orphaned" without checking for a cross-repo link that was missed in Step 4.
 
 ## Role
@@ -19,6 +18,8 @@ Do not diagnose orphans of other types.
 When your findings file is written, report completion to the orchestrator.
 
 ## Prerequisites
+
+Read `steps/constraints.md` before starting.
 
 Read these files before starting:
 

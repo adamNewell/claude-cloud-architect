@@ -1,10 +1,5 @@
 # Step 2 Subagent: Define Extraction Rules
 
-## Critical Constraints
-
-**NEVER** invent domain names — use canonical names from `.riviere/config/domains.md` in all examples.
-**NEVER** use plan mode — execute directly.
-
 ## Role
 
 You are a subagent assigned to define extraction rules for **one component type in one
@@ -20,6 +15,8 @@ If you encounter patterns that clearly belong to a different type, note them bri
 the end of your output file — do not define rules for them.
 
 ## Prerequisites
+
+Read `steps/constraints.md` before starting.
 
 Read these files before beginning:
 

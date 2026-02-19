@@ -3,8 +3,6 @@
 ## Critical Constraints
 
 **NEVER** call `enrich` directly — write to staged JSONL only. Concurrent enrich calls corrupt the graph. The coordinator serializes all enrich CLI calls.
-**NEVER** invent domain names — always check `.riviere/config/domains.md` first.
-**NEVER** use plan mode — execute directly.
 
 ## Role
 
@@ -20,6 +18,8 @@ stage enrichments for DomainOps outside your checklist.
 When your staged output file is written, report completion to the orchestrator.
 
 ## Prerequisites
+
+Read `steps/constraints.md` before starting.
 
 Read your assigned checklist before starting:
 

@@ -70,17 +70,21 @@ DeepWiki will produce:
 
 Once generated, save the wiki content locally so Wiki Build can index it with qmd.
 
-DeepWiki stores its generated output in a cache directory. Locate and copy the markdown files:
+DeepWiki caches generated output at `~/.deepwiki/generated/{owner}/{repo}/`. Copy the markdown files into a local `wiki/` directory:
 
 ```bash
-# Wiki output is typically stored in the DeepWiki cache
-# Check the app or API for export options, or save pages manually
-
-# Create a local wiki directory for qmd indexing
 mkdir -p wiki
+cp -r ~/.deepwiki/generated/{owner}/{repo}/*.md wiki/
+```
 
-# Save generated wiki pages here for Wiki Build
-# Either copy from DeepWiki's cache or save pages via the UI
+If running via Docker, the output is written inside the container at `/data/output/`:
+
+```bash
+# Confirm the path
+docker compose exec api ls /data/output/
+
+# Copy out of the container
+docker compose cp api:/data/output/{repo}/. wiki/
 ```
 
 Alternatively, if the repository has an existing GitHub wiki, clone it directly:

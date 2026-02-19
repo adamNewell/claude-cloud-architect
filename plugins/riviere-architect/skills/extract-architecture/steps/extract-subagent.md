@@ -3,8 +3,6 @@
 ## Critical Constraints
 
 **NEVER** call `add-component` directly — write to JSONL only. Concurrent writes corrupt the graph (tested: 45–60% data loss per round when calls run simultaneously). The coordinator serializes all CLI calls.
-**NEVER** invent domain names — always check `.riviere/config/domains.md` first. Use the canonical name exactly as written.
-**NEVER** use plan mode — execute directly.
 
 ## Role
 
@@ -19,6 +17,8 @@ root. Do not call `add-component` — write staged JSONL only.
 When your output files are written, report completion to the orchestrator.
 
 ## Prerequisites
+
+Read `steps/constraints.md` before starting.
 
 Read these files before scanning:
 

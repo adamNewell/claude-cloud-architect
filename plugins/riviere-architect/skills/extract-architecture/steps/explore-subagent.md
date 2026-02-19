@@ -13,10 +13,11 @@ completion to the orchestrator.
 
 ## Critical Constraints
 
-**NEVER** invent domain names — check `.riviere/config/domains.md` before naming any domain.
 **NEVER** report back to orchestrator before writing both output files (`.riviere/work/meta-{repo}.md` and `.riviere/work/domains-{repo}.md`).
 
 ## Prerequisites
+
+Read `steps/constraints.md` before starting.
 
 Read `.riviere/config/domains.md` **before** scanning. You will need canonical domain names
 when reporting what you find. If the file is empty or missing, that is expected — proceed
