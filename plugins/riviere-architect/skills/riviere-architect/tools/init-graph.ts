@@ -1,12 +1,12 @@
 #!/usr/bin/env bun
 /**
- * init-graph — initialize Rivière graph from Phase 2 artifacts
+ * init-graph — initialize Rivière graph from Configure artifacts
  *
  * Reads:
  *   .riviere/config/domains.md            — domain registry (source of record)
  *   .riviere/config/component-definitions.md — optional Custom Types table
  *
- * Runs the Phase 3 initialization sequence:
+ * Runs the Extract initialization sequence:
  *   1. riviere builder init               — first source + first domain
  *   2. riviere builder add-source         — remaining repositories
  *   3. riviere builder add-domain         — remaining domains
@@ -29,7 +29,7 @@ import { execSync, spawnSync } from "child_process";
 // ─── Help ─────────────────────────────────────────────────────────────────────
 
 const HELP = `
-init-graph — initialize Rivière graph from Phase 2 artifacts
+init-graph — initialize Rivière graph from Configure artifacts
 
 Reads:
   .riviere/config/domains.md           — domain registry (source of record)
@@ -173,7 +173,7 @@ const DOMAINS_PATH = resolve(".riviere/config/domains.md");
 if (!existsSync(DOMAINS_PATH)) {
   console.error("Error: .riviere/config/domains.md not found");
   console.error(
-    "Run Phase 1 to generate the domain registry before initializing the graph."
+    "Run Explore to generate the domain registry before initializing the graph."
   );
   process.exit(1);
 }
@@ -377,5 +377,5 @@ console.log(`  Sources:      ${repoEntries.length}`);
 console.log(`  Domains:      ${domains.length}`);
 console.log(`  Custom types: ${customTypes.length}`);
 if (!DRY_RUN) {
-  console.log(`\n  Proceed to Phase 3: extract components with riviere builder add-component`);
+  console.log(`\n  Proceed to Extract: extract components with riviere builder add-component`);
 }

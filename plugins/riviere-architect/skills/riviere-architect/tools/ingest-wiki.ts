@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * ingest-wiki — qmd wrapper for riviere-architect phase-0b
+ * ingest-wiki — qmd wrapper for riviere-architect wiki-index
  *
  * Shape rules:
  *   single-file   A .md file        → one collection named after the file
@@ -80,7 +80,7 @@ function detectShape(input: string): WikiShape {
   if (!existsSync(input)) {
     console.error(`Error: path not found: ${input}`);
     console.error("\nOptions:");
-    console.error("  • Run Phase 0A first to generate a wiki with DeepWiki");
+    console.error("  • Run Wiki Build first to generate a wiki with DeepWiki");
     console.error("  • Pass an existing docs directory (e.g. ./docs/)");
     console.error("  • Pass a GitHub wiki URL (e.g. https://github.com/org/repo.wiki.git)");
     process.exit(1);
@@ -188,4 +188,4 @@ switch (shape) {
 run(`qmd embed`);
 
 console.log(`\n✓ Done. qmd collection(s) indexed and ready to query.`);
-console.log(`  Proceed to Phase 1: references/phase-1-orchestrator.md`);
+console.log(`  Proceed to Explore: steps/explore-orchestrator.md`);

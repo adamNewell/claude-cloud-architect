@@ -11,14 +11,14 @@ Trace operational connections between components to create the flow graph.
 - Read `.riviere/config/linking-rules.md` for cross-domain patterns.
 - Read `.riviere/config/domains.md` — use canonical domain names when resolving cross-repo links.
 
-> **Single-repository codebases:** Follow `references/phase-4-subagent.md` directly —
-> you are both orchestrator and subagent. Use `.riviere/step-4-checklist.md` as the
+> **Single-repository codebases:** Follow `steps/connect-subagent.md` directly —
+> you are both orchestrator and subagent. Use `.riviere/connect-checklist.md` as the
 > checklist file. Call the link CLI directly.
 
 ## Generate Checklist
 
 ```bash
-npx riviere builder component-checklist --output=".riviere/step-4-checklist.md"
+npx riviere builder component-checklist --output=".riviere/connect-checklist.md"
 ```
 
 ## Spawn Workers
@@ -34,16 +34,16 @@ using canonical names from `domains.md`.
 
 ```bash
 mkdir -p .riviere/work/
-grep "orders-service/" .riviere/step-4-checklist.md > .riviere/work/checklist-orders-service.md
-grep "inventory-service/" .riviere/step-4-checklist.md > .riviere/work/checklist-inventory-service.md
+grep "orders-service/" .riviere/connect-checklist.md > .riviere/work/checklist-orders-service.md
+grep "inventory-service/" .riviere/connect-checklist.md > .riviere/work/checklist-inventory-service.md
 # repeat for each repository
 ```
 
-2. Spawn one worker per repository. Each receives `references/phase-4-subagent.md` as its
+2. Spawn one worker per repository. Each receives `steps/connect-subagent.md` as its
    instruction set:
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-4-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/connect-subagent.md and follow its instructions exactly.
 REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path}
 CHECKLIST: .riviere/work/checklist-{repo}.md
@@ -60,7 +60,7 @@ After all workers complete:
 1. Merge sub-checklists back into the master checklist:
 
 ```bash
-cat .riviere/work/checklist-*.md > .riviere/step-4-checklist.md
+cat .riviere/work/checklist-*.md > .riviere/connect-checklist.md
 ```
 
 2. Verify all items are checked before proceeding.
@@ -83,4 +83,4 @@ Present link summary showing total links created (sync vs async).
 
 ## Next Phase
 
-Read `references/phase-5.md`
+Read `steps/annotate-orchestrator.md`

@@ -8,7 +8,7 @@ feed into the orchestrator's merge step. You do not interact with the user.
 ## Scope
 
 **Your assigned repository only.** Do not read or modify files outside your repository root.
-Do not proceed to Phase 2. When your output files are written, you are done — report
+Do not proceed to Configure. When your output files are written, you are done — report
 completion to the orchestrator.
 
 ## Prerequisites
@@ -21,7 +21,7 @@ with scanning and stage all discovered domains as new.
 
 Check these locations in your repository in order:
 
-> **qmd:** If qmd was indexed in Phase 0B, run discovery queries against your repository's
+> **qmd:** If qmd was indexed in Wiki Index, run discovery queries against your repository's
 > collection before manual file scanning. See `Cookbook/Qmd.md` for query patterns. Use
 > results to orient the scan; verify key findings against source files.
 
@@ -195,4 +195,4 @@ are already fully represented in `domains.md`.
 
 Both output files are written. Your work is done — report back to the orchestrator.
 
-**Do not read `phase-2-orchestrator.md`.** Do not proceed further.
+**Do not read `configure-orchestrator.md`.** Do not proceed further.

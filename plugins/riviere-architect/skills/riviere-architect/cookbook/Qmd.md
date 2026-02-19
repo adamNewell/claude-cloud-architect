@@ -1,6 +1,6 @@
 # Cookbook: qmd
 
-Complete command reference for `qmd` — on-device hybrid search engine for markdown documentation. Used in **Phase 0A** to index and search the project wiki.
+Complete command reference for `qmd` — on-device hybrid search engine for markdown documentation. Used in **Wiki Build** to index and search the project wiki.
 
 ## Installation
 
@@ -142,35 +142,6 @@ qmd get wiki/architecture.md --full
 qmd multi-get "wiki/*.md" --json
 ```
 
-## MCP Server (Optional)
-
-For tighter Claude Code integration:
-
-```bash
-# stdio mode (Claude spawns as subprocess)
-qmd mcp
-
-# HTTP mode (shared long-lived server — faster for repeated calls)
-qmd mcp --http                   # localhost:8181
-qmd mcp --http --daemon          # background service
-qmd mcp stop                     # stop daemon
-```
-
-Add to `~/.claude/settings.json`:
-
-```json
-{
-  "mcpServers": {
-    "qmd": {
-      "command": "qmd",
-      "args": ["mcp"]
-    }
-  }
-}
-```
-
-MCP tools exposed: `qmd_search`, `qmd_vector_search`, `qmd_deep_search`, `qmd_get`, `qmd_multi_get`, `qmd_status`
-
 ## Maintenance
 
 ```bash
@@ -180,7 +151,7 @@ qmd update --pull    # re-index with git pull first
 qmd cleanup          # remove orphaned data
 ```
 
-## Phase 0A Workflow Pattern
+## Wiki Build Workflow Pattern
 
 ```bash
 # 1. Add wiki/docs as collection

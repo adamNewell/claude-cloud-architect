@@ -10,7 +10,7 @@ Check the graph for orphans and schema compliance.
 - Graph with enriched components from Step 5.
 - Read `.riviere/config/domains.md` — cross-domain orphan patterns may indicate a cross-repo link was missed.
 
-> **Single-repository codebases:** Follow `references/phase-6-subagent.md` for orphan
+> **Single-repository codebases:** Follow `steps/validate-subagent.md` for orphan
 > analysis when the orphan count exceeds 20. For smaller counts, run the orphan loop
 > directly as described below.
 
@@ -56,11 +56,11 @@ mkdir -p .riviere/work/
 npx riviere builder check-consistency --json > .riviere/work/orphans.json
 ```
 
-2. Spawn one worker per orphan type present. Each receives `references/phase-6-subagent.md`
+2. Spawn one worker per orphan type present. Each receives `steps/validate-subagent.md`
    as its instruction set:
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-6-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/validate-subagent.md and follow its instructions exactly.
 ORPHAN TYPE: {OrphanType}   (e.g., Event, UseCase, DomainOp, EventHandler)
 ```
 

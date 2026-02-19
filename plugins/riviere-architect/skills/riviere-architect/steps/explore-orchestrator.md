@@ -35,16 +35,16 @@ EOF
 
 ## Spawn Subagents
 
-Spawn one subagent per repository. Each subagent receives `references/phase-1-subagent.md`
+Spawn one subagent per repository. Each subagent receives `steps/explore-subagent.md`
 as its instruction set.
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-1-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/explore-subagent.md and follow its instructions exactly.
 REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path to repository}
 ```
 
-> **Single-repository codebases:** Follow `references/phase-1-subagent.md` directly
+> **Single-repository codebases:** Follow `steps/explore-subagent.md` directly
 > without spawning — you are both orchestrator and subagent.
 
 ## Wait and Merge
@@ -175,4 +175,4 @@ A `CheckoutOrder` class inferred to module `shipping` is a signal to re-examine.
 
 ## Next Phase
 
-Read `references/phase-2.md`
+Read `steps/configure-orchestrator.md`

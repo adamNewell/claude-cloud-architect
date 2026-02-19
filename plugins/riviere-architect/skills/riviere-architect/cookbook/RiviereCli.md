@@ -28,10 +28,10 @@ riviere extract <command>   # extract components        → cookbook/RiviereExtr
 
 | Phase              | Commands                                                                                       | Cookbook            |
 | ------------------ | ---------------------------------------------------------------------------------------------- | ------------------- |
-| Phase 3 — Extract  | `init`, `add-source`, `add-domain`, `define-custom-type`, `add-component`, `component-summary` | `RiviereBuilder.md` |
-| Phase 4 — Link     | `component-checklist`, `link`, `link-http`, `link-external`                                    | `RiviereBuilder.md` |
-| Phase 5 — Enrich   | `component-checklist --type DomainOp`, `enrich`                                                | `RiviereBuilder.md` |
-| Phase 6 — Validate | `check-consistency`, `validate`, `finalize`                                                    | `RiviereBuilder.md` |
+| Extract  | `init`, `add-source`, `add-domain`, `define-custom-type`, `add-component`, `component-summary` | `RiviereBuilder.md` |
+| Connect     | `component-checklist`, `link`, `link-http`, `link-external`                                    | `RiviereBuilder.md` |
+| Annotate   | `component-checklist --type DomainOp`, `enrich`                                                | `RiviereBuilder.md` |
+| Validate | `check-consistency`, `validate`, `finalize`                                                    | `RiviereBuilder.md` |
 | Any phase          | `query domains`, `query components`, `query trace`, `query orphans`                            | `RiviereQuery.md`   |
 
 ## Concurrency Rules

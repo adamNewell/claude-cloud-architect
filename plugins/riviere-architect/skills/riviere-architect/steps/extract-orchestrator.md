@@ -12,7 +12,7 @@ Coordinate component extraction across repositories and populate the graph.
 - Read `.riviere/config/component-definitions.md` for extraction rules
 - CLI installed: `npm install @living-architecture/riviere-cli`
 
-> **Single-repository codebases:** Follow `references/phase-3-subagent.md` directly —
+> **Single-repository codebases:** Follow `steps/extract-subagent.md` directly —
 > you are both orchestrator and subagent. Call `add-component` directly rather than
 > staging to JSONL.
 
@@ -49,11 +49,11 @@ during extraction, add it to `domains.md` first, then call `add-domain` manually
 concurrent writes corrupt the shared graph JSON. Workers write staged JSONL; the
 coordinator serializes all CLI calls.
 
-Spawn one worker per repository. Each receives `references/phase-3-subagent.md` as
+Spawn one worker per repository. Each receives `steps/extract-subagent.md` as
 its instruction set:
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-3-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/extract-subagent.md and follow its instructions exactly.
 REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path}
 ```
@@ -128,4 +128,4 @@ Present extraction summary showing component counts by domain and type.
 
 ## Next Phase
 
-Read `references/phase-4.md`
+Read `steps/connect-orchestrator.md`

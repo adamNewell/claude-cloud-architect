@@ -28,7 +28,7 @@ Exit code `2` means errors were found — Claude will stop and fix before contin
 ## Graph Initialization Tool
 
 `tools/init-graph.ts` reads `domains.md` and `component-definitions.md` and runs the
-full Phase 3 initialization sequence automatically:
+full Extract initialization sequence automatically:
 
 ```bash
 bun tools/init-graph.ts              # run
@@ -43,7 +43,7 @@ Runs in order: `init` → `add-source` → `add-domain` → `define-custom-type`
 Source URLs resolved from `.riviere/work/meta-{repo}.md` Root path → `git remote get-url origin`. Use `--source-url` to override.
 
 Custom types parsed from the `## Custom Types` table in `component-definitions.md`
-(written by Phase 2 orchestrator for accepted proposals):
+(written by Configure orchestrator for accepted proposals):
 
 ```markdown
 | Name | Description | Required Properties | Optional Properties |
@@ -55,7 +55,7 @@ Properties are semicolon-separated: `name:type:description;name2:type2:descripti
 
 ---
 
-## Phase 3: Initialize & Extract
+## Extract: Initialize & Extract
 
 ### `builder init` — Create the graph
 
@@ -184,12 +184,12 @@ riviere builder component-summary > .riviere/step-3-summary.json
 
 ---
 
-## Phase 4: Link
+## Connect: Link
 
 ### `builder component-checklist` — Generate linking checklist
 
 ```bash
-riviere builder component-checklist --output ".riviere/step-4-checklist.md"
+riviere builder component-checklist --output ".riviere/connect-checklist.md"
 riviere builder component-checklist --type API    # filter by type
 ```
 
@@ -247,7 +247,7 @@ riviere builder link-external \
 
 ---
 
-## Phase 5: Enrich
+## Annotate: Enrich
 
 ### `builder component-checklist` — Generate enrichment checklist
 
@@ -288,7 +288,7 @@ State change format: `from:to` or `from:[State1,State2]:to` for multiple sources
 
 ---
 
-## Phase 6: Validate
+## Validate: Validate
 
 ### `builder check-consistency` — Find orphans
 

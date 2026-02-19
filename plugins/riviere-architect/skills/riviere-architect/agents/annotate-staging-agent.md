@@ -1,11 +1,11 @@
 ---
-name: riviere-phase5-staging
-description: Enrichment staging worker for riviere-architect Phase 5. Reads DomainOp source code and writes riviere enrich calls to JSONL — never executes enrich directly. Use when the arch-deconstruct orchestrator spawns Phase 5 subagents.
+name: riviere-annotate-staging
+description: Enrichment staging worker for riviere-architect Annotate. Reads DomainOp source code and writes riviere enrich calls to JSONL — never executes enrich directly. Use when the arch-deconstruct orchestrator spawns Annotate subagents.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
 ---
 
-# Phase 5 Staging Agent
+# Annotate Staging Agent
 
 ## Purpose
 
@@ -20,18 +20,18 @@ Concurrent `riviere builder enrich` calls cause 45–60% data loss in the graph.
 Read your complete instructions from the phase reference doc:
 
 ```
-skills/riviere-architect/references/phase-5-subagent.md
+skills/riviere-architect/steps/annotate-subagent.md
 ```
 
 Then execute exactly as that doc specifies for your assigned REPO_PATH.
 
 ## Output
 
-Write staged JSONL to: `.riviere/work/enrich-staged-{repo-name}.jsonl`
+Write staged JSONL to: `.riviere/work/annotate-staged-{repo-name}.jsonl`
 
 Each line is one JSON object representing one `enrich` call. Do not call `riviere builder` — write the file only.
 
 When done, report:
 ```
-PHASE_5_DONE: {repo-name} | {N} enrichments staged | File: .riviere/work/enrich-staged-{repo-name}.jsonl
+ANNOTATE_DONE: {repo-name} | {N} enrichments staged | File: .riviere/work/annotate-staged-{repo-name}.jsonl
 ```

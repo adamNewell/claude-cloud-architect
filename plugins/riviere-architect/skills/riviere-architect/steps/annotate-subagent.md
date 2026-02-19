@@ -80,7 +80,7 @@ emit(new OrderPlaced(...));           // emits: "OrderPlaced event"
 
 ### 4. Write Staged Output
 
-Write one JSON object per line to `.riviere/work/enrich-staged-{repo}.jsonl`. Include
+Write one JSON object per line to `.riviere/work/annotate-staged-{repo}.jsonl`. Include
 only the fields you identified:
 
 ```json
@@ -101,4 +101,4 @@ all workers complete.
 Staged output file written and all checklist items marked `- [x]`. Your work is done —
 report back to the orchestrator.
 
-**Do not read `phase-6-orchestrator.md`.** Do not proceed further.
+**Do not read `validate-orchestrator.md`.** Do not proceed further.

@@ -6,10 +6,10 @@
  * at a depth that scales with the current phase.
  *
  * Phase detection (automatic from graph state):
- *   Phase 3 — components exist, no links yet        → structural + type-field checks
- *   Phase 4 — links exist                            → + link referential integrity
- *   Phase 5 — one or more DomainOps are enriched     → + enrichment quality checks
- *   Phase 6 — command was check-consistency/validate → + orphan threshold analysis
+ *   Extract — components exist, no links yet        → structural + type-field checks
+ *   Connect — links exist                            → + link referential integrity
+ *   Annotate — one or more DomainOps are enriched     → + enrichment quality checks
+ *   Validate — command was check-consistency/validate → + orphan threshold analysis
  *
  * Hook registration (.claude/settings.json):
  *   {
@@ -179,7 +179,7 @@ function detectPhase(graph: Graph): 3 | 4 | 5 | 6 {
   const components = graph.components ?? [];
   const links = graph.links ?? [];
 
-  // Phase 5: at least one DomainOp has enrichment data
+  // Annotate: at least one DomainOp has enrichment data
   const hasEnrichedDomainOp = components.some(
     (c) =>
       c.type === "DomainOp" &&
@@ -189,10 +189,10 @@ function detectPhase(graph: Graph): 3 | 4 | 5 | 6 {
   );
   if (hasEnrichedDomainOp) return 5;
 
-  // Phase 4: links exist
+  // Connect: links exist
   if (links.length > 0) return 4;
 
-  // Phase 3 (default)
+  // Extract (default)
   return 3;
 }
 
@@ -218,7 +218,7 @@ function warn(location: string, message: string): void {
   findings.push({ severity: "warning", location, message });
 }
 
-// ─── Phase 3: Structural + semantic validation ────────────────────────────────
+// ─── Extract: Structural + semantic validation ────────────────────────────────
 
 function validatePhase3(graph: Graph): void {
   // Root-level fields
@@ -401,7 +401,7 @@ function validatePhase3(graph: Graph): void {
   }
 }
 
-// ─── Phase 4: Link integrity ──────────────────────────────────────────────────
+// ─── Connect: Link integrity ──────────────────────────────────────────────────
 
 function validatePhase4(graph: Graph): void {
   const links = graph.links ?? [];
@@ -438,7 +438,7 @@ function validatePhase4(graph: Graph): void {
   }
 }
 
-// ─── Phase 5: Enrichment quality ─────────────────────────────────────────────
+// ─── Annotate: Enrichment quality ─────────────────────────────────────────────
 
 function validatePhase5(graph: Graph): void {
   const domainOps = (graph.components ?? []).filter((c) => c.type === "DomainOp");
@@ -497,7 +497,7 @@ function validatePhase5(graph: Graph): void {
   }
 }
 
-// ─── Phase 6: Orphan threshold ────────────────────────────────────────────────
+// ─── Validate: Orphan threshold ────────────────────────────────────────────────
 
 function validatePhase6(): void {
   // Skip redundant re-run if the hook fired from check-consistency itself

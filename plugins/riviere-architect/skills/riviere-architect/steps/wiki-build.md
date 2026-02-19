@@ -1,8 +1,8 @@
-# Phase 0A — Generate Wiki with DeepWiki
+# Wiki Build — Generate Wiki with DeepWiki
 
 ## Objective
 
-Use [DeepWiki-Open](https://github.com/AsyncFuncAI/deepwiki-open) to automatically generate a comprehensive wiki for the target repository — documentation, architecture diagrams, and component relationships — before reading it in Phase 0A.
+Use [DeepWiki-Open](https://github.com/AsyncFuncAI/deepwiki-open) to automatically generate a comprehensive wiki for the target repository — documentation, architecture diagrams, and component relationships — before reading it in Wiki Build.
 
 ## What DeepWiki Does
 
@@ -68,7 +68,7 @@ DeepWiki will produce:
 
 ## Export the Wiki
 
-Once generated, save the wiki content locally so Phase 0A can index it with qmd.
+Once generated, save the wiki content locally so Wiki Build can index it with qmd.
 
 DeepWiki stores its generated output in a cache directory. Locate and copy the markdown files:
 
@@ -79,7 +79,7 @@ DeepWiki stores its generated output in a cache directory. Locate and copy the m
 # Create a local wiki directory for qmd indexing
 mkdir -p wiki
 
-# Save generated wiki pages here for Phase 0A
+# Save generated wiki pages here for Wiki Build
 # Either copy from DeepWiki's cache or save pages via the UI
 ```
 
@@ -100,7 +100,7 @@ git clone https://github.com/your-org/your-repo.wiki.git wiki
 
 ## Ask Feature (Optional)
 
-Use DeepWiki's built-in **Ask** feature to query the repo before Phase 0A:
+Use DeepWiki's built-in **Ask** feature to query the repo before Wiki Build:
 
 - "What are the main architectural components?"
 - "How does data flow through the system?"
@@ -111,8 +111,8 @@ Capture answers to pre-populate `.riviere/config/discovery-notes.md`.
 
 ## Handoff
 
-Once the wiki is generated and saved locally, proceed to Phase 0B to index and search it with qmd.
+Once the wiki is generated and saved locally, proceed to Wiki Index to index and search it with qmd.
 
 ## Next Phase
 
-Read `references/phase-0b.md`
+Read `steps/wiki-index.md`

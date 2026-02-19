@@ -15,7 +15,7 @@ When you need command syntax or options during any phase, load the relevant cook
 
 | Need                                                              | Load                           |
 | ----------------------------------------------------------------- | ------------------------------ |
-| qmd search, collections, embeddings (Phase 0B)                    | `cookbook/Qmd.md`              |
+| qmd search, collections, embeddings (Wiki Index)                    | `cookbook/Qmd.md`              |
 | builder commands: init, add-component, link, enrich, validate     | `cookbook/RiviereBuilder.md`   |
 | query commands: domains, components, trace, orphans, search       | `cookbook/RiviereQuery.md`     |
 | extract commands                                                  | `cookbook/RiviereExtract.md`   |
@@ -30,23 +30,23 @@ WIKI_DATA: $1 -- Default: NONE
 ## Workflow
 
 <IF: WIKI_DATA>
-    Verify if it is a single document, a single document set, or a directory containing full system documentation. Proceed to Phase 1.
+    Verify if it is a single document, a single document set, or a directory containing full system documentation. Proceed to Explore.
 <ELSE>
     Ask user if they would like to generate wiki data from the system.
-    - If yes: Read `references/phase-0a-orchestrator.md` (Generate Wiki), then `references/phase-0b-orchestrator.md` (Register with qmd), then proceed to Phase 1.
-    - If no or wiki already exists: Proceed to Phase 1.
+    - If yes: Read `steps/wiki-build.md` (Generate Wiki), then `steps/wiki-index.md` (Register with qmd), then proceed to Explore.
+    - If no or wiki already exists: Proceed to Explore.
 <ENDIF>
 
-### Phase 0A - Generate Wiki (Optional) [IGNORE PHASE 0A]
+### Wiki Build — Generate Wiki (Optional)
 
-Read `references/phase-0a-orchestrator.md`
+Read `steps/wiki-build.md`
 
-### Phase 0B - Register Wiki via qmd (Optional)
+### Wiki Index - Register Wiki via qmd (Optional)
 
-Read `references/phase-0b-orchestrator.md`
+Read `steps/wiki-index.md`
 
 ### Entry Point
 
-Read `references/phase-1-orchestrator.md` to begin.
+Read `steps/explore-orchestrator.md` to begin.
 
-Phases 2–6 are self-chaining — each phase document tells you what to load next.
+Steps are self-chaining — each step document tells you what to load next.

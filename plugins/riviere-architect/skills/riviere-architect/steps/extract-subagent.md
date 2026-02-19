@@ -121,4 +121,4 @@ Two files:
 
 Both output files are written. Your work is done — report back to the orchestrator.
 
-**Do not read `phase-4-orchestrator.md`.** Do not proceed further.
+**Do not read `connect-orchestrator.md`.** Do not proceed further.

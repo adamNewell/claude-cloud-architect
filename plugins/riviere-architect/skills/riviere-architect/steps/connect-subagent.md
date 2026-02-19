@@ -82,4 +82,4 @@ orchestrator.
 
 All checklist items are marked `- [x]`. Your work is done — report back to the orchestrator.
 
-**Do not read `phase-5-orchestrator.md`.** Do not proceed further.
+**Do not read `annotate-orchestrator.md`.** Do not proceed further.

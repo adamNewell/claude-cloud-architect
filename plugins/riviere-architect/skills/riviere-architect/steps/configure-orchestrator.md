@@ -23,7 +23,7 @@ Steps 3 and 4 to extract and link components.
 
 Custom types may also be discovered — handled in the merge step below.
 
-> **Small / single-repo codebases:** Follow `references/phase-2-subagent.md` directly
+> **Small / single-repo codebases:** Follow `steps/configure-subagent.md` directly
 > for each component type in sequence — you are both orchestrator and subagent. The repo
 > dimension is implicit; output files use `rules-{type}.md`.
 
@@ -35,7 +35,7 @@ may use different frameworks for the same type — patterns must be discovered p
 Spawn one subagent per combination:
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-2-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/configure-subagent.md and follow its instructions exactly.
 COMPONENT TYPE: {TypeName}
 REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path to repository}
@@ -47,7 +47,7 @@ Spawn for every (type × repo) pair across: API, UseCase, DomainOp, Event, Event
 > **Single-repository codebases:** Spawn one worker per type only — the repo dimension
 > is implicit.
 
-If Phase 1 metadata suggests custom type candidates (e.g., background jobs, scheduled
+If Explore metadata suggests custom type candidates (e.g., background jobs, scheduled
 tasks, sagas), spawn one extra worker per (candidate × repo) with a brief description
 of the pattern.
 
@@ -137,4 +137,4 @@ Present extraction rules AND linking rules to the user for review.
 
 ## Next Phase
 
-Read `references/phase-3.md`
+Read `steps/extract-orchestrator.md`

@@ -9,7 +9,7 @@ Add semantic information to DomainOps — state changes, business rules, and ope
 - **Do not use plan mode.** Execute directly.
 - Graph with linked components from Step 4.
 
-> **Single-repository codebases:** Follow `references/phase-5-subagent.md` directly —
+> **Single-repository codebases:** Follow `steps/annotate-subagent.md` directly —
 > you are both orchestrator and subagent. Use `.riviere/step-5-checklist.md` as the
 > checklist file. Call the enrich CLI directly.
 
@@ -39,11 +39,11 @@ grep "inventory-service/" .riviere/step-5-checklist.md > .riviere/work/enrich-in
 # repeat for each repository
 ```
 
-2. Spawn one worker per repository. Each receives `references/phase-5-subagent.md` as its
+2. Spawn one worker per repository. Each receives `steps/annotate-subagent.md` as its
    instruction set:
 
 ```text
-AGENT INSTRUCTIONS: Read references/phase-5-subagent.md and follow its instructions exactly.
+AGENT INSTRUCTIONS: Read steps/annotate-subagent.md and follow its instructions exactly.
 REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path}
 CHECKLIST: .riviere/work/enrich-{repo}.md
@@ -59,7 +59,7 @@ After all workers complete:
 cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
 ```
 
-2. Read all `.riviere/work/enrich-staged-{repo}.jsonl` files. For each line, run the
+2. Read all `.riviere/work/annotate-staged-{repo}.jsonl` files. For each line, run the
    `enrich` call sequentially:
 
 ```bash
@@ -82,4 +82,4 @@ Present enrichment summary showing how many DomainOps were enriched.
 
 ## Next Phase
 
-Read `references/phase-6.md`
+Read `steps/validate-orchestrator.md`

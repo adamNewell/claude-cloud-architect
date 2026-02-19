@@ -6,7 +6,7 @@ Source-scanning command — processes source code to identify architectural comp
 npx riviere extract [options]
 ```
 
-> **Workflow note:** The riviere-architect plugin uses agent-based extraction in Phase 3
+> **Workflow note:** The riviere-architect plugin uses agent-based extraction in Extract
 > (Claude reads source files and writes staged JSONL) rather than `riviere extract`.
 > Use `riviere extract` as an alternative when you have an extraction config file and
 > want CLI-driven output instead.

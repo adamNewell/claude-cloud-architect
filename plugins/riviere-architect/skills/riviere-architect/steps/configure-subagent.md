@@ -207,4 +207,4 @@ The file must contain (in order):
 
 Output file is written. Your work is done — report back to the orchestrator.
 
-**Do not read `phase-3-orchestrator.md`.** Do not proceed further.
+**Do not read `extract-orchestrator.md`.** Do not proceed further.

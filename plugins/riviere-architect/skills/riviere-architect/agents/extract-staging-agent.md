@@ -1,11 +1,11 @@
 ---
-name: riviere-phase3-staging
-description: Component extraction staging worker for riviere-architect Phase 3. Reads source code and writes riviere add-component calls to JSONL — never executes CLI commands directly. Use when the arch-deconstruct orchestrator spawns Phase 3 subagents.
+name: riviere-extract-staging
+description: Component extraction staging worker for riviere-architect Extract. Reads source code and writes riviere add-component calls to JSONL — never executes CLI commands directly. Use when the arch-deconstruct orchestrator spawns Extract subagents.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
 ---
 
-# Phase 3 Staging Agent
+# Extract Staging Agent
 
 ## Purpose
 
@@ -20,7 +20,7 @@ Concurrent `riviere builder add-component` calls can produce inconsistent orderi
 Read your complete instructions from the phase reference doc:
 
 ```
-skills/riviere-architect/references/phase-3-subagent.md
+skills/riviere-architect/steps/extract-subagent.md
 ```
 
 Then execute exactly as that doc specifies for your assigned REPO_PATH.
@@ -33,5 +33,5 @@ Each line is one JSON object representing one `add-component` call. Do not call 
 
 When done, report:
 ```
-PHASE_3_DONE: {repo-name} | {N} components staged | File: .riviere/work/extract-{repo-name}.jsonl
+EXTRACT_DONE: {repo-name} | {N} components staged | File: .riviere/work/extract-{repo-name}.jsonl
 ```

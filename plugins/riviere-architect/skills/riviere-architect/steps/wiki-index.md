@@ -1,4 +1,4 @@
-# Phase 0B — Register Wiki via qmd
+# Wiki Index — Register Wiki via qmd
 
 ## Objective
 
@@ -29,8 +29,8 @@ Runs `--help` for full options. Calls `qmd collection add`, `qmd context add`, a
 
 qmd is indexed and embeddings are generated. The collection is ready to query.
 
-**Phase 0B complete.**
+**Wiki Index complete.**
 
 ## Next Phase
 
-Read `references/phase-1.md`
+Read `steps/explore-orchestrator.md`
