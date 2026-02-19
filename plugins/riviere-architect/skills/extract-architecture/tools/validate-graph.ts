@@ -32,6 +32,39 @@ import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { join, resolve } from "path";
 import { spawnSync } from "child_process";
 
+// ─── Help ─────────────────────────────────────────────────────────────────────
+
+const HELP = `
+validate-graph — PostToolUse hook for riviere-cli
+
+Fires after every riviere builder command and validates the graph
+at a depth that scales with the current phase.
+
+Phase detection (automatic from graph state):
+  Extract   — components exist, no links yet     → structural + type-field checks
+  Connect   — links exist                        → + link referential integrity
+  Annotate  — one or more DomainOps enriched     → + enrichment quality checks
+  Validate  — command was check-consistency      → + orphan threshold analysis
+
+USAGE
+  bun validate-graph.ts [options]
+
+  Designed to run as a PostToolUse hook (reads JSON from stdin).
+  Can also be invoked directly for manual validation.
+
+OPTIONS
+  --help, -h    Show this help
+
+EXIT CODES
+  0 — valid (or warnings only)
+  2 — errors found (must fix before continuing)
+`.trim();
+
+if (process.argv.includes("--help") || process.argv.includes("-h")) {
+  console.log(HELP);
+  process.exit(0);
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface HookInput {

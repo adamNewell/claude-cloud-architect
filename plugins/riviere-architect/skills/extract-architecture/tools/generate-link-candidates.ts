@@ -24,6 +24,34 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import path from "path";
 
+// ─── Help ─────────────────────────────────────────────────────────────────────
+
+const HELP = `
+generate-link-candidates — generate high-confidence link candidates from staged JSONL
+
+Two strategies:
+  1. subscribedEvents  EventHandler.subscribedEvents → matching Event → async link
+  2. Named import grep  Search caller source files for component name variants
+
+USAGE
+  bun generate-link-candidates.ts <repo-path...>
+  bun generate-link-candidates.ts --help
+
+ARGUMENTS
+  repo-path    One or more repository root paths used to resolve filePath fields
+
+OUTPUT
+  .riviere/work/link-candidates.jsonl
+
+OPTIONS
+  --help, -h   Show this help
+`.trim();
+
+if (process.argv.includes("--help") || process.argv.includes("-h")) {
+  console.log(HELP);
+  process.exit(0);
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Component {
