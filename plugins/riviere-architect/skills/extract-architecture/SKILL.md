@@ -15,8 +15,8 @@ When you need command syntax or options during any phase, load the relevant cook
 
 | Need                                                        | Load                      |
 | ----------------------------------------------------------- | ------------------------- |
-| qmd collections, context, embeddings (Wiki Index)           | `cookbook/qmd/cli.md`     |
-| command index, exit codes, concurrency rules, phase mapping | `cookbook/riviere/cli.md` |
+| qmd collections, context, embeddings (Wiki Index)           | `../../cookbook/qmd/cli.md`     |
+| command index, exit codes, concurrency rules, phase mapping | `../../cookbook/riviere/cli.md` |
 
 Load only the cookbook you need — do not load all unless working across tools.
 
@@ -24,7 +24,7 @@ Load only the cookbook you need — do not load all unless working across tools.
 
 WIKI_DATA: $1 -- Default: NONE
 
-**NEVER** call `add-component`, `enrich`, or `link` from subagents — concurrent writes corrupt the graph. Workers write staged JSONL; the coordinator serializes all CLI calls.
+**NEVER** call any `riviere builder` write command from subagents. Concurrency is treated as untenable for graph writes. Subagents stage output only; the coordinator executes all writes sequentially.
 **NEVER** invent domain names — always check `.riviere/config/domains.md` first.
 **NEVER** use plan mode in extraction steps — execute directly.
 **NEVER** proceed to the next step without user confirmation.
@@ -33,7 +33,7 @@ WIKI_DATA: $1 -- Default: NONE
 
 Before diving into steps, understand the non-obvious challenges this workflow is designed to solve:
 
-- **Concurrent write corruption** — Riviere's graph JSON is not concurrency-safe. Parallel agents writing to it simultaneously cause 45-60% data loss per round. This is why workers always stage to JSONL and only the coordinator serializes CLI calls.
+- **Concurrent write corruption** — Treat all `riviere builder` write commands as concurrency-unsafe (`add-source`, `add-domain`, `define-custom-type`, `add-component`, `link`, `link-http`, `link-external`, `enrich`, `finalize`). Parallel writes can corrupt `graph.json`, drop updates, or produce parse errors.
 - **Domain ≠ Repository** — A business domain often spans multiple repos. Agents that assume one repo = one domain will produce a broken graph. The `domains.md` registry exists precisely to prevent this.
 - **Module inference fragility** — Inferring which module a component belongs to requires a priority chain (code signal -> path rule -> name convention -> fallback). Skipping straight to name guessing produces noisy, unreliable graphs.
 - **Orphans as diagnostic signal** — Orphaned components (>20% of total) almost always indicate a systematic linking failure in Step 4, not individual missed links. Fixing orphans one-by-one when the root cause is a pattern gap wastes significant time.

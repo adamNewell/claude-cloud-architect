@@ -4,14 +4,14 @@
 
 Index the project's wiki or documentation in `qmd` so it can be searched in later phases.
 
-> **Command reference:** Load `cookbook/qmd/cli.md` for qmd collection setup, context, and embed commands.
+> **Command reference:** Load `../../cookbook/qmd/cli.md` for qmd collection setup, context, and embed commands.
 
 ## Setup
 
-Run the ingest tool from the skill's `Tools/` directory:
+Run the ingest tool from the skill's `tools/` directory:
 
 ```bash
-bun Tools/ingest-wiki.ts <path-or-url> [collection-name]
+bun tools/ingest-wiki.ts <path-or-url> [collection-name]
 ```
 
 The tool detects the shape of WIKI_DATA automatically:

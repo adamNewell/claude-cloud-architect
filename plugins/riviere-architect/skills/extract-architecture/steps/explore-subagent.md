@@ -28,7 +28,7 @@ with scanning and stage all discovered domains as new.
 Check these locations in your repository in order:
 
 > **qmd:** If qmd was indexed in Wiki Index, run discovery queries against your repository's
-> collection before manual file scanning. See `cookbook/qmd/query.md` for query patterns. Use
+> collection before manual file scanning. See `../../cookbook/qmd/query.md` for query patterns. Use
 > results to orient the scan; verify key findings against source files.
 
 1. **AI instruction files** (highest signal)

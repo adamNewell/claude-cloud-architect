@@ -1,121 +1,50 @@
-# Wiki Build — Generate Wiki with DeepWiki
+# Wiki Build — Generate Wiki (Optional)
 
 ## Objective
 
-Use [DeepWiki-Open](https://github.com/AsyncFuncAI/deepwiki-open) to automatically generate a comprehensive wiki for the target repository — documentation, architecture diagrams, and component relationships — before reading it in Wiki Build.
+Generate markdown wiki content for each target repository so Step `wiki-index` can ingest it into qmd.
 
-## What DeepWiki Does
+## Decision Gate
 
-1. Clones and analyzes the repository structure
-2. Creates embeddings of the code for smart retrieval
-3. Generates documentation with AI (Gemini, OpenAI, OpenRouter, or Ollama)
-4. Produces Mermaid diagrams for architecture and data flow
-5. Organizes everything into a structured, navigable wiki
+Run this step only when:
 
-## Setup
+- User wants wiki generation, and
+- `WIKI_DATA` is not already a usable docs/wiki path or `.wiki.git` URL.
 
-### Prerequisites
+If a valid wiki path already exists, skip directly to `steps/wiki-index.md`.
 
-- Google API key (`GOOGLE_API_KEY`) or OpenAI key (`OPENAI_API_KEY`)
-- Docker (Option A) or Python 3.x + Node.js (Option B)
+## Prerequisites
 
-### Option A — Docker (Recommended)
+- DeepWiki Open is available (follow upstream setup docs: [AsyncFuncAI/deepwiki-open](https://github.com/AsyncFuncAI/deepwiki-open))
+- At least one provider key is configured (`GOOGLE_API_KEY`, `OPENAI_API_KEY`, `OPENROUTER_API_KEY`) or local Ollama is available
+- Output layout is chosen before generation:
+  - Single repo: `./wiki/`
+  - Multi-repo: `./wikis/<repo>/`
 
-```bash
-git clone https://github.com/AsyncFuncAI/deepwiki-open.git
-cd deepwiki-open
+## Workflow
 
-# Configure API keys
-echo "GOOGLE_API_KEY=your_key" > .env
-echo "OPENAI_API_KEY=your_key" >> .env
-
-# Start
-docker compose up
-```
-
-### Option B — Manual
+1. Start DeepWiki Open (Docker or manual setup per upstream docs).
+2. Generate wiki content for each target repository.
+3. Export markdown locally:
+   - Typical local cache path: `~/.deepwiki/generated/{owner}/{repo}/`
+   - Docker deployments commonly write under `/data/output/`
+   - If a repo already has a GitHub wiki, cloning `<repo>.wiki.git` is acceptable instead of generation
+4. Verify export before continuing:
 
 ```bash
-git clone https://github.com/AsyncFuncAI/deepwiki-open.git
-cd deepwiki-open
-
-# Configure
-echo "GOOGLE_API_KEY=your_key" > .env
-
-# Backend
-python -m pip install poetry==2.0.1 && poetry install -C api
-python -m api.main
-
-# Frontend (separate terminal)
-npm install && npm run dev
+find wiki wikis -type f -name '*.md' 2>/dev/null | head
+find wiki wikis -type f -name '*.md' 2>/dev/null | wc -l
 ```
 
-DeepWiki runs at `http://localhost:3000`.
+At least one markdown file must exist per wiki.
 
-## Generate the Wiki
+5. Report exported wiki path(s), then proceed to `steps/wiki-index.md`.
 
-1. Open `http://localhost:3000`
-2. Enter the target repository URL (GitHub, GitLab, or Bitbucket)
-   - For private repos: click **"+ Add access tokens"** and provide a personal access token
-3. Click **"Generate Wiki"**
-4. Wait for generation to complete
+## Failure Recovery
 
-DeepWiki will produce:
-
-- Structured documentation pages per component/module
-- Mermaid architecture and data flow diagrams
-- A navigable wiki interface
-
-## Export the Wiki
-
-Once generated, save the wiki content locally so Wiki Build can index it with qmd.
-
-DeepWiki caches generated output at `~/.deepwiki/generated/{owner}/{repo}/`. Copy the markdown files into a local `wiki/` directory:
-
-```bash
-mkdir -p wiki
-cp -r ~/.deepwiki/generated/{owner}/{repo}/*.md wiki/
-```
-
-If running via Docker, the output is written inside the container at `/data/output/`:
-
-```bash
-# Confirm the path
-docker compose exec api ls /data/output/
-
-# Copy out of the container
-docker compose cp api:/data/output/{repo}/. wiki/
-```
-
-Alternatively, if the repository has an existing GitHub wiki, clone it directly:
-
-```bash
-git clone https://github.com/your-org/your-repo.wiki.git wiki
-```
-
-## Model Selection
-
-| Provider                | When to Use                   | Key Required           |
-| ----------------------- | ----------------------------- | ---------------------- |
-| Google Gemini (default) | Best quality, recommended     | `GOOGLE_API_KEY`       |
-| OpenAI                  | Alternative to Gemini         | `OPENAI_API_KEY`       |
-| OpenRouter              | Access to Claude, Llama, etc. | `OPENROUTER_API_KEY`   |
-| Ollama                  | Fully local, no API key       | Ollama running locally |
-
-## Ask Feature (Optional)
-
-Use DeepWiki's built-in **Ask** feature to query the repo before Wiki Build:
-
-- "What are the main architectural components?"
-- "How does data flow through the system?"
-- "What external services does this integrate with?"
-- "What are the bounded contexts / domains?"
-
-Capture answers to pre-populate `.riviere/config/discovery-notes.md`.
-
-## Handoff
-
-Once the wiki is generated and saved locally, proceed to Wiki Index to index and search it with qmd.
+- **Generation/auth failure:** report exact provider/auth error and stop; do not continue with empty output.
+- **Export path empty:** re-check `{owner}/{repo}` path mapping and re-export before indexing.
+- **Service unavailable:** skip this step only with explicit user approval and only if an alternate wiki/docs path exists.
 
 ## Next Phase
 

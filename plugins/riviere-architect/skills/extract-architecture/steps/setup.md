@@ -9,8 +9,8 @@ echo "=== extract-architecture prerequisites ===" && \
   (npx riviere --version > /dev/null 2>&1 && echo "PASS  riviere-cli" || echo "FAIL  riviere-cli — run: npm install -g @living-architecture/riviere-cli") && \
   (bun --version > /dev/null 2>&1 && echo "PASS  bun" || echo "FAIL  bun — install at https://bun.sh") && \
   (ls SKILL.md > /dev/null 2>&1 && echo "PASS  working directory" || echo "FAIL  working directory — cd to the skill root (directory containing SKILL.md)") && \
-  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
-  (ls cookbook/riviere/cli.md cookbook/qmd/cli.md > /dev/null 2>&1 && echo "PASS  cookbooks" || echo "FAIL  cookbooks — cookbook/riviere/cli.md or cookbook/qmd/cli.md missing")
+  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts tools/replay-staged-links.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
+  (ls ../../cookbook/riviere/cli.md ../../cookbook/qmd/cli.md > /dev/null 2>&1 && echo "PASS  cookbooks" || echo "FAIL  cookbooks — ../../cookbook/riviere/cli.md or ../../cookbook/qmd/cli.md missing")
 ```
 
 All five lines must show PASS before continuing.
@@ -21,14 +21,32 @@ All five lines must show PASS before continuing.
 mkdir -p .riviere/work .riviere/config
 ```
 
+## Concurrency Policy (Mandatory)
+
+Treat all `riviere builder` write commands as concurrency-unsafe.
+
+Do not run concurrent writes for any of:
+
+- `add-source`
+- `add-domain`
+- `define-custom-type`
+- `add-component`
+- `link`
+- `link-http`
+- `link-external`
+- `enrich`
+- `finalize`
+
+Subagents may analyze in parallel, but all write commands must be executed sequentially by the coordinator.
+
 ## Cookbooks
 
 The workflow loads cookbooks on demand — do not load all upfront:
 
 | Cookbook                  | Covers                                                      | Load when                                 |
 | ------------------------- | ----------------------------------------------------------- | ----------------------------------------- |
-| `cookbook/riviere/cli.md` | Command index, exit codes, concurrency rules, phase mapping | Any step using `npx riviere builder`      |
-| `cookbook/qmd/cli.md`     | qmd collections, context queries, embedding lookups         | Wiki Index step or qmd-based repo queries |
+| `../../cookbook/riviere/cli.md` | Command index, exit codes, concurrency rules, phase mapping | Any step using `npx riviere builder`      |
+| `../../cookbook/qmd/cli.md`     | qmd collections, context queries, embedding lookups         | Wiki Index step or qmd-based repo queries |
 
 ## Completion
 

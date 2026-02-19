@@ -13,7 +13,8 @@ Trace operational connections between components to create the flow graph.
 
 > **Single-repository codebases:** Follow `steps/connect-subagent.md` directly —
 > you are both orchestrator and subagent. Use `.riviere/connect-checklist.md` as the
-> checklist file. Call the link CLI directly.
+> checklist file, stage to `.riviere/work/link-staged-local.jsonl`, then replay staged
+> commands with `bun tools/replay-staged-links.ts`.
 
 ## Generate Checklist
 
@@ -25,9 +26,8 @@ npx riviere builder component-checklist --output=".riviere/connect-checklist.md"
 
 **Trigger:** 2 or more repositories, or checklist contains more than 50 unchecked items.
 
-**Partition strategy:** One worker per repository — each worker traces links only within
-its assigned repository's source files, but may link TO components in other repositories
-using canonical names from `domains.md`.
+**Partition strategy:** One worker per repository. Workers analyze links within their repo,
+then write staged JSONL commands. Coordinator executes all write commands sequentially.
 
 1. Split the master checklist into per-repository sub-checklists by matching source file
    paths to their repository root:
@@ -56,9 +56,8 @@ REPOSITORY ROOT: {local path}
 CHECKLIST: .riviere/work/checklist-{repo}.md
 ```
 
-> **Note:** Concurrent `link` / `link-http` calls across workers are generally safe (small
-> sequential appends). If a CLI call fails, the worker should retry once before flagging
-> to the coordinator.
+> **Mandatory policy:** Treat all `riviere builder` write commands as concurrency-unsafe.
+> Workers must stage commands only; coordinator serializes all writes.
 
 ## Wait and Merge
 
@@ -71,6 +70,21 @@ cat .riviere/work/checklist-*.md > .riviere/connect-checklist.md
 ```
 
 2. Verify all items are checked before proceeding.
+
+3. Replay staged link commands sequentially.
+
+Run the replay tool (deterministic parser + sequential executor):
+
+```bash
+bun tools/replay-staged-links.ts
+```
+
+The tool reads `.riviere/work/link-staged-*.jsonl`, validates each JSON line, and executes
+`link` / `link-http` / `link-external` sequentially. Report output:
+
+```text
+.riviere/work/link-replay-report.json
+```
 
 ## Validate
 
@@ -85,7 +99,7 @@ config files, and re-run the affected step.
 ## Error Recovery
 
 - **Worker sub-checklist is empty after grep-split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Open `.riviere/connect-checklist.md` and inspect actual path prefixes — update the grep pattern accordingly.
-- **`link` or `link-http` CLI call fails:** Retry once. If it fails again, log the failed link with source/target details and continue. Present unresolved links to the user at the end.
+- **Replay tool reports failures (exit code 2):** Open `.riviere/work/link-replay-report.json`, present malformed/failed lines to the user, and retry after fixes.
 - **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
 
 ## Completion

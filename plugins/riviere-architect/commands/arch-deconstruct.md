@@ -40,8 +40,8 @@ RUN_ID:        8-char UUID generated at start.
 - Phases are SEQUENTIAL — never start Phase N+1 until Phase N's orchestrator merge is complete
 - Respect concurrency constraints:
   - Extract: subagents write JSONL only; orchestrator serializes CLI calls
+  - Connect: subagents stage link commands only; orchestrator serializes CLI calls
   - **Annotate: NO concurrent `enrich` CLI calls; mandatory JSONL staging — concurrent enrich calls corrupt the graph (45–60% data loss)**
-  - Connect: concurrent linking IS safe
 - After each phase, validate artifacts exist before continuing
 - The validate-graph.ts hook fires automatically after every `riviere builder` command — if it exits with code 2, fix errors before the next phase
 
@@ -226,7 +226,7 @@ sequentially. These are pre-validated HIGH confidence links — apply them witho
 riviere builder component-checklist > .riviere/work/connect-checklist.md
 ```
 
-Split the checklist by repo. Spawn one subagent per repo for the remainder (concurrent linking is safe):
+Split the checklist by repo. Spawn one subagent per repo for staged link discovery:
 
 Agent prompt template:
 
@@ -244,14 +244,27 @@ were spawned. Focus on checklist items that remain unchecked — these are the
 ambiguous cases (HTTP cross-service, DI container patterns, external links) that
 require your judgment.
 
-You MAY call riviere builder link/link-http/link-external directly.
-Mark each checklist item [x] when linked.
-When complete, report: CONNECT_DONE: {repo-name} | {N} links created | Checklist updated.
+CRITICAL: Stage link commands only to .riviere/work/link-staged-{repo-name}.jsonl.
+Do NOT call riviere builder link/link-http/link-external directly.
+Mark each checklist item [x] when its link commands are staged.
+When complete, report: CONNECT_DONE: {repo-name} | {N} links staged | Checklist updated.
 ```
 
 Wait for all Connect subagents to complete.
 
-**Orchestrator:** Verify checklist completion. Run validate-graph.ts explicitly if no CLI calls fired the hook.
+**Orchestrator serialization** (follow `connect-orchestrator.md`):
+
+1. Verify checklist completion
+2. Ensure staged files exist: `.riviere/work/link-staged-{repo}.jsonl`
+3. Replay staged link commands via deterministic tool:
+
+   ```bash
+   bun skills/riviere-architect/tools/replay-staged-links.ts
+   ```
+
+   If exit code is `2`, inspect `.riviere/work/link-replay-report.json`, fix staged input,
+   and re-run replay.
+4. Run validate-graph.ts explicitly if no CLI calls fired the hook
 
 ### Step 6: Annotate — Enrich DomainOps (conditional)
 
