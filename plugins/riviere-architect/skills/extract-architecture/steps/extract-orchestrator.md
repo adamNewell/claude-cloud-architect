@@ -63,36 +63,33 @@ After all workers complete:
 
 ### 1. New domain discoveries
 
-Read all `.riviere/work/domains-{repo}.md` files. For each new domain found:
-
-1. Append to `.riviere/config/domains.md`
-2. Call `npx riviere builder add-domain --name "[name]" --system-type "[type]" --description "[desc]"`
-
-### 2. Run CLI calls sequentially
-
-For each `.riviere/work/extract-{repo}.jsonl` file (in any order), read each JSON
-object and call `add-component`:
-
 ```bash
-npx riviere builder add-component \
-  --type "[type]" \
-  --domain "[domain]" \
-  --module "[module]" \
-  --name "[name]" \
-  --repository "[repository]" \
-  --file-path "[filePath]" \
-  --line-number "[lineNumber]"
-  # plus type-specific flags from the staged JSON
+bun tools/merge-domains.ts --add-to-graph
 ```
 
-Type-specific flags:
+The tool reads all `.riviere/work/domains-{repo}.md` files, merges new domains into
+`domains.md`, and runs `add-domain` for each new entry. Report output:
 
-- API: `--api-type`, `--http-method`, `--http-path`
-- DomainOp: `--entity`, `--operation-name`
-- Event: `--event-name`, `--event-schema`
-- EventHandler: `--subscribed-events`
-- UI: `--route`
-- Custom: `--custom-type`, `--custom-property` (repeatable, format: `key:value`)
+```text
+.riviere/work/domain-merge-report.json
+```
+
+If the tool exits with code 2, near-duplicate domain names were detected — present
+them to the user for resolution before continuing.
+
+### 2. Replay staged components
+
+```bash
+bun tools/replay-staged-components.ts
+```
+
+The tool reads `.riviere/work/extract-*.jsonl`, validates each JSON line against the
+component schema, and executes `add-component` sequentially with all type-specific
+flags (API, DomainOp, Event, EventHandler, UI, Custom). Report output:
+
+```text
+.riviere/work/component-replay-report.json
+```
 
 ## Verify Extraction
 
@@ -122,7 +119,7 @@ Graph: `.riviere/[project-name]-[commit].json`
 ## Error Recovery
 
 - **`bun tools/init-graph.ts` fails:** Run with `--dry-run` first to preview commands. If the tool itself errors, check that `bun` is installed and that you are running from the skill root directory. Verify `tools/init-graph.ts` exists.
-- **`add-component` CLI call fails for a specific component:** Log the failure and continue with remaining components. After all workers complete, re-attempt failed components individually. Do not re-run the entire extract step.
+- **`replay-staged-components.ts` reports failures (exit code 2):** Open `.riviere/work/component-replay-report.json` for details. Failed components are logged with stdout/stderr. Fix the staged JSONL and re-run the tool — it skips already-added components.
 - **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.md` and `.riviere/config/component-definitions.md` before scanning.
 - **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.md` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.
 

@@ -32,13 +32,11 @@ showed 45–60% data loss per round when calls run simultaneously. Workers must 
 1. Split the DomainOp checklist into per-repository sub-checklists:
 
 ```bash
-mkdir -p .riviere/work/
-# Split enrichment checklist by repository
-while IFS= read -r repo_path; do
-  repo_name=$(basename "$repo_path")
-  grep "$repo_path" .riviere/step-5-checklist.md > ".riviere/work/enrich-${repo_name}.md"
-done < <(grep -oP '(?<=Root: ).*' .riviere/work/meta-*.md)
+bun tools/split-checklist.ts --checklist .riviere/step-5-checklist.md --prefix enrich
 ```
+
+The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
+and writes per-repo files to `.riviere/work/enrich-{repo}.md`.
 
 2. Spawn one worker per repository. Each receives `steps/annotate-subagent.md` as its
    instruction set:

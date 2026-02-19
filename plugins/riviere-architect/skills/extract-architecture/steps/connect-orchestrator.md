@@ -28,22 +28,17 @@ npx riviere builder component-checklist --output=".riviere/connect-checklist.md"
 **Partition strategy:** One worker per repository. Workers analyze links within their repo,
 then write staged JSONL commands. Coordinator executes all write commands sequentially.
 
-1. Split the master checklist into per-repository sub-checklists by matching source file
-   paths to their repository root:
+1. Split the master checklist into per-repository sub-checklists:
 
 ```bash
-mkdir -p .riviere/work/
-# Split checklist by repository — one file per repo
-# For each repository listed in .riviere/config/metadata.md, extract its entries:
-while IFS= read -r repo_path; do
-  repo_name=$(basename "$repo_path")
-  grep "$repo_path" .riviere/connect-checklist.md > ".riviere/work/checklist-${repo_name}.md"
-done < <(grep -oP '(?<=Root: ).*' .riviere/work/meta-*.md)
-
-# Verify: each per-repo checklist should be non-empty
-# If a checklist is empty, check that the repo root path in metadata.md matches
-# the file paths recorded during extract step
+bun tools/split-checklist.ts --checklist .riviere/connect-checklist.md --prefix checklist
 ```
+
+The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
+validates no empty splits, and writes per-repo files to `.riviere/work/checklist-{repo}.md`.
+
+If the tool exits with code 2, some checklist items could not be matched to a repository —
+check that path formats in the checklist match the repo roots in `meta-*.md`.
 
 2. Spawn one worker per repository. Each receives `steps/connect-subagent.md` as its
    instruction set:
@@ -126,7 +121,7 @@ config files, and re-run the affected step.
 
 ## Error Recovery
 
-- **Worker sub-checklist is empty after grep-split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Open `.riviere/connect-checklist.md` and inspect actual path prefixes — update the grep pattern accordingly.
+- **Worker sub-checklist is empty after split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Check `.riviere/work/checklist-split-report.json` for unmatched lines and verify path formats.
 - **Replay tool reports failures (exit code 2):** Open `.riviere/work/link-replay-report.json`, present malformed/failed lines to the user, and retry after fixes.
 - **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
 

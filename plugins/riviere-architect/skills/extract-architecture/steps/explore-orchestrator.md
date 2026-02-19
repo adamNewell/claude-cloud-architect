@@ -55,12 +55,16 @@ After all subagents complete:
 
 ### 1. Merge domain discoveries
 
-Read all `.riviere/work/domains-{repo}.md` files:
+```bash
+bun tools/merge-domains.ts
+```
 
-- **New rows** → append to `.riviere/config/domains.md`
-- **`ADD: {repo}` rows** → add that repo name to the existing domain's Repositories column
-- **Name collisions** → if two workers discovered what appears to be the same domain under
-  different names, ask the user to resolve before proceeding
+The tool reads all `.riviere/work/domains-{repo}.md` files, applies three merge rules
+(new → append, ADD → update Repositories, collision → flag), and writes the updated
+`domains.md`. Near-duplicate names (Levenshtein distance ≤ 2) are flagged as conflicts.
+
+If the tool exits with code 2, conflicts were detected — present them to the user for
+resolution before continuing.
 
 ### 2. Confirm with user
 
