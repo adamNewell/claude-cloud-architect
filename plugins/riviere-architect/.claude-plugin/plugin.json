@@ -1,0 +1,17 @@
+{
+  "name": "riviere-architect",
+  "version": "0.1.0",
+  "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
+  "author": {
+    "name": "Adam Newell",
+    "email": "adamdouglasnewell@gmail.com"
+  },
+  "keywords": [
+    "architecture",
+    "documentation",
+    "system-design",
+    "diagrams",
+    "adr"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

@@ -1,0 +1,140 @@
+# Step 2: Define Component Extraction Rules (Orchestrator)
+
+## Objective
+
+Produce `component-definitions.md` and `linking-rules.md` — the pattern guides used in
+Steps 3 and 4 to extract and link components.
+
+## Prerequisites
+
+- Read `.riviere/config/metadata.md` for codebase context
+- Read `.riviere/config/domains.md` — use canonical domain names in all examples
+
+## Component Types
+
+| Type         | Definition                                          |
+| ------------ | --------------------------------------------------- |
+| UI           | User-facing screens/pages                           |
+| API          | HTTP endpoints                                      |
+| UseCase      | Application service coordinating a user goal        |
+| DomainOp     | Business logic — aggregate methods, domain services |
+| Event        | Domain event published after something happens      |
+| EventHandler | Subscriber that reacts to an event                  |
+
+Custom types may also be discovered — handled in the merge step below.
+
+> **Small / single-repo codebases:** Follow `references/phase-2-subagent.md` directly
+> for each component type in sequence — you are both orchestrator and subagent. The repo
+> dimension is implicit; output files use `rules-{type}.md`.
+
+## Spawn Subagents
+
+**Partition unit: one worker per (component type × repository).** Different repositories
+may use different frameworks for the same type — patterns must be discovered per repo.
+
+Spawn one subagent per combination:
+
+```text
+AGENT INSTRUCTIONS: Read references/phase-2-subagent.md and follow its instructions exactly.
+COMPONENT TYPE: {TypeName}
+REPOSITORY: {repository-name}
+REPOSITORY ROOT: {local path to repository}
+PREREQUISITE: Read .riviere/config/metadata.md AND .riviere/config/domains.md
+```
+
+Spawn for every (type × repo) pair across: API, UseCase, DomainOp, Event, EventHandler, UI.
+
+> **Single-repository codebases:** Spawn one worker per type only — the repo dimension
+> is implicit.
+
+If Phase 1 metadata suggests custom type candidates (e.g., background jobs, scheduled
+tasks, sagas), spawn one extra worker per (candidate × repo) with a brief description
+of the pattern.
+
+## Wait and Merge
+
+After all subagents complete:
+
+### 1. Consolidate custom type proposals
+
+Read all `.riviere/work/rules-{type}.md` files. Collect every "Proposed Custom Types"
+section. Present a single consolidated list to the user — one conversation, not N:
+
+> "Workers found these patterns that may warrant custom component types. Please decide:
+> accept (will be `define-custom-type` in Step 3) or reject (treat as existing type)."
+
+```markdown
+## Proposed Custom Types
+
+| Pattern                        | Suggested Name  | Decision |
+| ------------------------------ | --------------- | -------- |
+| Background jobs in `src/jobs/` | `BackgroundJob` |          |
+| Saga orchestrators             | `Saga`          |          |
+```
+
+Record decisions. Accepted types are appended to `component-definitions.md` as a
+`## Custom Types` table using this exact format (parseable by `tools/init-graph.ts`):
+
+```markdown
+## Custom Types
+
+| Name | Description | Required Properties | Optional Properties |
+|------|-------------|---------------------|---------------------|
+| BackgroundJob | Scheduled background task | schedule:string:Cron expression or interval | timeout:number:Max run time in seconds |
+```
+
+Properties are semicolon-separated: `name:type:description;name2:type2:description2`.
+Leave the Optional Properties cell empty if none.
+
+### 2. Merge extraction rules
+
+Read all `.riviere/work/rules-{repo}-{type}.md` files. For each component type:
+
+- **Patterns match across repos** → write one unified rule
+- **Patterns differ across repos** → write the most common pattern as the main rule,
+  add a `### Repo Overrides` block for repos that differ
+
+Example:
+
+```markdown
+## API
+
+### Identification
+**Location:** `src/`
+**Class pattern:** `@Controller` decorator
+**Select:** methods decorated with `@Get`, `@Post`, etc.
+
+### Repo Overrides
+- `legacy-service`: uses Express `router.get(...)` — no class, extract route handlers directly
+```
+
+Merge into `.riviere/config/component-definitions.md` with this header:
+
+```markdown
+# Component Definitions
+
+Rules and patterns for Step 3 extraction. Contains no component instances — only
+identification patterns, field sources, excludes, and one example per type.
+```
+
+### 3. Merge linking patterns
+
+Collect HTTP Client Mappings and non-HTTP linking patterns from all worker outputs.
+Deduplicate — same client pattern listed once even if found in multiple repos.
+Write to `.riviere/config/linking-rules.md`.
+
+## Output
+
+**`.riviere/config/component-definitions.md`** — extraction rules per component type.
+
+**`.riviere/config/linking-rules.md`** — HTTP client mappings and non-HTTP linking patterns.
+
+## Completion
+
+Present extraction rules AND linking rules to the user for review.
+
+**Step 2 complete.** Wait for user feedback before proceeding.
+
+## Next Phase
+
+Read `references/phase-3.md`

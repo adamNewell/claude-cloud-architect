@@ -1,0 +1,28 @@
+{
+  "name": "my-marketplace",
+  "owner": {
+    "name": "Adam Newell",
+    "email": "adamdouglasnewell@gmail.com"
+  },
+  "metadata": {
+    "description": "A curated collection of Claude Code plugins",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "riviere-architect",
+      "source": "./plugins/riviere-architect",
+      "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
+      "version": "0.1.0",
+      "keywords": [
+        "architecture",
+        "documentation",
+        "system-design",
+        "diagrams",
+        "adr"
+      ],
+      "category": "productivity"
+    }
+  ]
+}
