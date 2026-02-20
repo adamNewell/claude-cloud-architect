@@ -1,0 +1,93 @@
+[
+  {
+    "id": "CBLDSEC01-BP01",
+    "title_full": "CBLDSEC01-BP01 Ensure that your container images are using least privilege identity",
+    "title": "Ensure that your container images are using least privilege identity",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/identity-and-access-management.html",
+    "description": "By default, containers provide process isolation. However, it is important to note that the default behavior is to run the container using the root user. When the processes inside the container are running as the root user, they have full administrative access to containers and the container host. Having an application running within a container through the root user expands the attack surface of the environment. Define the USER directive in the Dockerfile to ensure processes run with minimal privileges.",
+    "outcome": "Reduces the attack surface by ensuring container processes run with minimal privileges, preventing privilege escalation attacks.",
+    "pillar": "SECURITY",
+    "area": ["Identity and access management"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC01-BP02",
+    "title_full": "CBLDSEC01-BP02 Limit administrator access to build infrastructure (CI pipeline)",
+    "title": "Limit administrator access to build infrastructure (CI pipeline)",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/identity-and-access-management.html",
+    "description": "Adding continuous security validation in a build pipeline is a major focus for organizations moving to a DevSecOps strategy. It is important to secure the build pipeline as it typically accesses databases, proprietary code, and secrets or credentials across dev, test, and prod environments. A compromised build pipeline could provide a bad actor with access to all of these resources. Follow the best practice of granting the least privileged access to the container build infrastructure for both human and machine identities.",
+    "outcome": "Protects the build pipeline and prevents unauthorized access to sensitive resources including source code, secrets, and credentials.",
+    "pillar": "SECURITY",
+    "area": ["Identity and access management"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC02-BP01",
+    "title_full": "CBLDSEC02-BP01 Ensure that your images are scanned for vulnerabilities",
+    "title": "Ensure that your images are scanned for vulnerabilities",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/detective-controls.html",
+    "description": "After images are built, maintain a regular cadence of scanning those images to ensure no new or existing vulnerabilities have surfaced. Static scanning is performed before the image is deployed, allowing organizations to detect vulnerabilities in a container image before deployment. Dynamic container scanning is performed post-deployment and identifies vulnerabilities that may have been introduced by other software installed on the infrastructure itself.",
+    "outcome": "Detects and addresses vulnerabilities before and after deployment, maintaining a strong security posture.",
+    "pillar": "SECURITY",
+    "area": ["Detective controls"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC03-BP01",
+    "title_full": "CBLDSEC03-BP01 Minimize attack surface",
+    "title": "Minimize attack surface",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/infrastructure-protection.html",
+    "description": "Reduce attack surface when designing and building your container by: running distroless images without a shell or package manager, building open-source libraries from source or scanning them for vulnerabilities, removing or defanging setuid and setgid bits, linting your Dockerfile, using tools to remove unnecessary binaries, and ensuring containers operate with a read-only root filesystem.",
+    "outcome": "Reduces the attack surface by minimizing available tools and permissions that could be exploited by attackers.",
+    "pillar": "SECURITY",
+    "area": ["Infrastructure protection"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC03-BP02",
+    "title_full": "CBLDSEC03-BP02 Understand the lineage of your container image",
+    "title": "Understand the lineage of your container image",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/infrastructure-protection.html",
+    "description": "Understand where your container images are coming from. If not building images from scratch, only run images from trusted registries that have been signed with a trusted signature to ensure integrity. Don't incorporate images directly from a public repository into your container pipeline. Private registries should be used to allow an organization to maintain complete control and visibility over their container image catalog. If using images from public repositories, scan, sign, and store them in a private registry.",
+    "outcome": "Ensures integrity and security of container images by verifying their source and maintaining control over the image catalog.",
+    "pillar": "SECURITY",
+    "area": ["Infrastructure protection"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC04-BP01",
+    "title_full": "CBLDSEC04-BP01 Do not hardcode sensitive data into your container image",
+    "title": "Do not hardcode sensitive data into your container image",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/data-protection.html",
+    "description": "It is important that no sensitive information is stored in the container itself. User credentials should never be hardcoded into your container image. Instead, consider using a secret management protocol that is compatible with the container orchestration system being used to manage the container workloads.",
+    "outcome": "Protects sensitive information by using proper secret management instead of hardcoding credentials in container images.",
+    "pillar": "SECURITY",
+    "area": ["Data protection"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSEC04-BP02",
+    "title_full": "CBLDSEC04-BP02 Ensure that persistent data is stored outside of the container",
+    "title": "Ensure that persistent data is stored outside of the container",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/data-protection.html",
+    "description": "If your containerized application writes or consumes persistent data, ensure that data is stored outside of the container. Since containers are intended to be ephemeral, use volumes to store persistent data that will remain intact long after a container's lifecycle has completed.",
+    "outcome": "Ensures data persistence and security by storing data outside ephemeral containers using appropriate storage mechanisms.",
+    "pillar": "SECURITY",
+    "area": ["Data protection"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "CONTAINER_BUILD"
+  }
+]

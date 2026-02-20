@@ -1,0 +1,93 @@
+[
+  {
+    "area": ["Value for money"],
+    "description": "Document the definition of value for money for the jurisdictional and portfolio context, and how this service meets that definition. Most government entities have clear rules around how they assess value for money, but this can be subtly different across jurisdictions. For some countries, value for money is considered whatever is the best functionality for the cost to deliver the desired policy outcome. Other countries take into account the best balance of social, public, and environmental benefits along with cost. Engage with the government organization to understand and document their value for money definition.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP01",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST01-BP01", "COST01-BP02"],
+    "risk": "HIGH",
+    "title": "Document jurisdictional value for money definition",
+    "title_full": "GOV12-BP01 Document jurisdictional value for money definition"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Define how the cost and value is reported to oversight and governance bodies (for example, parliament, and public scrutiny). Encourage the organization to automate and provide ease of cost/value reporting for the service. AWS provides several reporting and cost-optimization tools, including AWS Cost Explorer Service, AWS Budgets, and AWS Cost and Usage Report. Serverless applications running on services like AWS Lambda and Amazon DynamoDB can help by providing insight into costs per event.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP02",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST02-BP02", "COST02-BP03"],
+    "risk": "MEDIUM",
+    "title": "Define cost and value reporting for governance bodies",
+    "title_full": "GOV12-BP02 Define cost and value reporting for governance bodies"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Build in-house capability to manage costs through training, tools, and equipping teams. Provide delivery teams with the services and tools that they need to be able to actively understand and manage their costs. Enable team autonomy in cost management decisions within appropriate governance frameworks.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP03",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST01-BP03"],
+    "risk": "MEDIUM",
+    "title": "Build in-house cost management capability",
+    "title_full": "GOV12-BP03 Build in-house cost management capability"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Leverage existing solutions and capabilities where possible. Support the reuse of platforms, panels, marketplaces, research, design systems, and existing solutions or components where possible. Encourage the organization to identify and leverage reusable tools, solutions, research and methods for the service. See the AWS Solutions Library for pre-built reference implementations.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP04",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST04-BP01"],
+    "risk": "MEDIUM",
+    "title": "Leverage existing solutions and capabilities",
+    "title_full": "GOV12-BP04 Leverage existing solutions and capabilities"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Leverage professional networks and user groups. Identify and engage with cross-governmental networks, professional networks and relevant user groups to engage peer review and feedback on the solution. Encourage the organization to identify and leverage networks and communities of practice, and establish peer review sessions for continuous cost optimization learning.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP05",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": [],
+    "risk": "LOW",
+    "title": "Leverage professional networks and user groups",
+    "title_full": "GOV12-BP05 Leverage professional networks and user groups"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Optimize for speed of change. It's sometimes necessary to optimize for speed to respond to a citizen need or department mandate rapidly. Government solutions might need to initially overcompensate on capacity to maintain service reliability during peak popularity, for example, at the time of a press release, to avoid breaking citizen trust. Fortunately, this necessary choice is temporary and works well with cloud economics. Service delivery teams can cost optimize and consider automatic scaling after release events, when utilization and popularity have normalized.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP06",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST05-BP01", "COST05-BP02"],
+    "risk": "MEDIUM",
+    "title": "Optimize for speed of change and automatic scaling",
+    "title_full": "GOV12-BP06 Optimize for speed of change and automatic scaling"
+  },
+  {
+    "area": ["Value for money"],
+    "description": "Optimize for budget planning processes in the jurisdiction. Provide decision makers with the key metrics that they need to balance citizen needs with service costs. Support the organization to take into account funding cycles and ensure continuity of service. Often, there is low flexibility in these cycles, however, government customers can be supported to build more flexibility into the program, project, or product-based funding mechanisms. Encourage the organization to automate and provide ease of cost/value reporting for the service, especially for delivery teams and decision makers.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/cost-optimization-pillar.html",
+    "id": "GOV12-BP07",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "COST_OPTIMIZATION",
+    "relatedIds": ["COST02-BP04", "COST02-BP05"],
+    "risk": "MEDIUM",
+    "title": "Optimize for budget planning processes and funding cycles",
+    "title_full": "GOV12-BP07 Optimize for budget planning processes and funding cycles"
+  }
+]

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "saga",
+    "sagaCode",
+    "capability",
+    "capabilityCode",
+    "description",
+    "href",
+    "indicators",
+    "antiPatterns",
+    "metrics"
+  ],
+  "properties": {
+    "saga": {
+      "type": "string",
+      "description": "Name of the DevOps saga (e.g., Organizational Adoption)"
+    },
+    "sagaCode": {
+      "type": "string",
+      "description": "Two-letter code for the saga (e.g., OA, DL, QA, AG, OB)"
+    },
+    "capability": {
+      "type": "string",
+      "description": "Name of the capability within the saga"
+    },
+    "capabilityCode": {
+      "type": "string",
+      "description": "Two-letter code for the capability (e.g., LS for Leader Sponsorship)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Overview description of the capability"
+    },
+    "href": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the AWS documentation for this capability"
+    },
+    "indicators": {
+      "type": "array",
+      "description": "List of indicators for this capability",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier in format SAGA.CAP.N (e.g., OA.LS.1)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the indicator"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the indicator"
+          },
+          "href": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to the AWS documentation for this indicator"
+          }
+        }
+      }
+    },
+    "antiPatterns": {
+      "type": "array",
+      "description": "List of anti-patterns to avoid",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier in format SAGA.CAP-APN (e.g., OA.LS-AP1)"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the anti-pattern"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the anti-pattern and why to avoid it"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "description": "List of metrics for measuring capability maturity",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier in format SAGA.CAP-MN (e.g., OA.LS-M1)"
+          },
+          "title": { "type": "string", "description": "Title of the metric" },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of what the metric measures"
+          },
+          "formula": {
+            "type": "string",
+            "description": "Formula for calculating the metric (if applicable)"
+          }
+        }
+      }
+    }
+  }
+}

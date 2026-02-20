@@ -1,0 +1,80 @@
+[
+  {
+    "id": "MNAREL01-BP01",
+    "title_full": "MNAREL01-BP01 Incorporate fault tolerance to achieve high availability as required for your industry vertical and customer expectations",
+    "title": "Incorporate fault tolerance to achieve high availability as required for your industry vertical and customer expectations",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-1.html",
+    "description": "These are two important concepts in the concept of availability. Fault tolerance is the ability to withstand subsystem failure and maintain availability (working properly within an established SLA). To implement fault tolerance, workloads use spare (or redundant) subsystems. Fault isolation minimizes the scope of impact when a failure does occur. This is typically implemented with modularization. Workloads are broken down into small subsystems that fail independently and can be repaired in isolation.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Failure Management"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "MERGERS_ACQUISITIONS"
+  },
+  {
+    "id": "MNAREL01-BP02",
+    "title_full": "MNAREL01-BP02 Establish SLAs, including DR RTO and RPO for the combined organization",
+    "title": "Establish SLAs, including DR RTO and RPO for the combined organization",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-1.html",
+    "description": "Critical platforms require high availability. It is advised to achieve the maximum required availability at a reasonable cost that meets customer and business needs.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Foundations"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "MERGERS_ACQUISITIONS"
+  },
+  {
+    "id": "MNAREL01-BP03",
+    "title_full": "MNAREL01-BP03 Establish a deployment strategy for combined company",
+    "title": "Establish a deployment strategy for combined company",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-1.html",
+    "description": "AWS provides a number of tools to simplify and automate the provisioning of infrastructure and deployment of applications. Each deployment service offers different capabilities for managing applications. To build a successful deployment architecture, evaluate the available features of each service against the needs your application and organization.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Change Management"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "MERGERS_ACQUISITIONS"
+  },
+  {
+    "id": "MNAREL01-BP04",
+    "title_full": "MNAREL01-BP04 Establish an SRE team and process for the combined organization",
+    "title": "Establish an SRE team and process for the combined organization",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-1.html",
+    "description": "Site reliability engineering (SRE) is the practice of using software tools to automate IT infrastructure tasks such as system management and application monitoring. Organizations use SRE to keep their software applications reliable amidst frequent updates from development teams.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Change Management"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "MERGERS_ACQUISITIONS"
+  },
+  {
+    "id": "MNAREL02-BP01",
+    "title_full": "MNAREL02-BP01 Establish alternatives for each critical external service to switch over to if needed, or balance traffic across",
+    "title": "Establish alternatives for each critical external service to switch over to if needed, or balance traffic across",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-2.html",
+    "description": "Amazon API Gateway can be used to front calls to backend external services and handle failover if problems are detected with the primary service.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Failure Management"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "MERGERS_ACQUISITIONS"
+  },
+  {
+    "id": "MNAREL02-BP02",
+    "title_full": "MNAREL02-BP02 Have legal agreements in place guaranteeing the right of continued usage of all external services",
+    "title": "Have legal agreements in place guaranteeing the right of continued usage of all external services",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/mergers-and-acquisitions-lens/marel-2.html",
+    "description": "As an example, see AWS Service Terms.",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "area": ["Foundations"],
+    "relatedIds": [],
+    "risk": "HIGH",
+    "lens": "MERGERS_ACQUISITIONS"
+  }
+]

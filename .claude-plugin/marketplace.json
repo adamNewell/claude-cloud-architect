@@ -23,6 +23,23 @@
         "adr"
       ],
       "category": "productivity"
+    },
+    {
+      "name": "waf-analysis",
+      "source": "./plugins/waf-analysis",
+      "description": "AWS Well-Architected Framework best practices for architecture reviews",
+      "version": "1.0.0",
+      "keywords": [
+        "aws",
+        "well-architected",
+        "waf",
+        "architecture-review",
+        "best-practices",
+        "security",
+        "reliability",
+        "cost-optimization"
+      ],
+      "category": "architecture"
     }
   ]
 }

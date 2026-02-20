@@ -1,0 +1,15 @@
+[
+  {
+    "id": "HCIPER01-BP01",
+    "title_full": "HCIPER01-BP01 Use multiple solutions for performance optimization",
+    "title": "Use multiple solutions for performance optimization",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/selection.html",
+    "description": "The optimal solution for a particular workload varies, and solutions often combine multiple approaches. Well-Architected healthcare workloads use multiple solutions and enable different features to improve performance. Take a data-driven approach to selecting a high-performance architecture and gather data on all aspects of the architecture.",
+    "outcome": "Healthcare workloads achieve optimal performance by leveraging multiple AWS services and features tailored to their specific requirements.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "area": ["Selection"],
+    "relatedIds": ["PERF01-BP01", "PERF02-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  }
+]

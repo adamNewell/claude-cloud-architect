@@ -1,0 +1,100 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Advanced Deployment Strategies",
+  "capabilityCode": "ADS",
+  "description": "Advanced deployment strategies provide organizations with the ability to deploy and release new features and updates gradually. The fast feedback loop enabled by these strategies aids in early detection and resolution of potential issues during deployment, enhancing the reliability of the release process. With advanced deployment strategies, organizations can improve the quality and speed of software releases, reduce the risk of downtime or errors, and provide enhanced user experience.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/advanced-deployment-strategies.html",
+  "indicators": [
+    {
+      "id": "DL.ADS.1",
+      "title": "Test deployments in pre-production environments",
+      "category": "FOUNDATIONAL",
+      "description": "Progressively validate software changes across multiple environments, including development (alpha) and testing (beta) before deploying into production. Additional staging environments can be introduced as needed, such as staging (gamma). These additional environments help to prevent the introduction of bugs in production environments, validates backwards compatibility, and increases the confidence in the quality of the deployment. Each non-production deployment serves as a gate, only allowing changes to progress to the next stage after they pass all validations. Early issue detection and isolation prevent propagation to later stages or production.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.1-test-deployments-in-pre-production-environments.html"
+    },
+    {
+      "id": "DL.ADS.2",
+      "title": "Implement automatic rollbacks for failed deployments",
+      "category": "FOUNDATIONAL",
+      "description": "Implement an automatic rollback strategy to enhance system reliability and minimize service disruptions. The strategy should be defined as a proactive measure in case of an operational event, which prioritizes customer impact mitigation even before identifying whether the new deployment is the cause of the issue. Rollback should be initiated based on alarms linked to key metrics like fault rates, latency, CPU usage, memory usage, disk usage, and log errors.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.2-implement-automatic-rollbacks-for-failed-deployments.html"
+    },
+    {
+      "id": "DL.ADS.3",
+      "title": "Use staggered deployment and release strategies",
+      "category": "FOUNDATIONAL",
+      "description": "Staggered deployments strategies make use of techniques like progressive wave-based deployments, one-box deployments, and rolling deployments. These techniques contribute to safer and more reliable software deployment and release processes. Staggered deployments are beneficial as they balance the safety of small-scoped deployments with the speed of delivering changes to customers. Progressive deployments involve deploying changes to deployment groups, or waves, of increasing size.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.3-use-staggered-deployment-and-release-strategies.html"
+    },
+    {
+      "id": "DL.ADS.4",
+      "title": "Implement Incremental Feature Release Techniques",
+      "category": "RECOMMENDED",
+      "description": "Incremental feature releases gradually roll out new features to users, reducing risk and maintaining system stability. Techniques include dark launching, two-phase deployments, feature flags, and canary releases. These techniques enable safe, controlled, and iterative changes to distributed systems which reduces risk associated with concurrent updates and maintaining system stability.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.4-implement-incremental-feature-release-techniques.html"
+    },
+    {
+      "id": "DL.ADS.5",
+      "title": "Ensure backwards compatibility for data store and schema changes",
+      "category": "RECOMMENDED",
+      "description": "Backwards compatibility in data stores and schemas ensures that as changes are made, previous versions of the system continue to operate as expected. As modifications, additions, or deletions are made to data structures and schemas, these changes should be designed to coexist with previous data structures, allowing both old and new versions to operate concurrently. Maintaining backwards compatibility helps to avoid breaking changes that could disrupt continuous integration and delivery pipelines.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.5-ensure-backwards-compatibility-for-data-store-and-schema-changes.html"
+    },
+    {
+      "id": "DL.ADS.6",
+      "title": "Use cell-based architectures for granular deployment and release",
+      "category": "OPTIONAL",
+      "description": "A cell-based architecture segments a larger system into isolated, independently functioning replicas, or cells. These cells are smaller components of the system that contain all application logic and storage. They have their own monitoring and alerting systems, are automated for creation and update, and can be managed and scaled individually. This approach offers advantages including scalability, fault isolation, testing, and operational resilience.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.6-utilize-cell-based-architectures-for-granular-deployment-and-release.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.ADS-AP1",
+      "title": "Deploying directly to production",
+      "description": "Deploying changes directly to production without first testing in pre-production environments risks unforeseen errors, bugs, or performance issues that can lead to service disruptions or downtime. Pre-production testing in environments that mimic production as closely as possible is crucial to verify the functionality and compatibility of changes under realistic conditions."
+    },
+    {
+      "id": "DL.ADS-AP2",
+      "title": "Ignoring rollbacks and data compatibility",
+      "description": "The absence of an automatic rollback strategy and a lack of consideration for data compatibility can lead to prolonged service disruptions and compatibility issues. An automatic rollback mechanism can reduce downtime and maintain system reliability as it ensures a quick return to a stable state in the event of a fault. Maintaining backward compatibility in data stores and schemas can prevent disruptions to existing functionalities and integration pipelines."
+    },
+    {
+      "id": "DL.ADS-AP3",
+      "title": "Monolithic deployment model",
+      "description": "Deploying all changes simultaneously and treating the entire system as a single unit increases the risk of errors that could impact the entire system and limits scalability. To mitigate these risks, adopt staggered deployments and consider cell-based architectures. Staggering deployments through wave, one-box, or rolling deployments allows for easier issue detection and rollback which reduces negative impact of failed deployments."
+    },
+    {
+      "id": "DL.ADS-AP4",
+      "title": "Abrupt feature release",
+      "description": "Releasing new features to all users at once without incremental deployment or testing can result in widespread disruptions if the feature fails or impacts the system negatively. Techniques like dark launching, two-phase deployments, feature flags, and canary releases reduce this risk by providing control and facilitating monitoring of the feature's impact in real-world conditions."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.ADS-M1",
+      "title": "Rollback frequency",
+      "description": "This metric measures how often changes need to be rolled back. While a higher rollback frequency may indicate issues with the deployment process or inadequate quality assurance capabilities, it can also suggest successful usage of advanced deployment strategy capabilities with automation facilitating fast rollbacks to minimize user risk.",
+      "formula": "Count the number of rollbacks and compare it to the total number of deployments"
+    },
+    {
+      "id": "DL.ADS-M2",
+      "title": "Deployment lead time",
+      "description": "The average time required to successfully deploy a feature or service from the moment a deployment is triggered to when it is live in an environment. Using this metric, teams can pinpoint bottlenecks in the deployment process. Enhance this metric by optimizing deployment strategies, utilizing distributed architectures, or deploying in waves to strike a balance between speed and safety.",
+      "formula": "Measure the duration from when the deployment is triggered to its completion, considering only successful deployments, and calculate the average over a specific time frame, such as weekly or monthly"
+    },
+    {
+      "id": "DL.ADS-M3",
+      "title": "Release frequency",
+      "description": "The frequency at which changes become accessible to end users. This metric distinguishes between deployments, which introduces new code or configurations into an environment, and releases, which make those changes accessible to end users. A high release frequency can indicate mature DevOps capabilities which enable releasing small, incremental changes that are automatically deployed and verified with confidence.",
+      "formula": "Count the number of releases to production over a specified period and compare this metric to deployment frequency to understand the correlation"
+    },
+    {
+      "id": "DL.ADS-M4",
+      "title": "Mean time to recover (MTTR)",
+      "description": "The average time taken to restore a system after a failure. This metric provides insight into the team's ability to quickly detect and address production issues. A lower MTTR indicates safer deployment practices, the use of automated rollbacks, and effective governance, quality assurance, and observability capabilities.",
+      "formula": "Measure the total amount of downtime and divide it by the total number of incidents within a specific time frame"
+    }
+  ]
+}

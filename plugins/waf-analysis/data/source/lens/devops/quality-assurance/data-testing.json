@@ -1,0 +1,72 @@
+{
+  "saga": "Quality Assurance",
+  "sagaCode": "QA",
+  "capability": "Data Testing",
+  "capabilityCode": "DT",
+  "description": "Data testing is a specialized type of testing that emphasizes the evaluation of data processed by systems, encompassing aspects like data transformations, data integrity rules, and data processing logic. Its purpose is to evaluate various attributes of data to identify data quality issues, such as duplication, missing data, or errors. By performing data testing, organizations can establish a foundation of reliable and trustworthy data for their systems which in turn enables informed decision-making, efficient business operations, and positive customer experiences.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/data-testing.html",
+  "indicators": [
+    {
+      "id": "QA.DT.1",
+      "title": "Ensure data integrity and accuracy with data quality tests",
+      "description": "Data quality tests assess the accuracy, consistency, and overall quality of the data used within the application or system. These tests typically involve validating data against predefined rules and checking for duplicate or missing data to ensure the dataset remains reliable. Using data quality tests enables rapid software delivery and continuous improvement of data driving systems. Teams can focus on how data should appear rather than continually checking it for accuracy, streamlining the development and deployment process.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.dt.1-ensure-data-integrity-and-accuracy-with-data-quality-tests.html"
+    },
+    {
+      "id": "QA.DT.2",
+      "title": "Enhance understanding of data through data profiling",
+      "description": "Use data profiling tools to examine, analyze, and understand the data including its content, structure, and relationships to identify issues such as inconsistencies, outliers, and missing values. By performing data profiling, teams can gain deeper insights into the characteristics and quality of their data, enabling them to make informed decisions about data management, data governance, and data integration strategies. This data is often used to enable or improve other types of data testing.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.dt.2-enhance-understanding-of-data-through-data-profiling.html"
+    },
+    {
+      "id": "QA.DT.3",
+      "title": "Validate data processing rules with data logic tests",
+      "description": "Data logic tests verify the accuracy and reliability of data processing and transformation within your application, ensuring that it functions as intended. Establish test cases for data processing workflows and transformation functions, confirming that expected outcomes are achieved. Use version control systems to track changes in data logic and implement automated data logic tests in development and staging environments to proactively identify and fix issues before they reach production.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.dt.3-validate-data-processing-rules-with-data-logic-tests.html"
+    },
+    {
+      "id": "QA.DT.4",
+      "title": "Detect and mitigate data issues with anomaly detection",
+      "description": "Data anomaly detection is a specialized form of anomaly detection which focuses on identifying unusual patterns or behaviors in data quality metrics that may indicate data quality issues. Consider integrating machine learning algorithms and statistical methods into your data quality monitoring processes. Use tools that can detect and address data anomalies in real-time and incorporate them into your development and deployment workflows to enable automated assessment of data accuracy and reliability.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.dt.4-detect-and-mitigate-data-issues-with-anomaly-detection.html"
+    },
+    {
+      "id": "QA.DT.5",
+      "title": "Utilize incremental metrics computation",
+      "description": "Incremental metrics computation allows teams to efficiently monitor and maintain data quality without needing to recompute metrics on the entire dataset every time data is updated. Use this method to significantly reduce computational resources and time spent on data quality testing, allowing for more agile and responsive data management practices. Segment your data into logical partitions based on time and automate the computation process by setting up triggers.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.dt.5-utilize-incremental-metrics-computation.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "QA.DT-AP1",
+      "title": "Testing data drift",
+      "description": "Testing data in environments that do not mirror production datasets can result in testing outdated data schemas, different configurations, or testing data not representative of real-world conditions. Tests that pass in a non-representative environment might fail in production, leading to undetected data issues. Ensure that testing environments mirror production as closely as possible, both in terms of configuration and the nature of the data. Regularly update testing environment datasets to reflect changes in production."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "QA.DT-M1",
+      "title": "Data test coverage",
+      "description": "The percentage of your dataset or data processing logic covered by tests. Data test coverage gives an overview of potential untested or under-tested areas of the application. A high coverage helps ensure a comprehensive evaluation, while low coverage can indicate blind spots in testing. Improve this metric by prioritizing areas with lower coverage, using automation and tools to enhance coverage, and regularly review test strategies.",
+      "formula": "Ratio of code or data elements covered by tests to the total lines of code or data elements in the application"
+    },
+    {
+      "id": "QA.DT-M2",
+      "title": "Test case run time",
+      "description": "The duration taken to run a test case or a suite of test cases. Increasing duration may highlight bottlenecks in the test process or performance issues emerging in the software under test. Improve this metric by optimizing test scripts and the order they run in, enhancing testing infrastructure, and running tests in parallel.",
+      "formula": "Timestamp difference between the start and end of test case execution"
+    },
+    {
+      "id": "QA.DT-M3",
+      "title": "Data quality score",
+      "description": "The combined quality of data in a system, encompassing facets such as consistency, completeness, correctness, accuracy, validity, and timeliness. Derive the data quality score by individually assessing each facet, then aggregating and normalizing them into a single metric, typically ranging from 0 to 100, with higher scores indicating better data quality. Consider factors like uniformity of data values (consistency), presence or absence of missing values (completeness), degree of data accuracy relative to real-world entities (correctness and accuracy), adherence of data to predefined rules (validity), and currency and relevance of the data (timeliness).",
+      "formula": "Aggregated and normalized assessment of consistency, completeness, correctness, accuracy, validity, and timeliness facets (scale 0-100)"
+    }
+  ]
+}

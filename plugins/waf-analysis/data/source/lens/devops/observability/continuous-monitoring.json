@@ -1,0 +1,134 @@
+{
+  "saga": "Observability",
+  "sagaCode": "OB",
+  "capability": "Continuous Monitoring",
+  "capabilityCode": "CM",
+  "description": "Continuous monitoring is the real-time observation and analysis of telemetry data to help optimize system performance. It encompasses alert configuration to notify teams of potential issues, promoting rapid response. Post-event investigations provide valuable insights to continuously optimize the monitoring process. By integrating artificial intelligence (AI) and machine learning (ML), continuous monitoring can achieve a higher level of precision and speed in detecting and responding to system issues.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/continuous-monitoring.html",
+  "indicators": [
+    {
+      "id": "OB.CM.1",
+      "title": "Automate alerts for security and performance issues",
+      "category": "FOUNDATIONAL",
+      "description": "Alerts should automatically notify teams when there are indicators of malicious activity, compromise, or performance degradation. Effective alerting accelerates incident response times, enabling teams to quickly address and resolve issues before they can significantly impact system performance or security.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.1-automate-alerts-for-security-and-performance-issues.html"
+    },
+    {
+      "id": "OB.CM.2",
+      "title": "Plan for large scale events",
+      "category": "FOUNDATIONAL",
+      "description": "A large scale event (LSE) is an incident that has a wide impact, such as service outages or major security incidents. Proper management of LSEs help to ensure business continuity, maintain customer trust, and reduce the negative impact of such events.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.2-plan-for-large-scale-events.html"
+    },
+    {
+      "id": "OB.CM.3",
+      "title": "Conduct post-incident analysis for continuous improvement",
+      "category": "FOUNDATIONAL",
+      "description": "Drive the continuous improvement of analysis and response mechanisms by holding post-incident retrospectives. The post-incident retrospectives allow teams to identify gaps and areas for improvement by analyzing the actions that were taken during an incident.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html"
+    },
+    {
+      "id": "OB.CM.4",
+      "title": "Report on business metrics to drive data-driven decision making",
+      "category": "FOUNDATIONAL",
+      "description": "Business metrics for all systems should be accessible and comprehensible to leaders and key stakeholders. These metrics should inform key performance indicators (KPIs), service level objectives (SLOs), service level agreement (SLA) adherence, user engagement, conversion rates, and other metrics relevant to the business sides of your operations.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.4-report-on-business-metrics-to-drive-data-driven-decision-making.html"
+    },
+    {
+      "id": "OB.CM.5",
+      "title": "Detect performance issues using application performance monitoring",
+      "category": "RECOMMENDED",
+      "description": "Application Performance Monitoring (APM) refers to the use of tools to monitor and manage the ongoing, real-time performance and availability of systems in production environments. APM tools help in maintaining the performance of systems by identifying performance issues early on.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.5-detect-performance-issues-using-application-performance-monitoring.html"
+    },
+    {
+      "id": "OB.CM.6",
+      "title": "Gather user experience insights using digital experience monitoring",
+      "category": "RECOMMENDED",
+      "description": "Digital Experience Monitoring (DEM) involves simulating user interactions with applications to measure the performance and availability of services from the perspective of end users. DEM allows teams to proactively detect and resolve issues that may impact user experience.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.6-gather-user-experience-insights-using-digital-experience-monitoring.html"
+    },
+    {
+      "id": "OB.CM.7",
+      "title": "Visualize telemetry data in real-time",
+      "category": "RECOMMENDED",
+      "description": "Visualization tools simplify the task of correlating and understanding large, complex datasets. Using these tools, teams are able to detect trends, patterns, and anomalies in data in a readily available and easy to understand way.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.7-visualize-telemetry-data-in-real-time.html"
+    },
+    {
+      "id": "OB.CM.8",
+      "title": "Hold operational review meetings for data transparency",
+      "category": "RECOMMENDED",
+      "description": "Operational review meetings are regular gatherings where teams from across the organization come prepared with an operational dashboard that showcases telemetry data, performance metrics, and other insights into operations for their products.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.8-hold-operational-review-meetings-for-data-transparency.html"
+    },
+    {
+      "id": "OB.CM.9",
+      "title": "Optimize alerts to prevent fatigue and minimize monitoring costs",
+      "category": "RECOMMENDED",
+      "description": "Reduce the number of ineffective alerts as well as the costs associated with monitoring by optimizing rules and thresholds for alerts based on business impact and issue severity.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.9-optimize-alerts-to-prevent-fatigue-and-minimize-monitoring-costs.html"
+    },
+    {
+      "id": "OB.CM.10",
+      "title": "Proactively detect issues using AI/ML",
+      "category": "OPTIONAL",
+      "description": "Adopt data-driven AI/ML monitoring tools and techniques like Artificial Intelligence Operations (AIOps), ML-powered anomaly detection, and predictive analytics solutions, to detect issues and performance bottlenecks proactively.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.10-proactively-detect-issues-using-aiml.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OB.CM-AP1",
+      "title": "Blame culture",
+      "description": "Encouraging a culture where individuals are blamed for errors or failures can deter open communication, and the collaborative diagnosis of issues. In a blame culture, team members may hide or underreport issues for fear of retribution. Instead, foster a culture of shared responsibility where failures are seen as opportunities for learning and improvement."
+    },
+    {
+      "id": "OB.CM-AP2",
+      "title": "Overlooking derived metrics",
+      "description": "Relying solely on surface-level metrics without deriving deeper insights can lead to unaddressed issues and potential service disruptions. Ensure that monitoring includes a comprehensive understanding of system performance by analyzing metrics in depth, such as distinguishing between latencies based on query size or categorizing error types."
+    },
+    {
+      "id": "OB.CM-AP3",
+      "title": "Inadequate monitoring coverage",
+      "description": "Not monitoring every critical system or frequently reviewing your monitoring strategy can lead to undetected issues or performance degradation. Regularly assess and update monitoring coverage, ensuring that all systems and applications are being observed. A symptom of this anti-pattern is 'no dogs barking,' where the absence of expected alerts or metrics itself can indicate an issue."
+    },
+    {
+      "id": "OB.CM-AP4",
+      "title": "Noisy and unactionable alarms",
+      "description": "If alarms frequently sound without actionable cause, trust in the alerting system diminishes, risking slower response times or overlooked genuine alerts. Ensure that alerts are both actionable and significant by continuously evaluating the outcomes they lead to. Implement mechanisms to mute false positives and adjust overly sensitive alarms."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OB.CM-M1",
+      "title": "Mean time to detect (MTTD)",
+      "description": "The average time it takes to detect a performance issue, attack, or compromise. A shorter MTTD helps organizations respond more quickly to incidents, minimizing damage and downtime.",
+      "formula": "Average time from when incidents occur to when they're detected by the monitoring systems (including both automated system detections and manual reporting)"
+    },
+    {
+      "id": "OB.CM-M2",
+      "title": "Mean time between failures (MTBF)",
+      "description": "The average time interval between consecutive failures in the production environment. Tracking this metric helps to gauge the reliability and stability of a system.",
+      "formula": "Total uptime / Number of failures over a given period"
+    },
+    {
+      "id": "OB.CM-M3",
+      "title": "Post-incident retrospective frequency",
+      "description": "The frequency at which post-incident retrospectives are held. Holding regular retrospectives help teams continuously improve analysis and incident response processes.",
+      "formula": "Number of retrospectives conducted within specified intervals (e.g., monthly or quarterly) / Total number of incidents"
+    },
+    {
+      "id": "OB.CM-M4",
+      "title": "False positive rate",
+      "description": "The percentage of alerts generated that are false positives, or incidents that do not require action. A lower false positive rate reduces alert fatigue and ensures that teams can focus on genuine issues.",
+      "formula": "(Number of false positive alerts / Total number of alerts generated) × 100"
+    },
+    {
+      "id": "OB.CM-M5",
+      "title": "Application performance index (Apdex)",
+      "description": "Measures user satisfaction with application responsiveness using a scale from 0 to 1. A higher Apdex score indicates better application performance, likely resulting in improved user experience.",
+      "formula": "(Satisfied transactions + (Tolerating transactions / 2)) / Total transactions, where Satisfied = response time ≤ target time, Tolerating = target time < response time ≤ 4× target time"
+    }
+  ]
+}

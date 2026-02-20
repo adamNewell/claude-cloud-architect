@@ -1,0 +1,123 @@
+{
+  "saga": "Automated Governance",
+  "sagaCode": "AG",
+  "capability": "Dynamic Environment Provisioning",
+  "capabilityCode": "DEP",
+  "description": "Establish strategies and practices to create, maintain, and manage multiple environments within an organization's landing zone, using automated processes. This approach helps ensure consistency and compliance, enhances security, improves operational efficiency, optimizes resource usage, and allows organizations to adapt to changes faster.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dynamic-environment-provisioning.html",
+  "indicators": [
+    {
+      "id": "AG.DEP.1",
+      "title": "Establish a controlled, multi-environment landing zone",
+      "description": "Establish a multi-environment landing zone as a controlled foundation which encompasses all of the environments that workloads run in. A landing zone acts as a centralized base from which you can deploy workloads and applications across multiple environments. Operate the landing zone using platform teams and the X as a Service (XaaS) interaction mode. This enables teams to request or create resources within the landing zone using infrastructure as code (IaC), API calls, and other developer tooling. The landing zone has the benefit of maintaining consistency across multiple environments through centrally-applied policies and service-level configurations.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.1-establish-a-controlled-multi-environment-landing-zone.html"
+    },
+    {
+      "id": "AG.DEP.2",
+      "title": "Continuously baseline environments to manage drift",
+      "description": "Baselining environments is a structured process for routinely updating and standardizing individual environments within the landing zone to match a specified configured state or baseline. Drift management, a part of this process, involves the identification and resolution of differences between the environment's current configuration and its desired baseline state. Regular baselining helps to ensure consistency across environments at scale, minimizing errors and enhancing operational efficiency and governance capabilities.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.2-continuously-baseline-environments-to-manage-drift.html"
+    },
+    {
+      "id": "AG.DEP.3",
+      "title": "Enable deployment to the landing zone",
+      "description": "Dedicate an environment for each system to host the resources and tools required to perform controlled and uniform application deployments to related non-production and production environments. These deployment environments can include infrastructure or services such as pipelines and build agents. At a minimum, each system should have a set of deployment, test, and production environments to support the development lifecycle. This provides isolation of systems, tailored environments customized according to specific needs, and separation of concerns.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.3-enable-deployment-to-the-landing-zone.html"
+    },
+    {
+      "id": "AG.DEP.4",
+      "title": "Codify environment vending",
+      "description": "By provisioning environments and the accounts operating them as infrastructure as code (IaC) or API calls, teams are empowered with the flexibility to create environments according to their specific requirements and ways of working. Use shared libraries or services that allow teams to request and manage environments using IaC. These libraries should encapsulate best practices for environment configuration and should be designed to be used directly in deployment pipelines, enabling individual teams to manage their environments autonomously.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.4-codify-environment-vending.html"
+    },
+    {
+      "id": "AG.DEP.5",
+      "title": "Standardize and manage shared resources across environments",
+      "description": "Cross-environment resource sharing is the practice of deploying, managing, and providing access to common resources across various environments from a centrally managed account. Platform teams should deploy and manage shared resources into accounts they manage, then provide APIs or libraries that individual teams can use to consume the shared resources as needed. This approach reduces redundancy and promotes standardization across the organization.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.5-standardize-and-manage-shared-resources-across-environments.html"
+    },
+    {
+      "id": "AG.DEP.6",
+      "title": "Test landing zone changes in a mirrored non-production landing zone",
+      "description": "To minimize the risk of potential failures when making changes to the landing zone, platform teams should establish mirrored landing zones for testing changes before deploying to the production landing zone. Use deployment pipelines to promote, validate, and deploy changes between the mirrored and production landing zones, performing extensive testing and validation at each stage.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.6-test-landing-zone-changes-in-a-mirrored-non-production-landing-zone.html"
+    },
+    {
+      "id": "AG.DEP.7",
+      "title": "Utilize metadata for scalable environment management",
+      "description": "Effective environment management at scale requires the collection and maintenance of key information about each environment, such as ownership, purpose, criticality, lifespan, and more. Adopt techniques like resource tagging to track and maintain this metadata. This allows platform teams to track and optimize costs by accurately attributing resource usage to specific environments, and supports the management of access controls and security measures.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.7-utilize-metadata-for-scalable-environment-management.html"
+    },
+    {
+      "id": "AG.DEP.8",
+      "title": "Implement a unified developer portal for self-service environment management",
+      "description": "Consider implementing a self-service portal that empowers developers to create, manage, and decommission their own isolated development or sandbox environments, within the established boundaries set by the platform team. While fostering autonomy for development teams, this approach accelerates the development process and reduces the operational load on the supporting platform team.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dep.8-implement-a-unified-developer-portal-for-self-service-environment-management.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "AG.DEP-AP1",
+      "title": "Manual environment management",
+      "description": "Relying on manual provisioning and management of environments, or using uncoordinated scripts, can introduce inconsistencies and inefficiencies. Manual approaches are prone to errors and can slow down development. Transition towards an automated, code-based approach for environment management to ensure enhanced repeatability and reliability."
+    },
+    {
+      "id": "AG.DEP-AP2",
+      "title": "Inflexible environment provisioning",
+      "description": "Provisioning one-size-fits-all environments without considering the unique needs of different workloads or teams can restrict the ability of workloads to operate optimally. Not taking into account the diverse requirements of different teams or workloads can result in inefficiencies, operational burdens, and slowed innovation. Adopt a dynamic provisioning approach tailored to the specific needs of each workload."
+    },
+    {
+      "id": "AG.DEP-AP3",
+      "title": "Bypassing non-production testing for environment changes",
+      "description": "Implementing changes directly in the production landing zone or to environment baselines without prior testing in a mirrored non-production environment exposes the organization to unnecessary risks. Always test large-scale changes in a safe, non-production environment to identify potential issues and mitigate them before they impact the production environment."
+    },
+    {
+      "id": "AG.DEP-AP4",
+      "title": "Allowing configuration drift",
+      "description": "Deviations in environment configurations can creep in due to manual changes or lack of consistent monitoring. This drift can compromise security, increase maintenance complexity, and lead to unpredictable outcomes. Adopt tools and practices that continuously baseline environments to maintain the desired state and enforce uniform configurations."
+    },
+    {
+      "id": "AG.DEP-AP5",
+      "title": "Fragmented self-service tools",
+      "description": "Providing multiple, disjointed self-service tools for developers to manage environments can create confusion, result in inefficiencies, and make it harder to enforce standards and best practices. Integrate these functionalities into a unified developer portal to ensure consistent practices, better governance, and smoother operations."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "AG.DEP-M1",
+      "title": "Environment provisioning lead time",
+      "description": "The average time it takes to provision an environment. A reduced lead time indicates an ability to meet changing requirements, an enhanced developer experience, and increased readiness for disaster recovery scenarios.",
+      "formula": "Track the duration from the moment a provisioning request is initiated to when the environment becomes operational.",
+      "unit": "Time (minutes, hours, or days)"
+    },
+    {
+      "id": "AG.DEP-M2",
+      "title": "Configuration drift rate",
+      "description": "The percentage of environments deviating from their baseline configuration within a specific time frame. Improve this metric by implementing observability capabilities, applying infrastructure-as-code practices, and regularly reviewing and updating environment baselines.",
+      "formula": "(Drifted environments / Total environments) * 100",
+      "unit": "Percentage (%)"
+    },
+    {
+      "id": "AG.DEP-M3",
+      "title": "Self-service tool adoption rate",
+      "description": "The percentage of developers using self-service tools for environment management. This metric can indicate the ease-of-use and effectiveness of provided self-service capabilities. Improve this metric by optimizing user interfaces, developing APIs and CLIs, conducting training sessions, and gathering feedback.",
+      "formula": "(Users adopting the tool / Total expected user base) * 100",
+      "unit": "Percentage (%)"
+    },
+    {
+      "id": "AG.DEP-M4",
+      "title": "Environment overhead cost",
+      "description": "Measuring overhead costs resulting from underutilized or over-provisioned environments. This metric provides insight into potential cost savings and optimal resource allocation. Improve this metric by implementing automated right-sizing capabilities, monitoring environment utilization, and de-provisioning unused environments.",
+      "formula": "Track costs associated with maintaining environments and compare against their actual utilization or workload.",
+      "unit": "Cost (USD)"
+    }
+  ]
+}

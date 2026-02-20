@@ -1,0 +1,80 @@
+[
+  {
+    "id": "CBLDSUS01-BP01",
+    "title_full": "CBLDSUS01-BP01 Keep build manifests up-to-date and aligned with application needs",
+    "title": "Keep build manifests up-to-date and aligned with application needs",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/software-and-architecture-patterns.html",
+    "description": "When designing containerized applications, keep your build manifests up-to-date and aligned with your application needs. A containerized application image starts from a Dockerfile that includes all commands required to include configuration and dependencies. If there are dependencies that are no longer required, removing them from the Dockerfile can reduce the time it takes to build the container image (affecting host resource consumption) and reduce the container image size (reducing the time to pull images and affecting host resources for running and storing container images).",
+    "outcome": "Reduces environmental impact by minimizing resource consumption during build and runtime operations.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Software and architecture patterns"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSUS02-BP01",
+    "title_full": "CBLDSUS02-BP01 Support containerized applications to run on energy-efficient hardware",
+    "title": "Support containerized applications to run on energy-efficient hardware",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/hardware-patterns.html",
+    "description": "To be able to use instance types with the least environmental impact, ensure your containerized application can run on a variety of instance types and architectures. This can be done by creating images that support multi-architecture. Use a build service that supports multi-architecture build servers and combine them to a multi-architecture image using the CI pipeline. You can also use tools that generate multi-architecture images from a single Dockerfile, such as Docker Buildx.",
+    "outcome": "Enables use of energy-efficient hardware like AWS Graviton processors, reducing environmental impact.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Hardware patterns"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSUS03-BP01",
+    "title_full": "CBLDSUS03-BP01 Use dynamically created build servers for building containerized workloads",
+    "title": "Use dynamically created build servers for building containerized workloads",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/development-and-deployment-process.html",
+    "description": "Using dynamically created build servers (such as AWS CodeBuild) ensures that while building your containerized images, the needed infrastructure is provisioned when the build process starts and terminated as soon as the build process ends. This reduces resource waste from idle build infrastructure.",
+    "outcome": "Reduces wasted resources and environmental impact by provisioning build infrastructure only when needed.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Development and deployment process"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSUS03-BP02",
+    "title_full": "CBLDSUS03-BP02 Use pre-defined or built runtimes to reduce build time and reuse dependencies",
+    "title": "Use pre-defined or built runtimes to reduce build time and reuse dependencies",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/development-and-deployment-process.html",
+    "description": "When building different types of containerized applications, using common and standardized runtimes for the build process reduces the operational management of creating and maintaining custom images. By using specific runtimes for your build server, you verify that no common dependency is downloaded and configured as part of the build process. All relevant dependencies are incorporated into the different runtimes of your build servers and are used many times by different build processes for different applications.",
+    "outcome": "Reduces resource consumption and environmental impact by reusing common dependencies across builds.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Development and deployment process"],
+    "relatedIds": [],
+    "risk": "LOW",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSUS03-BP03",
+    "title_full": "CBLDSUS03-BP03 Update parent and base images regularly",
+    "title": "Update parent and base images regularly",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/development-and-deployment-process.html",
+    "description": "Update your base and parent images to the latest versions, as sometimes there is a performance improvement introduced in newer versions. These improvements are translated into sustainability improvements as they affect the resource consumption of the underlying infrastructure and improve overall efficiency.",
+    "outcome": "Improves resource efficiency and reduces environmental impact through performance improvements in newer image versions.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Development and deployment process"],
+    "relatedIds": [],
+    "risk": "LOW",
+    "lens": "CONTAINER_BUILD"
+  },
+  {
+    "id": "CBLDSUS03-BP04",
+    "title_full": "CBLDSUS03-BP04 Delete unused or obsolete container images",
+    "title": "Delete unused or obsolete container images",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/container-build-lens/development-and-deployment-process.html",
+    "description": "Create mechanisms to verify that unused or obsolete container images are deleted. This can be achieved, for example, by registry lifecycle policies as exists in Amazon ECR. Removing unused images reduces storage requirements and associated resource consumption.",
+    "outcome": "Reduces storage resource consumption and environmental impact by removing obsolete container images.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Development and deployment process"],
+    "relatedIds": [],
+    "risk": "MEDIUM",
+    "lens": "CONTAINER_BUILD"
+  }
+]

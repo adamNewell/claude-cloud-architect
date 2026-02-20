@@ -1,0 +1,100 @@
+{
+  "saga": "Observability",
+  "sagaCode": "OB",
+  "capability": "Data Ingestion and Processing",
+  "capabilityCode": "DIP",
+  "description": "Data ingestion and processing involves the collection, centralization, and analysis of data from multiple sources. This data, when effectively ingested and processed, helps teams to understand the availability, security, performance, and reliability of their systems in real-time. Through streamlining data ingestion and processing, teams can make quicker and more effective decisions, enhancing overall agility and reliability of systems.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/data-ingestion-and-processing.html",
+  "indicators": [
+    {
+      "id": "OB.DIP.1",
+      "title": "Aggregate logs and events across workloads",
+      "category": "FOUNDATIONAL",
+      "description": "Logs and events should be aggregated across multiple workloads to provide a comprehensive view of the entire system. This enables teams to troubleshoot, identify patterns, and resolve operational issues. Implement a log aggregation solution that supports collecting logs from various sources and provides functions for filtering, searching, visualizing, and alerting.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.1-aggregate-logs-and-events-across-workloads.html"
+    },
+    {
+      "id": "OB.DIP.2",
+      "title": "Centralize logs for enhanced security investigations",
+      "category": "FOUNDATIONAL",
+      "description": "Effective security investigations require the aggregation, standardization, and centralization of logs and events so they are readily accessible to investigation teams. Use cloud native tools or SIEM solutions to aggregate, standardize, and centralize logs and event data, while respecting regional boundaries and data sovereignty requirements.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.2-centralize-logs-for-enhanced-security-investigations.html"
+    },
+    {
+      "id": "OB.DIP.3",
+      "title": "Implement distributed tracing for system-wide request tracking",
+      "category": "RECOMMENDED",
+      "description": "Distributed tracing is a method to track requests as they move through distributed systems. It provides insights into system interactions across multiple services and applications, enabling quicker issue identification and resolution. Use a tracing solution that is scalable, provides real-time data collection, and supports comprehensive visualization of tracing data.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.3-implement-distributed-tracing-for-system-wide-request-tracking.html"
+    },
+    {
+      "id": "OB.DIP.4",
+      "title": "Aggregate health and status metrics across workloads",
+      "category": "RECOMMENDED",
+      "description": "Aggregate health and status metrics across all workloads for a unified view of the system's overall health. Aggregated health metrics provide a snapshot of the system's overall health and performance, aiding in proactive issue detection and efficient resource management.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.4-aggregate-health-and-status-metrics-across-workloads.html"
+    },
+    {
+      "id": "OB.DIP.5",
+      "title": "Optimize telemetry data storage and costs",
+      "category": "RECOMMENDED",
+      "description": "Optimize costs associated with storing and processing large amounts of telemetry data by using techniques like data filtering and compression. When dealing with non-security related telemetry data, data sampling can also be an effective method to reduce costs.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.5-optimize-telemetry-data-storage-and-costs.html"
+    },
+    {
+      "id": "OB.DIP.6",
+      "title": "Standardize telemetry data with common formats",
+      "category": "RECOMMENDED",
+      "description": "Normalize telemetry data using a common format or standard schema to enhance consistency in data collection and reporting. This facilitates seamless correlation and analysis across multiple facets of observability. Notable open-source projects supporting this goal are OpenTelemetry and the Open Cybersecurity Alliance Schema Framework (OCSF).",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.dip.6-standardize-telemetry-data-with-common-formats.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OB.DIP-AP1",
+      "title": "Over-reliance on ETL Tools",
+      "description": "Over-relying on ETL (Extract, Transform, Load) tools for data processing can lead to inflexibility and difficulties adapting to data source changes. Where possible, use tools with native integrations that allow ETL-free data processing and analysis pipelines, enabling a more flexible and scalable way to integrate data from multiple sources without introducing additional operational overhead."
+    },
+    {
+      "id": "OB.DIP-AP2",
+      "title": "Ignoring event correlation",
+      "description": "Ignoring the correlation of multiple alerts can hide broader issues. Incorporate event correlation into the observability strategy to quickly identify and resolve problems across multiple tools and systems. Utilize distributed tracing tools to trace requests across multiple services and dependencies, centralized logs and events for security investigations, and use normalized data formats to enable correlation of telemetry from multiple sources."
+    },
+    {
+      "id": "OB.DIP-AP3",
+      "title": "Inefficient data analysis",
+      "description": "Relying on monolithic or manual data processing methods leads to inefficient data analysis. Monolithic data processing of large volumes leads to long wait times, slow detection and reaction times, and potentially increased cost. Overcome these inefficiencies by adopting scalable and distributed architectures like serverless computing, capable of handling large data volumes in parallel. Data processing should be automated wherever possible to ensure consistent, error-free, and efficient data analysis."
+    },
+    {
+      "id": "OB.DIP-AP4",
+      "title": "Lack of data governance",
+      "description": "Poor data governance practices can lead to inaccurate data, poor decision-making, and compliance risks. Establish and enforce data governance policies, including data quality checks, granular access control, and data provenance tracking."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OB.DIP-M1",
+      "title": "Data ingestion rate",
+      "description": "The amount of data ingested by monitoring systems in a given time period which indicates that the system can effectively process large volumes of telemetry data, leading to more accurate insights.",
+      "formula": "Volume of data ingested by the monitoring systems per unit of time"
+    },
+    {
+      "id": "OB.DIP-M2",
+      "title": "Data processing latency",
+      "description": "The time it takes for telemetry data to be processed and made available for analysis. Lower data processing latency aims to quickly assess and act on insights from telemetry data.",
+      "formula": "Time elapsed between data ingestion and the availability of processed data for analysis"
+    },
+    {
+      "id": "OB.DIP-M3",
+      "title": "Data cost efficiency",
+      "description": "Measuring the cost of collecting, storing, and processing telemetry data compared to the number of actionable insights generated or decisions made based on these insights. This metric assures that resources are utilized effectively and unnecessary expenses are minimized.",
+      "formula": "Total cost of data collection, storage, and processing divided by the number of actionable insights provided"
+    },
+    {
+      "id": "OB.DIP-M4",
+      "title": "Anomaly detection rate",
+      "description": "The percentage of anomalies detected by the monitoring systems. A higher anomaly detection rate indicates that the system is effective in identifying potential issues, enabling teams to proactively address them.",
+      "formula": "(Number of anomalies detected by the monitoring systems / Total number of events) * 100"
+    }
+  ]
+}

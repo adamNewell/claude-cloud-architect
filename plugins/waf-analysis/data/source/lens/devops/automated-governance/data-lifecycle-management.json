@@ -1,0 +1,111 @@
+{
+  "saga": "Automated Governance",
+  "sagaCode": "AG",
+  "capability": "Data Lifecycle Management",
+  "capabilityCode": "DLM",
+  "description": "Enforce stringent data controls, residency, privacy, sovereignty, and security throughout the entire data lifecycle. Scale your data collection, processing, classification, retention, disposal, and sharing processes to better align with regulatory compliance and safeguard your software from potential disruptions due to data mismanagement.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/data-lifecycle-management.html",
+  "indicators": [
+    {
+      "id": "AG.DLM.1",
+      "title": "Define recovery objectives to maintain business continuity",
+      "category": "FOUNDATIONAL",
+      "description": "Clear recovery objectives help to ensure that teams can maintain business continuity and recover with minimal data loss, keeping the delivery pipeline flowing and maintaining service reliability. Set recovery point objectives (RPO) indicating how much data loss is acceptable, and recovery time objectives (RTO) specifying how quickly services need to be restored following an incident. Develop and document your disaster recovery (DR) strategy, make it available to teams, and conduct exercises and trainings to maintain the ability to perform the strategy. Implement policies and automated governance capabilities that align with your RPO and RTO objectives.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.1-define-recovery-objectives-to-maintain-business-continuity.html"
+    },
+    {
+      "id": "AG.DLM.2",
+      "title": "Strengthen security with systematic encryption enforcement",
+      "category": "FOUNDATIONAL",
+      "description": "With continuous delivery, the risk of data breaches that can disrupt the software delivery process and negatively impact the business increases. To remain agile and rapidly able to deploy safely, it is necessary to enforce encryption at scale to protect sensitive data from unauthorized access when it is at rest and in transit. Infrastructure should be defined as code and expected to change frequently. Resources being deployed need to be checked for compliant encryption configuration as part of the deployment process, while continuous scans for unencrypted data and resource misconfiguration should be automated in the environment. Automate the process of encryption key creation, distribution, and rotation to make the use of secure encryption methods simpler for teams to follow and enable them to focus on their core tasks without compromising security.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.2-strengthen-security-with-systematic-encryption-enforcement.html"
+    },
+    {
+      "id": "AG.DLM.3",
+      "title": "Automate data processes for reliable collection, transformation, and storage using pipelines",
+      "category": "FOUNDATIONAL",
+      "description": "A data pipeline is a series of steps to systematically collect, transform, and store data from various sources. Data pipelines can follow different sequences, such as extract, transform, and load (ETL), or extract and load unstructured data directly into a data lake without transformations. Consistent data collection and transformation fuels informed decision-making, proactive responses, and feedback loops. Data pipelines play a key role in enhancing data quality by performing operations like sorting, reformatting, deduplication, verification, and validation, making data more useful for analysis. Just as DevOps principles are applied to software delivery, the same can be done with data management through pipelines using a methodology commonly referred to as DataOps, which incorporates DevOps principles into data management including the automation of testing and deployment processes for data pipelines.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.3-automate-data-processes-for-reliable-collection-transformation-and-storage-using-pipelines.html"
+    },
+    {
+      "id": "AG.DLM.4",
+      "title": "Maintain data compliance with scalable classification strategies",
+      "category": "FOUNDATIONAL",
+      "description": "Automated data classification includes using tools and strategies to identify, tag, and categorize data based on sensitivity levels, type, and more. Data classification aids in enforcing data security, privacy, and compliance requirements. Misclassification or lack of data classification can lead to data breaches or non-compliance with data protection regulations. Scaling this practice through automation enables organizations to catalog, secure, and maintain the vast amounts of data they process. Use tagging strategies to catalog data effectively and help maintain visibility of data across different services and stages of the software development lifecycle. Put guardrails in place to enforce compliance with data classification and handling requirements, such as those related to data privacy and residency. For advanced use cases, AI/ML tools can provide automatic recognition and classification of data, especially sensitive data, reducing the need for manual, human intervention.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.4-maintain-data-compliance-with-scalable-classification-strategies.html"
+    },
+    {
+      "id": "AG.DLM.5",
+      "title": "Reduce risks and costs with systematic data retention strategies",
+      "category": "FOUNDATIONAL",
+      "description": "Data is continuously generated, processed, and stored throughout the development lifecycle, increasing the complexity and importance of automated data management capabilities. Automated data retention and disposal is the process of implementing strategies and tools that systematically store data for pre-established periods and securely delete it afterward. The goal of data retention and disposal is not just about compliance, but also about reducing risks, sustainability, minimizing costs, and improving operational efficiency. To effectively implement automated data retention and disposal, start by defining the data lifecycle policies for your organization, including understanding regulatory and business requirements, how long data needs to be retained, and the conditions under which it should be disposed. Once policies are in place, automate the enforcement of these policies with data lifecycle management tools, and develop mechanisms to log and audit data disposal actions for accountability and traceability.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.5-reduce-risks-and-costs-with-systematic-data-retention-strategies.html"
+    },
+    {
+      "id": "AG.DLM.6",
+      "title": "Centralize shared data to enhance governance",
+      "category": "FOUNDATIONAL",
+      "description": "Practicing DevOps puts an emphasis on teams working collaboratively and continuously exchanging data. Governing this shared data requires proper control, management, and distribution of data to prevent unauthorized access, data breaches, and other security incidents. Use centralized data lakes to provide a single source of truth of data and management within your organization, helping to reduce data silos and inconsistencies. It enables secure and efficient data sharing across teams, enhancing collaboration and overall productivity. Use Role-Based Access Control (RBAC) or Attribute-Based Access Control (ABAC) to limit access to data based on the user context. Implement automated metadata management and deploy continuous, automated data quality checks. When collaboration extends beyond the organization's boundaries, clean rooms can be used to maintain data privacy and security by creating isolated data processing environments with predefined rules that automatically govern the flow and accessibility of data.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.6-centralize-shared-data-to-enhance-governance.html"
+    },
+    {
+      "id": "AG.DLM.7",
+      "title": "Ensure data safety with automated backup processes",
+      "category": "RECOMMENDED",
+      "description": "Data loss can be catastrophic for any organization. Automated backup mechanisms help to ensure that your data is not only routinely backed up, but also that these backups are maintained and readily available when needed. As data is constantly being created and modified, these processes minimize the risk for data loss and reduce the manual, error-prone approach of backing up data. Define a backup policy that outlines the types of data to be backed up, the frequency of backups, and the duration for which backups should be retained, including data restoration processes and timelines. Choose backup tools that support automation and can be integrated into your DevOps pipelines and environments. Regularly test the data restoration process to ensure that backed-up data can be effectively restored when required, and conduct regular audits and reviews of the backup policy.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.7-ensure-data-safety-with-automated-backup-processes.html"
+    },
+    {
+      "id": "AG.DLM.8",
+      "title": "Improve traceability with data provenance tracking",
+      "category": "RECOMMENDED",
+      "description": "Data provenance tracking records the history of data throughout its lifecycle—its origins, how and when it was processed, and who was responsible for those processes. This practice forms a vital part of ensuring data integrity, reliability, and traceability, providing a clear record of the data's journey from its source to its final form. The process involves capturing, logging, and storing metadata that provides valuable insights into the lineage of the data, including the data's source, any transformations it underwent, the flow of data across systems and services, and actors interacting with the data. Use automated tools and processes to manage data provenance by automatically capturing and logging metadata and make it easily accessible and queryable for review and auditing purposes. Data provenance tracking is particularly recommended for datasets dealing with sensitive or regulated data, machine learning workflows, and complex data processing which may require debugging.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.dlm.8-improve-traceability-with-data-provenance-tracking.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "AG.DLM-AP1",
+      "title": "Lack of data protection measures",
+      "description": "Lax encryption, data access controls, backup policies, and poorly defined recovery objectives contribute to data vulnerability and can lead to regulatory non-compliance. Automated backup, encryption mechanisms and comprehensive disaster recovery plans are critical in maintaining data availability and minimizing downtime during recovery processes."
+    },
+    {
+      "id": "AG.DLM-AP2",
+      "title": "Inadequate data classification practices",
+      "description": "Accurate data classification plays a role in managing data access and ensuring the right stakeholders have access to the appropriate data. Manual or non-existent data classification could create vulnerabilities, possibly leading to misplacing data or granting unauthorized individuals access to sensitive data. An automated data classification approach, potentially leveraging AI/ML tools, can reduce human error and increase efficiency, ensuring data is consistently and correctly labeled according to its sensitivity."
+    },
+    {
+      "id": "AG.DLM-AP3",
+      "title": "Unrestricted data access",
+      "description": "Sharing data without proper governance can expose your organization to security risks like data breaches, loss of sensitive information, or violations of data sovereignty laws. You should manage and restrict access to shared data, provide a single source of truth through centralized data lakes, and use clean rooms for collaboration outside of the organization's boundaries."
+    },
+    {
+      "id": "AG.DLM-AP4",
+      "title": "Reliance on manual data retention and disposal",
+      "description": "Manual handling of data retention and disposal processes can lead to human error, missed deadlines, non-compliance, and inefficient data management. Retaining data indefinitely is also not a good option, as it can lead to increased storage costs, potential non-compliance with data privacy laws, and an increased risk of data breaches. Automate data retention enforcement to help ensure compliance and efficient data management to reduce costs and improve operational efficiency."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "AG.DLM-M1",
+      "title": "Recovery compliance rate",
+      "description": "The percentage of recovery operations that meet defined recovery time objectives (RTO) and recovery point objectives (RPO). This metric measures the effectiveness of backup and recovery procedures. Improve this metric by regularly testing and optimizing recovery procedures, training teams, and investing in reliable recovery tools.",
+      "formula": "(Number of recoveries meeting both RTO and RPO / Total number of recovery attempts) × 100",
+      "category": "Reliability"
+    },
+    {
+      "id": "AG.DLM-M2",
+      "title": "Backup failure rate",
+      "description": "The percentage of backup and attempted recovery operations that fail within a given period. This metric provides insight into the reliability of backup and recovery processes. A high failure rate indicates potential issues with the systems, policies, or tools in place and can jeopardize business continuity in the event of data loss or system failures.",
+      "formula": "(Number of unsuccessful data backups and recovery operations / Total number of successful operations) × 100",
+      "category": "Reliability"
+    },
+    {
+      "id": "AG.DLM-M3",
+      "title": "Data quality score",
+      "description": "The combined quality of data in a system, encompassing facets such as consistency, completeness, correctness, accuracy, validity, and timeliness. In the context of data lifecycle management, this score reflects the effectiveness of automated governance and effective data management practices. You may choose to track more granular metrics across multiple systems, such as adherence to data classification, retention, provenance accuracy, and encryption requirements.",
+      "formula": "Aggregate and normalize individual quality facets (consistency, completeness, correctness, accuracy, validity, timeliness) into a single metric, typically ranging from 0 to 100, with higher scores indicating better data quality. The specific method for aggregating the scores may vary depending on the organization's data quality framework and the relative importance assigned to each facet.",
+      "category": "Data Quality"
+    }
+  ]
+}

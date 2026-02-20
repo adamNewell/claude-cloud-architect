@@ -1,0 +1,80 @@
+[
+  {
+    "id": "HCISUS01-BP01",
+    "title_full": "HCISUS01-BP01 Identify targets for sustainability improvement",
+    "title": "Identify targets for sustainability improvement",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/region-selection.html",
+    "description": "Prioritize targets for improvement by reviewing your workloads against the sustainability principles. Migrating workloads from on-premises data centers to the cloud can reduce the workload's carbon footprint by 88%. Regular review of cloud architecture for optimization opportunities can reduce carbon footprints, meaning healthcare workload migrations can deliver cloud benefits while simultaneously improving sustainability.",
+    "outcome": "Healthcare organizations identify and prioritize opportunities to reduce their environmental impact while migrating to and optimizing workloads in the cloud.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Region Selection"],
+    "relatedIds": ["SUS01-BP01", "SUS02-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCISUS02-BP01",
+    "title_full": "HCISUS02-BP01 Match workload infrastructure to user behavior patterns",
+    "title": "Match workload infrastructure to user behavior patterns",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/user-behavior-patterns.html",
+    "description": "Scale infrastructure to continually match user demand and performance requirements. While many healthcare workloads are life-critical with steady 24x7 demand, other workloads like ambulatory care or revenue cycle workflows exhibit cyclical utilization patterns with peak demand during business hours. Minimize the amount of hardware used by scaling workloads down during periods of low demand.",
+    "outcome": "Healthcare workloads use only the infrastructure needed to meet current demand, reducing environmental impact and costs while maintaining required performance.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["User Behavior Patterns"],
+    "relatedIds": ["SUS02-BP02", "SUS02-BP05", "COST06-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCISUS03-BP01",
+    "title_full": "HCISUS03-BP01 Remove or refactor unused components",
+    "title": "Remove or refactor unused components",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/software-and-architecture-patterns.html",
+    "description": "Analyze demand on workloads to identify components that can be removed or refactored. Engage component owners and stakeholders to redesign clinical workflows and decrease workload infrastructure. Healthcare delivery systems and large ISVs often have sprawling IT footprints with numerous siloed systems. Identifying and removing or refactoring components with little or no use can simplify workflows, decrease cost, and improve sustainability.",
+    "outcome": "Healthcare organizations reduce complexity, cost, and environmental impact by eliminating unused infrastructure while maintaining required functionality through workflow redesign.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Software and Architecture Patterns"],
+    "relatedIds": ["SUS03-BP01", "SUS03-BP02", "COST07-BP02"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCISUS03-BP02",
+    "title_full": "HCISUS03-BP02 Optimize impact on customer devices and equipment",
+    "title": "Optimize impact on customer devices and equipment",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/software-and-architecture-patterns.html",
+    "description": "Evaluate the overall impact of applications, devices, and equipment. Build new features as backward compatible, minimizing the need for new hardware. Evaluate the potential impact of new or upgraded hardware requirements to minimize the overall impact when architecting new workloads or features.",
+    "outcome": "Healthcare applications are designed to minimize the need for hardware upgrades, reducing electronic waste and extending the useful life of customer devices and equipment.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Software and Architecture Patterns"],
+    "relatedIds": ["SUS03-BP05"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCISUS04-BP01",
+    "title_full": "HCISUS04-BP01 Measure effectiveness of sustainability efforts",
+    "title": "Measure effectiveness of sustainability efforts",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/measure-results.html",
+    "description": "Quantify and report results to drive continuous improvement processes. The healthcare vertical extensively uses metrics and measures to quantify care quality, effectiveness, and patient experience. Adding metrics to quantify sustainability improvement can better align business interests with sustainability goals. Analysis of such reporting can help identify repeatable processes for achieving sustainability improvements.",
+    "outcome": "Healthcare organizations track sustainability metrics alongside clinical quality measures, enabling data-driven decisions and continuous improvement in environmental performance.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Measure Results"],
+    "relatedIds": ["SUS06-BP01", "SUS06-BP02"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCISUS05-BP01",
+    "title_full": "HCISUS05-BP01 Remove unneeded or redundant health data",
+    "title": "Remove unneeded or redundant health data",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/data-patterns.html",
+    "description": "Automate data retention processes that retain the minimum amount of health data required to meet regulatory and business requirements. Review and classify data in line with business and regulatory requirements. While regulatory requirements may impose data retention periods, health data is often retained in perpetuity well beyond its useful life. Optimize storage costs and environmental impact by using appropriate storage classes and removing unneeded or redundant data through automated lifecycle policies.",
+    "outcome": "Healthcare organizations minimize storage costs and environmental impact by retaining only necessary health data while meeting all regulatory and business requirements through automated lifecycle management.",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Data Patterns"],
+    "relatedIds": ["SUS05-BP01", "SUS05-BP02", "COST07-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  }
+]

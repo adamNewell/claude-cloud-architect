@@ -1,0 +1,117 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Local Development",
+  "capabilityCode": "LD",
+  "description": "Local development concentrates on establishing development environments that mirror the production setup as closely as possible, either on a local machine or in the cloud. The primary goal is to allow developers to receive feedback as fast as possible in the development lifecycle without impacting other team members or systems.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/local-development.html",
+  "indicators": [
+    {
+      "id": "DL.LD.1",
+      "title": "Establish development environments for local development",
+      "description": "Create development environments that provide individual developers with a safe space to test changes and receive immediate feedback without impacting others on the team or shared environments. Development environments are small scale, production-like environments that provide a balance between providing developers with accurate feedback and being low cost and easy to manage.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.1-establish-development-environments-for-local-development.html"
+    },
+    {
+      "id": "DL.LD.2",
+      "title": "Consistently provision local environments",
+      "description": "Standardize and automate the process for setting up local development environments using managed services, infrastructure as code (IaC), and scripted automation. This approach permits environments to be reliably replicated across different systems and teams, ensuring uniformity. Consistent local environments help to reduce issues that occur only on particular machines.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.2-consistently-provision-local-environments.html"
+    },
+    {
+      "id": "DL.LD.3",
+      "title": "Commit local changes early and often",
+      "description": "While developing locally, developers should begin to make small, frequent commits to save versions of their code changes as they develop. Unlike pushing code changes so that they are accessible to other team members, local commits deal specifically with a developer's individual progress as they develop locally. This practice makes local development safer, enabling developers to freely innovate without fear of losing completed work by capturing snapshots of iterative changes to the code base.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.3-commit-local-changes-early-and-often.html"
+    },
+    {
+      "id": "DL.LD.4",
+      "title": "Enforce security checks before commit",
+      "description": "Pre-commit hooks can be an effective tool for maintaining security best practices. These hooks can help in the early detection of potential security risks, such as exposed sensitive data or publishing code to untrusted repositories. At a minimum, use pre-commit hooks to identify hidden secrets, like passwords and access keys, before code is published to a shared repository. When discovering secrets, the code push should fail immediately—effectively preventing a security incident from occurring.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.4-enforce-security-checks-before-commit.html"
+    },
+    {
+      "id": "DL.LD.5",
+      "title": "Enforce coding standards before commit",
+      "description": "Identify common style, formatting, and other flaws before they are published to a repository. Use static code scanning tools, such as linters, to improve code quality and consistency before pushing committed code. This process can be automated using pre-commit hooks. Upon discovery, pushing the commit should ideally fail and require immediate correction by the developer. Automatically and consistently enforcing coding standards during the local development process directly improves the code review process by removing common errors before manual review.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.5-enforce-coding-standards-before-commit.html"
+    },
+    {
+      "id": "DL.LD.6",
+      "title": "Leverage extensible development tools",
+      "description": "Extensible software development tools, primarily integrated development environments (IDEs) or text editors, can be augmented with plugins or extensions. These plugins enhance the functionalities of the software, allowing for improved and tailored developer experiences.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.6-leverage-extensible-development-tools.html"
+    },
+    {
+      "id": "DL.LD.7",
+      "title": "Establish sandbox environments with spend limits",
+      "description": "Sandbox environments are dedicated spaces for developers to explore, experiment, and innovate with new technologies or ideas. Unlike development environments, which are meant for more structured day-to-day development, they allow more flexibility with fewer controls, while ensuring no connectivity to internal networks or other environments.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.7-establish-sandbox-environments-with-spend-limits.html"
+    },
+    {
+      "id": "DL.LD.8",
+      "title": "Generate mock datasets for local development",
+      "description": "Mock datasets are synthetic or modified datasets that developers can use during the development process, eliminating the need to interact with real, sensitive production data. Using mock datasets ensures tests are thorough and realistic, without compromising security.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.8-generate-mock-datasets-for-local-development.html"
+    },
+    {
+      "id": "DL.LD.9",
+      "title": "Share tool configurations",
+      "description": "Sharing tool configuration among project or team members helps ensure a uniform setup of integrated development environment (IDE) settings, text editor preferences, and pre-commit hooks. Having these configurations tailored to each code base can reduce discrepancies in code styles and promote seamless collaboration and a predictable developer experience. This enables any developer working within that repository to begin working in the environment quickly while maintaining team norms.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.9-share-tool-configurations.html"
+    },
+    {
+      "id": "DL.LD.10",
+      "title": "Manage unused development environments",
+      "description": "Properly managing unused environments prevents unnecessary resource utilization and potential security threats. When development environments are not in use, the environment and associated resources should be disabled or deleted. Treat development environments as ephemeral environments to reduce unexpected costs and eliminate potentially insecure resources running unnecessarily.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.10-manage-unused-development-environments.html"
+    },
+    {
+      "id": "DL.LD.11",
+      "title": "Implement smart code completion with machine-learning",
+      "description": "Use machine learning (ML) algorithms within development tools to predict and suggest code as developers write, based on patterns and commonly used syntax. This can improve development experience, speed up the coding process, and reduce the potential for errors.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ld.11-implement-smart-code-completion-with-machine-learning.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.LD-AP1",
+      "title": "Irregular commits",
+      "description": "Sporadic or large commits lead to lost progress, complicate change tracking, and reduce rollback capability. Large batched commits to the main branch make integration, code reviews, and confident deployment difficult. Best practice: Commit small, logical changes frequently."
+    },
+    {
+      "id": "DL.LD-AP2",
+      "title": "Avoiding local development environments",
+      "description": "Results in changes made directly in production or multiple developers sharing a single development account. Restricts safe experimentation and testing, increasing risk of errors, service disruption, and integration issues. Best practice: Set up individual local development environments for each developer."
+    },
+    {
+      "id": "DL.LD-AP3",
+      "title": "Inconsistent local environment setup",
+      "description": "Allowing developers to set up environments without standardization leads to variations across setups. Causes hard-to-diagnose bugs and 'it works on my machine' scenarios, impacting team productivity. Best practice: Use automated tools, scripts, and playbooks to ensure consistent environment setups."
+    },
+    {
+      "id": "DL.LD-AP4",
+      "title": "Long-lived development branches",
+      "description": "Continuous deployment from long-lived branches causes merge conflicts, technical debt, and code base divergence. Diverges from production setup and integrated code. Best practice: Source deployments from the main releasable branch that reflects production code."
+    },
+    {
+      "id": "DL.LD-AP5",
+      "title": "Over-reliance on basic text editors",
+      "description": "Relying solely on traditional editors (VI, Emacs) lacks capabilities of modern IDEs. Misses benefits of plugin ecosystems and automation integration. Best practice: Use IDEs and modern text editors with rich plugin ecosystems tailored to development tasks."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.LD-M1",
+      "title": "Local Environment Provisioning Time",
+      "description": "The amount of time developers spend on setting up or troubleshooting their local development environment. This metric indicates inefficiencies in onboarding or local environment maintenance, which can negatively impact productivity.",
+      "formula": "If centrally provisioned or fully automated: Use observability tools to monitor the time dedicated to environment setup. If individual developer action required: Conduct regular surveys or use time-tracking tools to gather data points."
+    },
+    {
+      "id": "DL.LD-M2",
+      "title": "Post-Commit Test Failure Rate",
+      "description": "The percentage of tests that fail in an integrated environment after a local commit. This metric allows teams to track and optimize the effectiveness of their local testing environments and workflows.",
+      "formula": "(Number of tests that fail post-commit in integrated environment) ÷ (Total number of tests run post-commit) × 100%. Target: This metric should trend downwards over time, indicating that local environments are becoming more consistent with integrated environments and developers are catching more issues before committing changes."
+    }
+  ]
+}

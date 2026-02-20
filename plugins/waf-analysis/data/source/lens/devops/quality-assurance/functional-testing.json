@@ -1,0 +1,98 @@
+{
+  "saga": "Quality Assurance",
+  "sagaCode": "QA",
+  "capability": "Functional Testing",
+  "capabilityCode": "FT",
+  "description": "Functional testing validates that the system operates according to specified requirements. It is used to consistently verify that components such as user interfaces, APIs, databases, and the source code, work as intended. By examining these components of the system, functional testing helps ensure that each feature behaves as expected, safeguarding both user expectations and the software's integrity.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/functional-testing.html",
+  "indicators": [
+    {
+      "id": "QA.FT.1",
+      "title": "Ensure individual component functionality with unit tests",
+      "category": "FOUNDATIONAL",
+      "description": "Unit tests evaluate the functionality of one individual part of an application, called units. The goal of unit tests is to provide fast, thorough feedback while reducing the risk of introducing flaws when making changes. Unit tests should be isolated to a single class, function, or method within the code. Fakes or mocks are used in place of external or infrastructure components to help ensure that the scope is isolated. These tests should be fast, repeatable, and provide assertions that lead to a pass or fail outcome. Teams should be able to run unit tests locally as well as through continuous integration pipelines. Ideally, teams adopt Test-Driven Development (TDD) practices and write tests before the software is developed.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.ft.1-ensure-individual-component-functionality-with-unit-tests.html"
+    },
+    {
+      "id": "QA.FT.2",
+      "title": "Validate system interactions and data flows with integration tests",
+      "category": "FOUNDATIONAL",
+      "description": "Integration tests evaluate the interactions between multiple components that make up the system, including infrastructure and external systems. The goal of integration testing is to help ensure that these interactions and data flows work together, ensuring that recent changes have not disrupted any interfaces or introduced undesired behaviors. Integration tests often run much slower than unit testing due to the fact that they interact with real system, such as databases, message queues, and external APIs. While integration tests should involve real components, they should still be isolated from production or shared environments where possible.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.ft.2-validate-system-interactions-and-data-flows-with-integration-tests.html"
+    },
+    {
+      "id": "QA.FT.3",
+      "title": "Confirm end-user experience and functional correctness with acceptance tests",
+      "category": "FOUNDATIONAL",
+      "description": "Acceptance tests evaluate the observable functional behavior of the system from the perspective of the end user in a production-like environment. These tests encompass functional correctness of user interfaces, general application behavior, and ensuring that user interface elements lead to expected user experiences. By considering all facets of user interactions and expectations, acceptance testing provides a comprehensive evaluation of an application's readiness for production deployment. Forms of functional acceptance tests include: End-To-End (E2E) Testing for validating integrated components and user flows through delivery pipelines, User Acceptance Testing (UAT) for external end-users to validate the system aligns with business needs, and Synthetic Testing for continuously running simulations of user behavior in live testing environments.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.ft.3-confirm-end-user-experience-and-functional-correctness-with-acceptance-tests.html"
+    },
+    {
+      "id": "QA.FT.4",
+      "title": "Balance developer feedback and test coverage using advanced test selection",
+      "category": "OPTIONAL",
+      "description": "In a DevOps model, regression testing is no longer a testing activity with human involvement. Instead, every change triggers automated pipelines that conduct a new cycle of tests, making each pipeline execution effectively a regression test. As systems become more complex over time, so do the test suites. Running all tests every time a change is made can become time-consuming and inefficient. Before choosing to implement advanced test selection methods using machine learning (ML), you should first optimize test execution through parallelization, reducing stale or ineffective tests, improving the infrastructure the tests are run on, and changing the order of tests to optimize for faster feedback. Test Impact Analysis (TIA) offers a structured approach to advanced test selection by examining the differences in the codebase to determine the tests that are most likely to be affected by the recent changes. Predictive test selection uses ML models trained on historical code changes and test outcomes to determine how likely a test is to reveal errors based on the change.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.ft.4-balance-developer-feedback-and-test-coverage-using-advanced-test-selection.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "QA.FT-AP1",
+      "title": "Over indexing on coverage metrics",
+      "description": "Relying heavily on test coverage metrics can lead teams to believe that the software is comprehensively tested. However, high test coverage might not catch all potential defects, as tests can run code without truly validating its correctness. This can result in overlooked defects and misplaced trust in the efficacy of the tests. To address this issue, incorporate regular test suite reviews focusing on meaningful assertions, rather than just coverage percentages. Introducing additional metrics like mutation testing scores can help to continuously measure and assess unit tests to help ensure they are meaningful. Improve the effectiveness of tests over time by tracking the number of defects escaping to production against test coverage percentages."
+    },
+    {
+      "id": "QA.FT-AP2",
+      "title": "Reactive test writing",
+      "description": "Adopting a strategy where tests are primarily written post-software development and after defects emerge can produce software with undiscovered bugs. While writing code before tests might seem time-efficient, it can lengthen overall development cycles, increase costs, and erode trust in software quality. Provide developers with training to encourage adopting both Test-Driven Development (TDD) and Behavior-Driven Development (BDD) practices to introduce testing early in the development lifecycle. These approaches emphasize designing and writing tests before code, ensuring that testing considerations are embedded from the start."
+    },
+    {
+      "id": "QA.FT-AP3",
+      "title": "Only testing functional requirements",
+      "description": "Focusing only on functional tests while sidelining non-functional aspects like accessibility, performance, and security can lead to vulnerabilities, poor user experience, and performance issues. Ongoing feedback loops with end users is the key to ensuring a well-rounded testing approach that strikes a balance between functional and non-functional tests. Engage with users early in the development process, conduct experiments, and iterate based on their feedback. Assess the ratio of functional to non-functional test activities, and pay attention to post-release incidents related to non-functional aspects of the application."
+    },
+    {
+      "id": "QA.FT-AP4",
+      "title": "Neglecting to address flaky tests",
+      "description": "Continuously unreliable or inconsistent test results, known as flaky tests, can diminish trust in the test suite. These tests can lead to wasted time addressing false positives and as teams become accustomed to flaky tests they may begin to ignore them. This can lead to real defects being missed or ignored. Recognize the importance of consistent test outcomes. Address flakiness by rigorously investigating and resolving its root causes of failing tests, refining test design, and ensuring the testing environment is stable and reproducible. Establish a policy to handle flaky tests, such as quarantining them until resolved, to maintain the integrity of the test suite."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "QA.FT-M1",
+      "title": "Defect density",
+      "description": "The number of defects identified per unit of code, typically per thousand lines of code (KLOC). A high defect density can indicate areas of the code that might require additional scrutiny or rework. By focusing on these areas, teams can enhance code quality. Improve this metric by increasing the rigor of code reviews, using static code analysis tools, and ensure developers have access to training and best practices.",
+      "formula": "Number of defects / Size of codebase in KLOC"
+    },
+    {
+      "id": "QA.FT-M2",
+      "title": "Test pass rate",
+      "description": "The percentage of test cases that pass successfully. This metric provides an overview of the software's health and readiness for release. A declining pass rate can indicate emerging issues or code instability. Monitoring the test pass rate helps to evaluate the effectiveness of quality assurance testing process.",
+      "formula": "Number of successful tests / Total tests run * 100"
+    },
+    {
+      "id": "QA.FT-M3",
+      "title": "Escaped defect rate",
+      "description": "The number of defects found by users post-release compared to those identified during testing. A higher rate can suggest gaps in the testing process and areas where user flows are not effectively tested. This metric helps identify testing blind spots and areas for improvement.",
+      "formula": "Number of post-release defects / Total defects identified * 100"
+    },
+    {
+      "id": "QA.FT-M4",
+      "title": "Test case run time",
+      "description": "The duration taken to run a test case or a suite of test cases. Increasing the duration can highlight bottlenecks in the test process or performance issues emerging in the software under test. Improve this metric by optimizing test scripts and the order they run in, enhancing testing infrastructure, and running tests in parallel.",
+      "formula": "Timestamp difference between the start and end of test case execution"
+    },
+    {
+      "id": "QA.FT-M5",
+      "title": "Test coverage",
+      "description": "The percentage of the codebase tested. This is generally further segmented as the percentage of functions, statements, branches, or conditions. Test coverage gives an overview of potential untested or under-tested areas of the application. Improve this metric by prioritizing areas with lower coverage, using automation and tools to enhance coverage, and regularly review test strategies.",
+      "formula": "Code covered by tests / Total lines of code in the application * 100"
+    },
+    {
+      "id": "QA.FT-M6",
+      "title": "Feature-to-bug ratio",
+      "description": "The proportion of new features developed compared to the number of bugs fixed. This metric provides insight into the balance between innovation and quality assurance. A higher ratio might indicate a focus on feature development, while a lower ratio can suggest a phase of stabilization or significant technical debt. To strike a balance, align your software development strategy with business goals and feedback loops.",
+      "formula": "Total number of new features / Total number of bugs fixed in a given period"
+    }
+  ]
+}

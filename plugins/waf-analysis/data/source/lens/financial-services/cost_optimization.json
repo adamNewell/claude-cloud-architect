@@ -1,0 +1,189 @@
+[
+  {
+    "id": "FSICOST01-BP01",
+    "title": "Evangelize cloud education among all (including non-technical) staff and stakeholders",
+    "description": "A company-sponsored cloud training program exists, and is required for all cloud stakeholders regardless of their seniority or affiliated organization. This includes digital training (on-demand courses so your team can learn about the latest services when and where it's convenient), classroom training (in-person and virtual training from instructors who teach your team in a hands-on learning environment), and AWS Certification (validate technical skills and cloud expertise to grow your career and business). For new employees, it should be part of their onboarding training, and should be mandatory training on a yearly basis for all existing employees and contractors.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": [
+      "Cloud Financial Management",
+      "Education",
+      "Organizational Alignment"
+    ]
+  },
+  {
+    "id": "FSICOST02-BP01",
+    "title": "Apply the Pareto-principle 80/20 rule for your CFM efforts",
+    "description": "No matter your organization size, pay specific attention to your capacity investment while developing CFM-related concepts. Apply the 80/20 rule to create an optimal input/output solution for cost allocation and cost optimization activities. Start with default allocation opportunities (per AWS account, AWS-generated createdBy tag), then follow up by tagging all AWS services that support tagging. For cost optimization, incorporate implementation of low-hanging cost optimization recommendations (from Cost Explorer or AWS Trusted Advisor) into daily activities of your teams. Centralized teams evaluate and book Savings Plans and Reserved Instances quarterly, while decentralized teams perform instance rightsizing and modernization weekly. Evaluate time and capacity invested into technical adjustments versus cost saving for at least the next 24 months.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": [
+      "Cloud Financial Management",
+      "Cost Allocation",
+      "Optimization Strategy"
+    ]
+  },
+  {
+    "id": "FSICOST03-BP01",
+    "title": "Use automation to drive scale for Cloud Financial Management practices",
+    "description": "Automation can drastically reduce the cost of the CFM. You can provision resources using auto scaling or using managed services, set budgets to meet, and alerts to inform users on cost utilization. Automating operations reduces the frequency of manual tasks, improves efficiency, and benefits enterprises by delivering a consistent and reliable experience when deploying, administering, or operating workloads. You can free up human resources from manual operational tasks and use them for higher value tasks and innovations, thereby improving business outcomes. Enterprises require a proven, tested way to manage their workloads in the cloud that is secure, fast, and cost effective, with minimum risk and maximum reliability.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": [
+      "Cloud Financial Management",
+      "Automation",
+      "Operational Excellence"
+    ]
+  },
+  {
+    "id": "FSICOST04-BP01",
+    "title": "Promote a culture of transparency on costs",
+    "description": "To promote transparency and accountability of costs, it is important to have standard mechanisms that show or charge back the costs to business units or applications. Companies use tags to allocate cost to teams, business units, or organizations within an enterprise and to observe trends. Enforce a tagging taxonomy with tag policies within pipelines that deploy infrastructure as code (IAC) and govern using SCPs at the organization-level and configuration across all AWS accounts. In large organizations, some teams are very advanced in cost optimization while other teams are not that mature. Hence, team cooperation, sharing importance of Cloud Finance Management, and Cloud Center of Excellence is extremely important to promote a culture of cost optimization.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Cost Awareness", "Tagging", "Organizational Culture"]
+  },
+  {
+    "id": "FSICOST05-BP01",
+    "title": "Be aware of anomalies and periodically review your architecture",
+    "description": "Anomalies can drive up cost. Set up AWS Cost Anomaly Detection to detect and alert on anomalous spend patterns in your deployed AWS services. Cost Anomaly Detection automatically determines thresholds each day by adjusting for organic growth and seasonal trends (like usage increases from Sunday to Monday or increased spend at the beginning of the month) through machine learning models. Financial systems usually integrate with several other third-party systems, and Cost Anomaly Detection can integrate with these systems as well.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Cost Monitoring", "Anomaly Detection", "Architecture Review"]
+  },
+  {
+    "id": "FSICOST06-BP01",
+    "title": "Monitor your workload usage cycle around times of higher and lower utilization (quarter-end, year-end, weekends, and holidays) to identify ways to reduce your costs",
+    "description": "You may have workload usage cycles for week-end or month-end, and quarter-end have more usage of resources. In some cases, there could be higher usage due to events like the start of trading hours, holidays shopping, and so on. Monitoring usage and corresponding events are helpful to optimize cost and architecture. You can choose to shutdown unused instances, for example Amazon EC2 servers for development, or QA on Friday, and bring them back up on Monday.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Usage Monitoring", "Workload Optimization", "Resource Scheduling"]
+  },
+  {
+    "id": "FSICOST07-BP01",
+    "title": "Use AWS credit programs such as Migration Acceleration Plan, Digital Innovation, and Activate to save costs and drive cloud adoption",
+    "description": "Multiple credit options are available, such as Migrations, Digital Innovation, Cloud Economics, and Prototyping to Activate credits. Different departments work in silos, and often the credits earned by the workload in one department need to be publicized for consumption across the other units. Ensure that the workloads are leveraging these credits across the organization. Purchasing third-party products or even data from AWS Marketplace should be considered. Talk to your account team to get relevant information on a regular basis for available credit programs. For example, Activate provides up to $100K in credits for startups.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["AWS Credits", "Cost Reduction", "Adoption"]
+  },
+  {
+    "id": "FSICOST08-BP01",
+    "title": "Sign up for a compute savings plan for discounts on compute versus on-demand pricing",
+    "description": "Financial systems usually have a predicted usage pattern. Sign up for a compute savings plan, as they offer discounts on compute of up to 72% compared to on-demand pricing. The most flexible type of Savings Plan applies across the core compute services (Amazon EC2, AWS Fargate, and AWS Lambda) and across Amazon EC2 instance size, operating system, tenancy, Availability Zone, and Region. This flexibility accommodates continuously evolving workloads and avoids unused commitment. Instead of a single monolithic savings plan, opt for smaller concurrent active Savings Plans, which are additive to reduce commitment risk, increase discount coverage, and relieve the burden of long-range usage predictions. Gain better control of the flexibility of Savings Plan usage and manage costs with regular monitoring on a regular cadence over quarterly basis.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Savings Plans", "Compute Optimization", "Capacity Planning"]
+  },
+  {
+    "id": "FSICOST09-BP01",
+    "title": "Define data retention policies to select the right storage type for your data lifecycle",
+    "description": "FSI companies usually have long retention policies for their regulatory and audit requirements that usually span multiple years and might even be able to take up to a day or two to be able to retrieve old data. Defining data retention policies and corresponding architecture to transfer data from main storage to archival storage is important. This can be achieved by transferring data from RDS database to S3, or creating snapshot and storing it for better cost efficiencies.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Storage Optimization", "Data Lifecycle", "Retention Policies"]
+  },
+  {
+    "id": "FSICOST10-BP01",
+    "title": "Use less costly Regions for disaster recovery and test platforms",
+    "description": "FSI companies usually have to plan their Disaster Recovery (DR) and also run a cadence of dry runs for regulatory purposes, and typically opt to setup their DR site in an alternate AWS Region. Depending on the SLA for latency, data sovereignty, and compliance needs, you could run DR in a less costly Region. Consider cheaper Regions for non-production environments.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Regional Strategy", "Disaster Recovery", "Cost Reduction"]
+  },
+  {
+    "id": "FSICOST11-BP01",
+    "title": "Identify pricing models and savings plans for your selected AWS services when designing your architecture",
+    "description": "Cloud cost is an important part of the design and architecture process and is used in making trade-offs between quality, performance, security and other non-functional requirements. Cloud cost is considered when selecting AWS services (using building block services such as Amazon Elastic Compute Cloud versus using managed services such as Amazon Elastic Container Service). Cost factors that go into the selection of cloud resources include: Savings Plans, Reserved Instances, Amazon EC2 Spot Instances, or Amazon S3 Intelligent-Tiering. Cost trade-offs also include resource-level decisions based on performance. Design activities include cost estimation for the services being built using the AWS Pricing Calculator, AWS Price List API, or third-party pricing tools. Examples include: using managed services to reduce operational overhead, adopting serverless architecture (pay per-request), implementing caching mechanisms, selecting the right storage mechanism, choosing the right instances and usage of Spot Instances, and considering CPU architecture like Graviton-based instances.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Pricing Models", "Architecture Design", "Cost Trade-offs"]
+  },
+  {
+    "id": "FSICOST12-BP01",
+    "title": "Migrate your mainframe and on-premises infrastructure to adopt a cloud-based microservices approach",
+    "description": "Financial institutions are moving from monolithic legacy systems such as mainframes into modern microservices architectures, giving them the flexibility of provisioning multiple environments to develop features rapidly, instead of waiting for the single monolith environment to be available, giving them greater agility and faster time-to-market. Quantifying this gain is important for stakeholder buy-in.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Modernization", "Microservices", "Architecture Migration"]
+  },
+  {
+    "id": "FSICOST13-BP01",
+    "title": "Set up pay-as-you-go services when team expands for certain duration",
+    "description": "Some financial services institutions hire contractors during specific months, or for a project. These contractors can work on a project for a short duration, like 6 months to a year. Procuring a new machine, and ensuring that it is meeting the compliance standards of a financial services institution can be resource intensive. Using a service like Amazon WorkSpaces for end-user computing can help with cost-efficient utilization of resources. You can create workspaces per your internal standards, and provision it for a new resource.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Resource Management", "Pay-as-you-go", "End-user Computing"]
+  },
+  {
+    "id": "FSICOST14-BP01",
+    "title": "Consider the cost of licensing third-party applications and software",
+    "description": "If you are using third-party software, understand the specific licensing terms of each third-party vendor. AWS offers both Dedicated Hosts that have pre-installed virtualization software (Hypervisor) whereas bare metal servers do not have pre-installed virtualization software. Choosing the right instance type specific to the licensing terms may reduce your third-party licensing costs. Generally, third-party software applications and associated support can provide your workload with a lower overall cost of ownership than in-house created applications. Because software vendors have a much broader perspective of customer requirements, their software can more economically support a wider range of use cases than an in-house developed solution. A software support agreement reduces your technical debt if and when new workload features are needed.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Licensing", "Third-party Software", "TCO Analysis"]
+  },
+  {
+    "id": "FSICOST15-BP01",
+    "title": "Monitor and optimize your ongoing costs, ROIs, and tradeoffs against alternative AWS services on a periodic basis to maintain your lowest cost of ownership",
+    "description": "Financial services institutions add new human resources periodically, like contractors, vendors, or FTEs, so it is necessary to maintain a cost-aware culture. There are also enhancements from AWS on cost-related services. You should conduct periodic workshops, sessions on effective ways to measure, monitor and optimize cost to spread awareness of cost optimization to existing resources, as well as new resources on the team. The frequency of such workshops should be at least once every six months. Every six months, or during the session, you should recognize cost optimization wins and recognize individual people driving or contributing to the cost optimization. This drives cost-optimization culture in a team.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Cost Review", "Continuous Optimization", "Organizational Culture"]
+  },
+  {
+    "id": "FSICOST16-BP01",
+    "title": "Use AWS cost management tools to perform retrospective, audit-based cost optimization on existing cloud workloads",
+    "description": "There is a process to examine existing cloud spend, and identify cost optimization opportunities using manual analysis, or the use of tools (AWS Billing and Cost Management and Cost Management tools, AWS Partner tools, open-source tools, or DIY tools). Cost optimization opportunities are identified, prioritized, and implemented in a continuous, programmatic manner, ensuring all cloud workloads run as lean as possible while meeting all functional and non-functional requirements. As your requirements change, be aggressive in decommissioning resources, components, and workloads that you no longer require.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Cost Analysis", "Optimization Tools", "Continuous Assessment"]
+  },
+  {
+    "id": "FSICOST17-BP01",
+    "title": "Assess workload architecture to identify the most cost-effective resources",
+    "description": "There are multiple factors that affect the architecture, for example, new enhancements related to business requirements, re-architecting your workload to improve efficiency, new services released by AWS, price changes by AWS, or your team creating an MVP product with services without considering costs. It is necessary to assess the architecture and resources used by workload, for example, usage of serverless technologies, managed services to reduce the operational overhead, or AWS Graviton-based instances that meet your needs. Alternatively, you can refactor your monolithic application to run as microservices. Most of the FSI systems are API-driven, so splitting them across a number of diverse services helps procurement, and the right-sizing of related resources.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": [
+      "Architecture Review",
+      "Resource Selection",
+      "Workload Optimization"
+    ]
+  },
+  {
+    "id": "FSICOST18-BP01",
+    "title": "Define ambitious modernization strategy to become truly AWS optimized",
+    "description": "In traditional financial institutions, databases and core banking solutions are key cost drivers. Improve your Total Cost of Ownership (TCO) by refactoring your lift and shift strategies to continue your modernization activities where you can improve performance while reducing your costs. The Operational Excellence pillar helps you define which workloads are suitable for refactoring. In the case of core banking systems provided by a vendor, start a dialog with your vendor to build a roadmap for workload modernization to make them cost-efficient. Also concentrate on modernization of workloads that interact with databases and core banking systems (for example, customer-facing web-pages, and apps). Leverage the AWS service WorkSpaces for remote diagnostics.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Modernization", "TCO Optimization", "Core Banking"]
+  },
+  {
+    "id": "FSICOST19-BP01",
+    "title": "Use AWS cloud services to change the way you reduce cost and improve agility in your infrastructure",
+    "description": "Today, technology and digital solutions are an integral part of FSI operations, however IT cost is not the biggest block within all expenditures in the profit and loss of FSI customers (personnel and marketing have greater impacts on cost). Using AWS Cloud solutions and services to change the way you operate impacts your profitability in the short and long term. Think big and explore regularly with your AWS Account Management team to test and launch new use cases and solutions. For example, you may boost your IT teams' productivity by exploring Amazon Q Developer. With Intelligent Document Processing, you can automatically process financial or insurance documents using AI and free up capacity on your service teams.",
+    "pillar": "COST_OPTIMIZATION",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Innovation", "Business Model", "Digital Transformation"]
+  }
+]

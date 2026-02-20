@@ -1,0 +1,97 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Cryptographic Signing",
+  "capabilityCode": "CS",
+  "description": "Cryptographic signing in the development lifecycle authenticates the origins and verifies the integrity of software components. Through the use of digital signatures, it safeguards software builds and deployments against unauthorized changes and potential threats from malicious actors. By leveraging cryptographic signing, you can establish a secure software supply chain, improve transparency in the build and delivery process, and reliably distribute verifiable software components at scale.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/cryptographic-signing.html",
+  "indicators": [
+    {
+      "id": "DL.CS.1",
+      "title": "Implement automated digital attestation signing",
+      "description": "Digital attestations serve as verifiable evidence that software components were built, tested, and conform to organizational standards within a controlled environment. Signatures associated with each attestation can be verified to ensure that the component has not been tampered with and originated from a trusted source. Generating attestations throughout the development lifecycle provides a method of ensuring software quality, origin, and authenticity.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.cs.1-implement-automated-digital-attestation-signing.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "DL.CS.2",
+      "title": "Sign code artifacts after each build",
+      "description": "Code signing is the process of attaching a digital signature to build artifacts like binaries, containers, and other forms of packaged code to enable verifying its integrity and authenticity. Signing code artifacts minimizes risk of using or distributing tampered or counterfeit software.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.cs.2-sign-code-artifacts-after-each-build.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "DL.CS.3",
+      "title": "Enforce verification before using signed artifacts",
+      "description": "Before using code artifacts, the cryptographic signature should be inspected and validated. This verification step enforces trust and security within the development lifecycle, ensuring that software remains unchanged before it is used or deployed.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.cs.3-enforce-verification-before-using-signed-artifacts.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "DL.CS.4",
+      "title": "Enhance traceability using commit signing",
+      "description": "Commit signing involves attaching a digital signature to code commits, certifying the integrity of changes and the identity of the committer. While not universally adopted by all organizations, commit signing enhances trust and traceability as developers make code changes, making it easier to track the origin of changes and ensure their authenticity.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.cs.4-enhance-traceability-using-commit-signing.html",
+      "category": "OPTIONAL"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.CS-AP1",
+      "title": "Ignoring key compromise",
+      "description": "Key compromise can severely affect the integrity of the software. When cryptographic signing keys are suspected to be compromised, immediate steps should be taken to revoke and replace them to maintain the security and trust in the code base. Regular key rotation prevents prolonged unauthorized access from a compromised key and strengthens overall security."
+    },
+    {
+      "id": "DL.CS-AP2",
+      "title": "Reuse of signing keys across projects",
+      "description": "Sharing the same signing keys across multiple projects can affect the integrity of the software. If a key is compromised, all projects signed with that key become potential targets. To mitigate the risk, the best practice is to use distinct keys for different projects or workloads."
+    },
+    {
+      "id": "DL.CS-AP3",
+      "title": "Incomplete signature verification",
+      "description": "Trusting incorrectly signed code can introduce vulnerabilities. Skipping the validation of cryptographic signatures for third-party libraries or dependencies jeopardizes application security. You should consistently validate signatures to maintain code integrity and authenticity. It is equally important to assess certificate attributes such as validity periods and key usage. Avoid relying exclusively on manual checks for signature validation; using automation in the verification process upholds consistent security checks and minimizes errors."
+    },
+    {
+      "id": "DL.CS-AP4",
+      "title": "Overlooking timestamp validation",
+      "description": "Ignoring timestamp validation can lead to situations where code is deemed untrustworthy due to an expired certificate, even if the code itself is legitimate and unaltered. This may result in unintentional outages or service disruptions, as systems might refuse to run or integrate with the signed artifact. Proper timestamp validation ensures that certificates were valid at the time the code was signed, preventing unnecessary disruptions due to expired certificates while still maintaining trust in the code's integrity."
+    },
+    {
+      "id": "DL.CS-AP5",
+      "title": "Avoid certificate pinning",
+      "description": "Hard-coding certificate information within your software, often called certificate pinning, might initially seem like an extra layer of security by tightly coupling your code to a certificate. However, it is an anti-pattern as it makes your software inflexible and brittle. If the pinned certificate needs to be replaced or updated, it will require a software update, which might not be feasible, especially for critical systems or widely distributed applications. Instead, rely on proper certificate validation processes and maintain a flexible and agile certificate management system."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.CS-M1",
+      "title": "Number of unsigned releases",
+      "description": "Measures the number of releases without cryptographic signatures. This goal of this metric is to reduce this percentage, reflecting increased compliance with cryptographic practices across the organization.",
+      "formula": "Compare the number of unsigned releases to the total releases over a specific time frame."
+    },
+    {
+      "id": "DL.CS-M2",
+      "title": "Number of expired certificates used",
+      "description": "Assesses how often expired certificates are used. Using expired certificates suggests potential operational oversights in certificate renewal and management.",
+      "formula": "Log and count releases where expired certificates were used."
+    },
+    {
+      "id": "DL.CS-M3",
+      "title": "Time to revoke a compromised key",
+      "description": "The duration between the detection of a key compromise and its revocation. This measures efficiency of the incident response process and how quickly the organization can react to potential threats to key compromise.",
+      "formula": "Calculate the average time between the occurrence of key compromise and key revocation."
+    },
+    {
+      "id": "DL.CS-M4",
+      "title": "Time to sign",
+      "description": "This amount of time it takes to sign a code artifact. If it takes too long to sign an artifact, it could be a bottleneck in the deployment or release process.",
+      "formula": "Average the time taken for signing across the entire organization in a given time frame."
+    },
+    {
+      "id": "DL.CS-M5",
+      "title": "Time to verify",
+      "description": "Measures the duration required to verify the cryptographic signature of a code artifact. It ensures the verification process is efficient and doesn't become a bottleneck.",
+      "formula": "Calculate the average time taken to verify across all signatures in a given period."
+    }
+  ]
+}

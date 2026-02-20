@@ -1,0 +1,130 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Team Interfaces",
+  "capabilityCode": "TI",
+  "description": "Team interfaces are the input and output mechanisms that direct the flow of work between teams in a DevOps environment. These interfaces work to share information and resources across the organization, facilitate collaboration, and help teams to align their goals and priorities. Effective team interfaces streamline processes, reduce bottlenecks, and improve overall productivity within and across teams.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/team-interfaces.html",
+  "indicators": [
+    {
+      "id": "OA.TI.1",
+      "title": "Communicate work flow and goals between teams and stakeholders",
+      "description": "Regularly share ongoing work, roadmaps, and team goals with key stakeholders and other teams. By externalizing this information, teams can improve visibility across the organization. This helps teams understand how their work impacts others and the overall business goals. Teams can use work tracking tools that promote a more agile, adaptive approach, such as Scrum or Kanban boards, and dashboards to make their work, priorities, and key metrics visible to others in the organization.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.1-communicate-work-flow-and-goals-between-teams-and-stakeholders.html"
+    },
+    {
+      "id": "OA.TI.2",
+      "title": "Streamline intra-team communication using tools and processes",
+      "description": "Equip teams with tools to automate and manage their workflows, priorities, and decision-making processes. Implement team collaboration, document sharing, task creation, and progress monitoring tools. Establish team norms and practices, such as lexicons, story pointing, and defining 'done', to streamline intra-team communication. Use reporting tools, playbooks, and retrospective sessions to improve processes and team norms.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.2-streamline-intra-team-communication-using-tools-and-processes.html"
+    },
+    {
+      "id": "OA.TI.3",
+      "title": "Establish mechanisms for teams to gather and manage customer feedback",
+      "description": "Establish feedback channels that help teams gather and manage input from both internal and external customers of their products. Related processes should be created for teams to track, prioritize, and act on the feedback received for their respective value stream. Integrate the feedback with collaboration tools and existing workflows so that inputs, decisions, and outcomes are documented and prioritized with the rest of the value stream work.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.3-establish-mechanisms-for-teams-to-gather-and-manage-customer-feedback.html"
+    },
+    {
+      "id": "OA.TI.4",
+      "title": "Refine error tracking and resolution",
+      "description": "Establish mechanisms for continuous improvement in error correction, tracking, and resolution. This includes developing a culture of learning from mistakes, sharing knowledge, and using data-driven insights to drive improvements. Implement tools and processes to facilitate effective error tracking and resolution, such as issue tracking systems, monitoring, and alerting solutions.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.4-refine-error-tracking-and-resolution.html"
+    },
+    {
+      "id": "OA.TI.5",
+      "title": "Design adaptive approval workflows without compromising safety",
+      "description": "Establish approval processes and guidelines that prioritize speed, safety, and agility. These processes should account for factors such as risk assessment, impact analysis, and stakeholder engagement, while also allowing for feedback and improvement. Use automation and tools to support these processes, rather than requiring complex, human-driven collaboration between teams.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.5-design-adaptive-approval-workflows-without-compromising-safety.html"
+    },
+    {
+      "id": "OA.TI.6",
+      "title": "Prioritize customer needs to deliver optimal business outcomes",
+      "description": "Customer-driven development is an approach that places the end user's needs and expectations at the heart of product development. Instead of starting with technical specifications or available resources, teams start by visualizing the ideal user experience. From there, iteratively work backwards to determine how to deliver on that plan. An example of this is the Amazon 'working backwards' process.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.6-prioritize-customer-needs-to-deliver-optimal-business-outcomes.html"
+    },
+    {
+      "id": "OA.TI.7",
+      "title": "Maintain a unified knowledge source for teams",
+      "description": "Adopt collaboration and configuration tools, supported by established processes, to store documents, configurations, and other artifacts in a unified source of record. Keep documentation up-to-date to help teams work more autonomously and build trust. Implement processes for regular review of artifacts in the source of record and remove outdated content as needed.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.7-maintain-a-unified-knowledge-source-for-teams.html"
+    },
+    {
+      "id": "OA.TI.8",
+      "title": "Simplify access to organizational information",
+      "description": "Provide internal users access to vital organizational information, such as details about the organization, objectives, analytics, employee data, policies, hierarchical structures, and escalation channels. One approach is to manage a centralized platform, like an intranet, where employees can swiftly locate the information they need for effective job performance.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.8-simplify-access-to-organizational-information.html"
+    },
+    {
+      "id": "OA.TI.9",
+      "title": "Facilitate self-service collaboration through APIs and documentation",
+      "description": "Develop clear and comprehensive service documentation for improved accessibility and navigation, including user guides, tutorials, and FAQs. Provide well-defined interfaces, such as APIs or web portals, to simplify access and usage. Regularly review and update interfaces to meet user needs. Establish ownership for documentation and services, and implement mechanisms for teams to ask for clarification, help, or provide feedback.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.9-facilitate-self-service-collaboration-through-apis-and-documentation.html"
+    },
+    {
+      "id": "OA.TI.10",
+      "title": "Choose interaction modes for improved efficiency and cost savings",
+      "description": "Teach teams about the different interaction modes as outlined in Team Topologies, including 'X as a Service' (XaaS), facilitation, and collaboration. With knowledge of how to optimize interaction modes for specific scenarios, teams can measure the cost, efficiency, and applicability of each mode against their use case. XaaS is typically the most cost-effective and efficient interaction mode between teams when available.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.10-choose-interaction-modes-for-optimal-efficiency-and-cost-savings.html"
+    },
+    {
+      "id": "OA.TI.11",
+      "title": "Offer optional opportunities for cross-team collaboration",
+      "description": "Establish regular communication channels and forums to encourage cross-team collaboration and information sharing. This can include joint planning sessions, team demos, or cross-team retrospectives. Encourage a culture of open communication and collaboration across teams, sharing knowledge, best practices, and lessons learned.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ti.11-offer-optional-opportunities-for-cross-team-collaboration.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.TI-AP1",
+      "title": "Documentation overload and neglect",
+      "description": "Having too much documentation can slow down the development lifecycle and increase the cognitive load of readers. Insufficient or outdated documentation can lead to misinformed decisions and missed opportunities. Create a balance between comprehensive documentation and agile methodology. Continually update documentation to reflect current practices and insights, while also maintaining a focus on action and progress."
+    },
+    {
+      "id": "OA.TI-AP2",
+      "title": "Lack of cross-functional collaboration",
+      "description": "Teams that operate in silos and avoid collaborating with other departments can miss broader organizational context and perspectives. Siloed teams often result in longer feedback loops and reduced sharing of best practices across the organization. Introduce opportunities for teams to meet, such as joint workshops, gamification opportunities, technical communities, or using shared documentation platforms."
+    },
+    {
+      "id": "OA.TI-AP3",
+      "title": "Inflexible approval processes",
+      "description": "Overly bureaucratic approval processes can act as barriers to progress, inhibiting agility and slowing down product delivery. These processes can lead to delays and reduce the organization's ability to adapt quickly to changes. Make improvements to quality assurance and automated governance capabilities to introduce automated change management workflows. By automating these traditionally human-driven decision gates, teams become more autonomous leading to improved deployment frequency and reduced time to market."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.TI-M1",
+      "title": "Feedback response time",
+      "description": "The average time it takes for a team to address and respond to customer feedback. This metric indicates agility and adaptiveness to customer needs and showcases the team's efficiency in addressing feedback.",
+      "formula": "Average of (timestamp_response - timestamp_feedback_received) for all feedback received within a set period"
+    },
+    {
+      "id": "OA.TI-M2",
+      "title": "Handoff frequency",
+      "description": "The count of handoffs in a process, including those across different teams. Having many handoffs can indicate potential inefficiencies, bottlenecks, and areas where errors might occur due to excessive handoffs. A lower number of handoffs across many processes generally indicates more autonomy within a team.",
+      "formula": "Count of handoffs within a given process, particularly between different teams"
+    },
+    {
+      "id": "OA.TI-M3",
+      "title": "Knowledge sharing index",
+      "description": "This refers to how much teams share, update, and use collective knowledge repositories and assets. This highlights the effectiveness of knowledge management processes and the extent to which shared knowledge supports team activities.",
+      "formula": "Track the number of accesses, contributions, and modifications to shared repositories or platforms. Consider using surveys or setting up a scale to assess the perceived value and utility of shared knowledge sources."
+    },
+    {
+      "id": "OA.TI-M4",
+      "title": "Onboarding satisfaction (OSAT)",
+      "description": "The satisfaction level of new team members regarding their onboarding experience. This metric provides insights into the effectiveness and efficiency of the onboarding process, identifying areas that need improvement.",
+      "formula": "Use surveys to measure satisfaction on a scale (for example, 1-10) after a new hire goes through the onboarding process. Calculate the average score and track changes over time."
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "SLSSUS01-BP01",
+    "title_full": "SLSSUS01-BP01 Leverage serverless architecture inherent sustainability benefits",
+    "title": "Leverage serverless architecture inherent sustainability benefits",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/sustainability.html",
+    "description": "Serverless architectures inherently support sustainability by maximizing utilization of provisioned resources and minimizing total resources required. With pay-per-use pricing and automatic scaling, serverless reduces energy consumption by eliminating over-provisioned idle resources. Refer to the main AWS Well-Architected Sustainability Pillar for detailed practices.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Resource efficiency"],
+    "relatedIds": ["SUS01-BP01"],
+    "risk": "LOW",
+    "lens": "SERVERLESS"
+  },
+  {
+    "id": "SLSSUS01-BP02",
+    "title_full": "SLSSUS01-BP02 Optimize Lambda function efficiency to reduce environmental impact",
+    "title": "Optimize Lambda function efficiency to reduce environmental impact",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/sustainability.html",
+    "description": "Reduce environmental impact by optimizing Lambda function code, right-sizing memory allocations, and minimizing execution time. Efficient functions use less compute resources and energy. Combine this with serverless pay-per-use model to ensure you only consume resources when processing actual work.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Resource efficiency"],
+    "relatedIds": ["SUS02-BP01"],
+    "risk": "LOW",
+    "lens": "SERVERLESS"
+  },
+  {
+    "id": "SLSSUS01-BP03",
+    "title_full": "SLSSUS01-BP03 Use managed services to benefit from AWS infrastructure efficiency",
+    "title": "Use managed services to benefit from AWS infrastructure efficiency",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/serverless-applications-lens/sustainability.html",
+    "description": "Leverage fully managed serverless services like Lambda, API Gateway, DynamoDB, and Step Functions to benefit from AWS's infrastructure efficiency and sustainability commitments. AWS continuously optimizes its infrastructure for energy efficiency, and serverless customers automatically benefit from these improvements.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Managed services"],
+    "relatedIds": ["SUS03-BP01"],
+    "risk": "LOW",
+    "lens": "SERVERLESS"
+  }
+]

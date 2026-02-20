@@ -1,0 +1,111 @@
+{
+  "saga": "Automated Governance",
+  "sagaCode": "AG",
+  "capability": "Secure Access and Delegation",
+  "capabilityCode": "SAD",
+  "description": "Secure access and delegation is a governance capability that establishes scalable methods for managing fine-grained access controls while providing teams with necessary autonomy. This capability includes explicit access granting, least privilege principles, temporary access controls, emergency procedures, and regular auditing to ensure alignment with evolving business requirements and current threat landscapes.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/secure-access-and-delegation.html",
+  "indicators": [
+    {
+      "id": "AG.SAD.1",
+      "title": "Centralize and federate access with temporary credential vending",
+      "description": "Implement centralized identity management with temporary credentials",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.2",
+      "title": "Delegate identity and access management responsibilities",
+      "description": "Distribute IAM responsibilities across teams",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.3",
+      "title": "Treat pipelines as production resources",
+      "description": "Apply production-level security controls to CI/CD pipelines",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.4",
+      "title": "Limit human access with just-in-time access",
+      "description": "Provide temporary access only when needed",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.5",
+      "title": "Implement break-glass procedures",
+      "description": "Establish emergency access procedures for critical situations",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.6",
+      "title": "Conduct periodic identity and access management reviews",
+      "description": "Regularly audit access controls to align with evolving requirements",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.7",
+      "title": "Implement rotation policies for secrets, keys, and certificates",
+      "description": "Rotate credentials and certificates on a regular schedule",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    },
+    {
+      "id": "AG.SAD.8",
+      "title": "Adopt a zero trust security model, shifting towards an identity-centric security perimeter",
+      "description": "Shift from perimeter-based to identity-centric security",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-secure-access-and-delegation.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "AG.SAD-AP1",
+      "title": "Broad Permissions",
+      "description": "Granting extensive permissions without regular checks can lead to inadvertent access rights. This poses a significant security risk as potential vulnerabilities or unauthorized activities could occur."
+    },
+    {
+      "id": "AG.SAD-AP2",
+      "title": "Manual Identity and Access Management",
+      "description": "Depending on manual methods for both access control and identity management may lead to inconsistencies, delays, and errors. This manual approach is especially problematic as organizations grow, making it harder to scale and maintain security."
+    },
+    {
+      "id": "AG.SAD-AP3",
+      "title": "Static Permission Management",
+      "description": "Without a method to periodically review permissions as roles or business needs evolve can create both security vulnerabilities and operational inefficiencies."
+    },
+    {
+      "id": "AG.SAD-AP4",
+      "title": "Neglecting Break-Glass Protocols",
+      "description": "Lacking established break-glass procedures could impair timely responses during emergencies that require elevated access."
+    },
+    {
+      "id": "AG.SAD-AP5",
+      "title": "Not Evolving Security with DevOps",
+      "description": "Adhering strictly to existing or outdated security models as the organization adopts DevOps best practices can introduce vulnerabilities and slow down progress."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "AG.SAD-M1",
+      "title": "Incident frequency due to access violations",
+      "description": "The number of security incidents caused by leaked credentials, incorrect, or overly broad permissions over a given period. This metric highlights weaknesses in access controls and potential gaps in identity and access management practices.",
+      "formula": "Count the number of security incidents attributed to access controls each month and compare it with past data to identify trends."
+    },
+    {
+      "id": "AG.SAD-M2",
+      "title": "IAM review frequency",
+      "description": "The number of times IAM policies and permissions are reviewed over a given period. Regular or continuous reviews can help identify potential risks before they become security incidents.",
+      "formula": "Count each IAM review that occurs over a given period, such as a quarter or year."
+    },
+    {
+      "id": "AG.SAD-M3",
+      "title": "Time to revoke access",
+      "description": "The average duration taken to revoke access once it's determined to be no longer necessary.",
+      "formula": "Average duration from the moment it is identified that access needs to be revoked to the time that access is revoked."
+    },
+    {
+      "id": "AG.SAD-M4",
+      "title": "Rotation compliance",
+      "description": "The percentage of security-sensitive assets (credentials, secrets, keys, certificates) rotated in compliance with established policies over a specified period.",
+      "formula": "(Number of assets rotated in compliance / Total number of assets due for rotation) × 100"
+    }
+  ]
+}

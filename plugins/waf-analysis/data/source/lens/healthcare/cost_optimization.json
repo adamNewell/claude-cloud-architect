@@ -1,0 +1,15 @@
+[
+  {
+    "id": "HCICOST01-BP01",
+    "title_full": "HCICOST01-BP01 Understand costs and drivers through expenditure and usage awareness",
+    "title": "Understand costs and drivers through expenditure and usage awareness",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/expenditure-and-usage-awareness.html",
+    "description": "Understanding your organization's costs and drivers is critical for managing cost and usage effectively, and identifying cost-reduction opportunities. Attribute resource costs to workloads, individual organizations, or product owners to drive efficient usage behavior and reduce waste. Accurate cost and usage monitoring allows you to understand profitability of organization units and products and make informed decisions about resource allocation.",
+    "outcome": "Healthcare organizations have visibility into their cloud costs and can make data-driven decisions about resource allocation and optimization opportunities.",
+    "pillar": "COST_OPTIMIZATION",
+    "area": ["Expenditure and Usage Awareness"],
+    "relatedIds": ["COST02-BP01", "COST02-BP02", "COST02-BP03"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  }
+]

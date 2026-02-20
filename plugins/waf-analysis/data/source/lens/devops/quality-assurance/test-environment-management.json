@@ -1,0 +1,83 @@
+{
+  "saga": "Quality Assurance",
+  "sagaCode": "QA",
+  "capability": "Test Environment Management",
+  "capabilityCode": "TEM",
+  "description": "This capability focuses on dynamically provisioning test environments that are used for running test cases. Using automation to manage these environments and associated test data reduces both testing duration and expense while improving accuracy of test results. Effectively managing test data as a part of this process helps with identifying and correcting defects earlier on in the development lifecycle.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/test-environment-management.html",
+  "indicators": [
+    {
+      "id": "QA.TEM.1",
+      "title": "Establish dedicated testing environments",
+      "category": "FOUNDATIONAL",
+      "description": "Use testing environments to detect and correct issues earlier on in the development lifecycle. Deploy integrated changes into these environments before they are deployed to production. These environments are as production-like as possible, providing the ability to simulate real-world conditions which can validate that changes are ready for production deployment. Design your testing environments to mimic production qualities that you need to test, such as monitoring settings or regional variants. At a minimum, have a staging environment that you monitor closely to catch potential issues early. Infrastructure as code (IaC) should be used for managing and deploying these environments, ensuring consistent and predictable provisioning.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.1-establish-dedicated-testing-environments.html"
+    },
+    {
+      "id": "QA.TEM.2",
+      "title": "Ensure consistent test case execution using test beds",
+      "category": "FOUNDATIONAL",
+      "description": "Test cases require specific conditions and test data to run in a predetermined state. Test beds, configured within broader testing environments, provide the conditions necessary to ensure reproducible and accurate test case execution. Integrate test bed preparation into the delivery pipeline, leveraging infrastructure as code (IaC) to help guarantee consistent test bed setup. Rather than updating or patching test beds, use immutable infrastructure and treat them as ephemeral environments. Use data restoration techniques to automate populating test beds with test data specific to the test case being run.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.2-ensure-consistent-test-case-execution-using-test-beds.html"
+    },
+    {
+      "id": "QA.TEM.3",
+      "title": "Store and manage test results",
+      "category": "FOUNDATIONAL",
+      "description": "When tests are run, the results offer insights into the system's health, providing actionable feedback for developers. Establish a structured test result storage strategy to maintain the integrity, relevance, and availability of these results. Store test results in a centralized system or platform using a machine-readable format, such as JSON or XML. Each set of test outcomes should be both timestamped and versioned to enable historical tracking of changes, improvements, or potential regressions. Test results must be encrypted both at rest and in transit to protect against sensitive data.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.3-store-and-manage-test-results.html"
+    },
+    {
+      "id": "QA.TEM.4",
+      "title": "Implement a unified test data repository for enhanced test efficiency",
+      "category": "RECOMMENDED",
+      "description": "Test data refers to specific input datasets designed for testing purposes to simulate real-world scenarios. Centralizing test datasets in a unified storage location, such as a data lake or source code repository, ensures they are stored, normalized, and managed effectively. Create a centralized, version-controlled system to store test datasets and ensure the data in this central repository is sanitized and approved for non-production environments. Regularly maintain the centralized test data source by updating it either periodically or when there are changes in systems data schemas, features, functions, or dependencies.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.4-implement-a-unified-test-data-repository-for-enhanced-test-efficiency.html"
+    },
+    {
+      "id": "QA.TEM.5",
+      "title": "Run tests in parallel for faster results",
+      "category": "RECOMMENDED",
+      "description": "Parallelized test execution is the practice of concurrently running multiple test cases or suites to accelerate test results and expedite feedback. As software grows and becomes more modular, especially in architectures like microservices, the number of test cases also increases. Running these tests sequentially could significantly slow down delivery pipelines. By creating many test beds and distributing test cases across them asynchronously, tests can be run in parallel to allow for faster iterations and more frequent deployments.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.5-run-tests-in-parallel-for-faster-results.html"
+    },
+    {
+      "id": "QA.TEM.6",
+      "title": "Enhance developer experience through scalable quality assurance platforms",
+      "category": "RECOMMENDED",
+      "description": "As team structures and operating models change within the organization to support distributed teams with value stream ownership, the roles and responsibility of quality assurance teams also evolve. Form platform teams that offer scalable testing services to stream-aligned teams to enhance the developer experience and expedite test environment set up. These platforms can feature self-service options, automated test environment management, test bed provisioning, and equipping teams with the tools to produce, manage, and use test data and infrastructure.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.tem.6-enhance-developer-experience-through-scalable-quality-assurance-platforms.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "QA.TEM-AP1",
+      "title": "Low test data coverage",
+      "description": "Using a limited set of test data that does not cover all known scenarios, leading to testing gaps and unexpected issues. Effective test data management should include the creation of a comprehensive and diverse set of test data that covers all possible scenarios. Reduce the likelihood of low data coverage occurring by being proactive about test data requirements at the start of the development lifecycle rather than creating and managing test data after a change has been made."
+    },
+    {
+      "id": "QA.TEM-AP2",
+      "title": "Insecure test data",
+      "description": "Not having the proper policies and security measures in place when generating, storing, or using test data can lead to potential data breaches, inaccuracies, and inefficiencies in the test process. Test data management strategies should prioritize data security and governance practices to ensure that data is accurately and securely managed throughout the testing process. For example, using actual production data without proper obfuscation or sanitization in test environments has the potential of exposing sensitive information. Use automated governance capabilities to apply guardrails, set up secure access to test data, and automate the lifecycle of test data."
+    },
+    {
+      "id": "QA.TEM-AP3",
+      "title": "Centralized testing",
+      "description": "Maintaining a traditional, centralized approach to quality assurance and testing can create bottlenecks, reduce agility, and inhibit teams from taking full ownership of their value stream. Instead, focus on providing stream-aligned teams with the tools, knowledge, and resources to self-manage their testing requirements. Distribute quality assurance functions by creating platform teams and enabling teams to support others by offering scalable testing services, tools, and guidance."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "QA.TEM-M1",
+      "title": "Test bed provisioning time",
+      "description": "The duration spent provisioning a test environment including all supporting infrastructure and data saturation. This metric indicates inefficiencies in the overall test bed provisioning process.",
+      "formula": "Timestamp of when environment is confirmed ready - Timestamp of start of provisioning"
+    },
+    {
+      "id": "QA.TEM-M2",
+      "title": "Test case execution time",
+      "description": "The duration taken to run a test case or a suite of test cases. Faster test execution speeds indicate efficient test environment and execution management which allows for rapid iterations and feedback. Improve this metric by optimizing test bed provisioning, ensuring efficient resource allocation, and parallelizing test runs.",
+      "formula": "Timestamp of end of test case execution - Timestamp of start of test case execution"
+    }
+  ]
+}

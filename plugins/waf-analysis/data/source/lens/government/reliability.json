@@ -1,0 +1,67 @@
+[
+  {
+    "area": ["Resilience testing"],
+    "description": "Establish and document test-driven design and implementation, including scenario testing and mitigation planning. Establish system and process test environments, including scaled functional testing, user testing with the public, war gaming for procedural and scenario testing, and the potential for regulatory sandboxes for policy testing. Consider running regular AWS Well-Architected game days in the lead up to launching a new product to identify areas for improvement and end to end system/service reliability.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/reliability-pillar.html",
+    "id": "GOV08-BP01",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "relatedIds": ["REL11-BP01", "REL11-BP02", "REL11-BP03"],
+    "risk": "HIGH",
+    "title": "Establish test-driven design with scenario testing and mitigation planning",
+    "title_full": "GOV08-BP01 Establish test-driven design with scenario testing and mitigation planning"
+  },
+  {
+    "area": ["Resilience testing"],
+    "description": "Seek peer review of reliability planning. Run and document feedback and recommendations from peer review sessions for the service and reliability planning. Support the customer to engage with relevant peers to review, share, and help assure the best possible reliability of the service.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/reliability-pillar.html",
+    "id": "GOV08-BP02",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "relatedIds": ["REL11-BP04"],
+    "risk": "MEDIUM",
+    "title": "Seek peer review of reliability planning",
+    "title_full": "GOV08-BP02 Seek peer review of reliability planning"
+  },
+  {
+    "area": ["Service continuity"],
+    "description": "Assess the impact of downtime and service deadlines. Test and document the assumptions about the likely impacts of service downtime, especially on vulnerable people and communities, and around anticipated deadlines such as elections, seasonal emergencies (such as fire season), and waiting times at medical care facilities. Capture these assumptions in user journey maps and document remediations and strategies in the concept of operations document.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/reliability-pillar.html",
+    "id": "GOV09-BP01",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "relatedIds": ["REL13-BP01", "REL13-BP02"],
+    "risk": "HIGH",
+    "title": "Assess impact of downtime on vulnerable populations and service deadlines",
+    "title_full": "GOV09-BP01 Assess impact of downtime on vulnerable populations and service deadlines"
+  },
+  {
+    "area": ["Service continuity"],
+    "description": "Plan for a graceful degradation of service, with appropriate fail-overs and alternative service pathways. Verify that the service has appropriate fail-over strategies proportionate to the risk, and that users can identify alternative pathways to the service, including offline and phone-based user journeys. Verify that alternative service pathways are quickly discoverable by end users, even if the digital services are down. Have a stakeholder list, FAQs, and a communications plan prepared.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/reliability-pillar.html",
+    "id": "GOV09-BP02",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "relatedIds": ["REL10-BP01", "REL10-BP02", "REL10-BP03"],
+    "risk": "HIGH",
+    "title": "Plan for graceful service degradation with alternative pathways",
+    "title_full": "GOV09-BP02 Plan for graceful service degradation with alternative pathways"
+  },
+  {
+    "area": ["Service continuity"],
+    "description": "Verify and document the processes and public reporting of post-incident reviews. Government departments often have specific requirements to report incidents publicly, and even when there isn't a requirement, it is often good practice to help maintain high public trust and confidence in the public institution. Identifying any requirements and ensuring the processes and expectations are clear and documented can assist in future incident management.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/reliability-pillar.html",
+    "id": "GOV09-BP03",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "RELIABILITY",
+    "relatedIds": ["OPS11-BP05", "OPS11-BP06"],
+    "risk": "MEDIUM",
+    "title": "Document post-incident review and public reporting processes",
+    "title_full": "GOV09-BP03 Document post-incident review and public reporting processes"
+  }
+]

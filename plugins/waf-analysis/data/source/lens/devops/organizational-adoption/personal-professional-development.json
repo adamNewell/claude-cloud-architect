@@ -1,0 +1,94 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Personal and Professional Development",
+  "capabilityCode": "PPD",
+  "description": "Organizations that provide personal and professional growth opportunities are able to improve overall employee satisfaction and enable individuals to be more amenable to adopting new ways of working. While transitioning to a DevOps environment, providing professional skills training to existing employees allows them to become accustomed to and fully utilize new technologies, rules, and practices. By supporting ongoing growth opportunities over time, teams can stay up-to-date with industry trends, identify areas for improvement, and drive innovation, which is critical in the fast-paced world of DevOps.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/personal-and-professional-development.html",
+  "indicators": [
+    {
+      "id": "OA.PPD.1",
+      "title": "Encourage collaboration, innovation, learning, and continuous growth to foster a generative culture",
+      "description": "A generative culture provides teams with the autonomy and opportunities to experiment and learn from failures, creating a space for development and performance growth. In a generative culture, individuals feel comfortable expressing their ideas and opinions without fear, and information is openly shared for improvement. Leaders should promote a culture of openness and inclusivity and provide teams the autonomy and opportunities to experiment and learn from failures. Leaders should model these behaviors and create an environment that promotes collaboration, innovation, learning, and continuous growth.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.1-encourage-collaboration-innovation-learning-and-continuous-growth-to-foster-a-generative-culture.html"
+    },
+    {
+      "id": "OA.PPD.2",
+      "title": "Allocate time and budget for targeted training",
+      "description": "Allocate dedicated time and budget for internal and external training, specifically targeting areas that are necessary for achieving business objectives and driving transformation. This could include leadership training, new employee training, or continuous training for already experienced individual contributors. Identify relevant skills and knowledge gaps, develop a comprehensive training plan, and dedicate resources and time to complete the training. Implement feedback and evaluation mechanisms to measure training outcomes and identify areas for improvement.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.2-allocate-time-and-budget-for-targeted-training.html"
+    },
+    {
+      "id": "OA.PPD.3",
+      "title": "Offer diverse and accessible training options",
+      "description": "Offer accessible training options with materials and courses made available in multiple languages and formats, including in-person, remote, and self-paced options. Provide accessible and inclusive content for employees with visual or communication impairments, incorporating features like closed captioning and screen reader compatibility. Leaders should identify the diverse training needs of teams and individual team members, and develop accessible training options that are available in multiple languages and formats.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.3-offer-diverse-and-accessible-training-options.html"
+    },
+    {
+      "id": "OA.PPD.4",
+      "title": "Invest in attracting, developing, and retaining skilled employees",
+      "description": "Invest in attracting, developing, and retaining skilled employees by providing clear role definitions, mentorship programs, career advancement opportunities, and actionable feedback. Gather feedback regularly from employees to understand their needs and inform training and development initiatives. Build transparent reward and recognition programs, and communicate promotion criteria unambiguously to every employee.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.4-invest-in-attracting-developing-and-retaining-skilled-employees.html"
+    },
+    {
+      "id": "OA.PPD.5",
+      "title": "Recognize and reward continuous learning",
+      "description": "Establish measurable learning targets, including stretch goals, and design meaningful reward systems to encourage team members to meet their set targets. Regularly provide feedback and progress assessments, which keeps employees aligned with their learning goals. Emphasize the significance of soft skills training and how they correlate with the broader business and team goals. Celebrate and broadly acknowledge individual and team accomplishments related to learning and skill development to reinforce the organization's commitment to fostering a culture of continuous learning.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.5-recognize-and-reward-continuous-learning.html"
+    },
+    {
+      "id": "OA.PPD.6",
+      "title": "Promote knowledge sharing through inter-team interest groups",
+      "description": "Facilitate and support knowledge-sharing opportunities and interest groups, often called skills guilds, that allow individuals to interact with other like-minded people within the organization on topics of interest. These groups can partake in activities such as internal blogging, hosting internal conferences, attending external events, or group discussions. Allocate time and resources to support these opportunities and groups tailored based on your organization's unique needs and circumstances, such as dedicating specific hours each week, providing meeting spaces, or assigning budget for professional development courses and symposiums.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ppd.6-promote-knowledge-sharing-through-inter-team-interest-groups.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.PPD-AP1",
+      "title": "Unclear growth opportunities",
+      "description": "Solely depending on existing expertise without providing consistent learning opportunities, combined with a lack of clarity on career progression. Without regular upskilling and a visible growth path, teams can become demotivated and less efficient. Regularly offer training, workshops, and certifications while also outlining clear career pathways that link professional development to career advancement in the organization."
+    },
+    {
+      "id": "OA.PPD-AP2",
+      "title": "Non-inclusive training",
+      "description": "Neglecting to consider non-functional skill sets like soft skills and considering the diverse needs of team members might not fully address specific skill gaps, learning styles, or embrace the unique backgrounds and experiences of team members. This can limit the effectiveness of the training and alienate portions of the team. Design targeted training programs that cater to various skill levels, functional and non-functional skills, and recognize the importance of diversity and inclusivity."
+    },
+    {
+      "id": "OA.PPD-AP3",
+      "title": "Reactive talent development",
+      "description": "Only providing development opportunities when a skill gap emerges or when talent starts looking elsewhere, rather than proactively investing in talent attraction, development, and retention. This short-term view can cause a delay in progress and missed growth opportunities. Be proactive about identifying industry trends and upcoming skills requirements. Regularly engage in discussions with team members about their career aspirations and invest in programs that help them achieve these goals."
+    },
+    {
+      "id": "OA.PPD-AP4",
+      "title": "Ignoring autonomous knowledge sharing",
+      "description": "Not supporting inter-team knowledge sharing fails to harness the collective knowledge and skills within the organization. Self-directed learning provided through these interactions enables team members to engage with others in the organization about innovative solutions and practices that emerge from diverse experiences and expertise. Encourage team members to actively participate in interest groups to share their experiences, discuss industry trends, and collaborate on projects outside their immediate teams. Recognize and reward active participation and knowledge-sharing to promote a culture of continuous learning and collaboration."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.PPD-M1",
+      "title": "Employee net promoter score (eNPS)",
+      "description": "Measure employees' engagement and satisfaction within the organization, gauging their likelihood to recommend the organization as an ideal workplace. This can provide insight into the overall health of the organizational culture and indicates the effectiveness of leadership in creating an inclusive and positive work environment. A higher eNPS can correlate with better productivity, lower turnover, and improved team dynamics.",
+      "formula": "Percentage of promoters (score 9-10) minus percentage of detractors (score 0-6). Track using periodic, anonymized net promoter score surveys."
+    },
+    {
+      "id": "OA.PPD-M2",
+      "title": "Meetup frequency",
+      "description": "The frequency of inter-team knowledge-sharing sessions, such as skills guild meetings, internal conferences, or Lunch and Learns, held within a specific period, such as monthly or quarterly. A consistent frequency of meetups indicates active collaboration, knowledge transfer, and a vibrant sharing environment among teams.",
+      "formula": "Track each knowledge-sharing session in a dedicated log or system. At the end of your tracking period, tally the total number of sessions."
+    },
+    {
+      "id": "OA.PPD-M3",
+      "title": "Retention rate",
+      "description": "The percentage of team members that remain with the organization over a specific time frame, such as quarterly or yearly. A high retention rate suggests a positive organizational culture, employee satisfaction, and effective professional development initiatives. It also signals stability, which can have positive impacts on business continuity, team dynamics, and retaining top talent.",
+      "formula": "Subtract the percentage of team members who have left from 100%. For example, if 10 out of 100 team members left over a year, then the retention rate would be 90% for that year."
+    },
+    {
+      "id": "OA.PPD-M4",
+      "title": "Skill growth rate",
+      "description": "The improvement in employees' skills over a specified period, which indicates the effectiveness of personal and professional development initiatives and an organizational emphasis on continuous learning and growth. Improve this metric by allocating budget and time to dedicated learning activities, setting individual learning goals, and rewarding continuous growth.",
+      "formula": "Use tools such as skill assessments, certifications, or self-assessments to track skill improvements over time."
+    }
+  ]
+}

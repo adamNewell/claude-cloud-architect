@@ -1,0 +1,70 @@
+{
+  "name": "waf-analysis",
+  "version": "1.0.0",
+  "description": "AWS Well-Architected Framework best practices for architecture reviews",
+  "author": {
+    "name": "Adam Newell",
+    "email": "adamdouglasnewell@gmail.com",
+    "url": "https://github.com/adamNewell"
+  },
+  "repository": "https://github.com/adamNewell/claude-cloud-architect",
+  "license": "MIT",
+  "keywords": [
+    "aws",
+    "well-architected",
+    "waf",
+    "architecture-review",
+    "best-practices",
+    "security",
+    "reliability",
+    "performance",
+    "cost-optimization",
+    "sustainability",
+    "devops"
+  ],
+  "agents": ["./agents/"],
+  "skills": ["./skills/"],
+  "mcpServers": {
+    "aws-cost-management": {
+      "command": "uvx",
+      "args": ["awslabs.billing-cost-management-mcp-server@latest"]
+    },
+    "aws-iac": {
+      "command": "uvx",
+      "args": ["awslabs.aws-iac-mcp-server@latest"]
+    },
+    "aws-dynamodb": {
+      "command": "uvx",
+      "args": ["awslabs.dynamodb-mcp-server@latest"]
+    },
+    "aws-kb": {
+      "command": "uvx",
+      "args": ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"]
+    },
+    "aws-dp-mcp": {
+      "command": "uvx",
+      "args": ["awslabs.aws-dataprocessing-mcp-server@latest", "--allow-write"]
+    },
+    "aws-openapi": {
+      "command": "uvx",
+      "args": ["awslabs.openapi-mcp-server@latest"]
+    },
+    "aws-pricing": {
+      "command": "uvx",
+      "args": ["awslabs.aws-pricing-mcp-server@latest"]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "powertools": {
+      "command": "npx",
+      "args": ["-y", "powertools-for-aws-mcp"]
+    },
+    "tessl": {
+      "command": "tessl",
+      "args": ["mcp", "start"]
+    }
+  }
+}

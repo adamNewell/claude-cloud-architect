@@ -1,0 +1,93 @@
+[
+  {
+    "id": "DALSUS15-BP01",
+    "title_full": "DALSUS15-BP01 Define your organization's current environmental impact",
+    "title": "Define your organization's current environmental impact",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Think about sustainability as a non-functional requirement when designing your systems. Use the AWS Customer Carbon Footprint Tool to understand your current environmental impact and establish a baseline for improvement. Track carbon emissions associated with your analytics workloads.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS01-BP01"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP02",
+    "title_full": "DALSUS15-BP02 Encourage sustainable thinking",
+    "title": "Encourage sustainable thinking",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Foster a culture of sustainability awareness across your organization. Incorporate sustainability considerations into design reviews and architectural decisions. Educate teams on the environmental impact of resource choices in analytics workloads.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS01-BP02"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP03",
+    "title_full": "DALSUS15-BP03 Encourage a culture of data minimization",
+    "title": "Encourage a culture of data minimization",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Promote data minimization practices by collecting and retaining only the data that is necessary for business purposes. Review data collection practices and eliminate unnecessary data to reduce storage requirements and processing overhead.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS04-BP01"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP04",
+    "title_full": "DALSUS15-BP04 Implement data retention processes to remove unnecessary data",
+    "title": "Implement data retention processes to remove unnecessary data",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Implement automated data retention policies using Amazon S3 Lifecycle Management, Amazon Kinesis data retention settings, and Kafka retention configurations. Remove unnecessary data from your analytics environment to reduce storage and processing requirements.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS04-BP02"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP05",
+    "title_full": "DALSUS15-BP05 Optimize data modeling and storage for efficient data retrieval",
+    "title": "Optimize data modeling and storage for efficient data retrieval",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Design efficient data models and choose appropriate data types to minimize storage requirements. Use partitioning, bucketing, and sort keys to enable efficient data retrieval with minimal resource consumption. Optimize Amazon Redshift distribution styles and sort keys.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS03-BP01"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP06",
+    "title_full": "DALSUS15-BP06 Prevent unnecessary data movement between systems and applications",
+    "title": "Prevent unnecessary data movement between systems and applications",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Minimize data movement between systems to reduce energy consumption and network overhead. Use services like Amazon Athena and Amazon Redshift Spectrum to query data in place without copying. Implement efficient data pipeline architectures that avoid redundant data transfers.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS03-BP02"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALSUS15-BP07",
+    "title_full": "DALSUS15-BP07 Efficiently manage your analytics infrastructure to reduce underutilized resources",
+    "title": "Efficiently manage your analytics infrastructure to reduce underutilized resources",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-15.html",
+    "description": "Monitor and optimize infrastructure utilization to minimize underutilized resources. Use serverless options like Amazon Redshift Serverless, schedule resources to pause during non-working hours, and implement auto-scaling to match resource provisioning to actual demand.",
+    "outcome": "",
+    "pillar": "SUSTAINABILITY",
+    "area": ["Sustainability implementation"],
+    "relatedIds": ["SUS05-BP01"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  }
+]

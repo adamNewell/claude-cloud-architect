@@ -1,0 +1,86 @@
+{
+  "saga": "Observability",
+  "sagaCode": "OB",
+  "capability": "Strategic Instrumentation",
+  "capabilityCode": "SI",
+  "description": "Strategic instrumentation is a capability aimed at designing and implementing monitoring systems to capture meaningful and actionable data from your applications and infrastructure. This includes collecting telemetry, tracking key performance indicators (KPIs), and enabling data-driven decision making. The goal of strategic instrumentation is to provide deep visibility into your systems, facilitating rapid response to issues, optimizing performance, and aligning IT operations with business objectives by capturing relevant telemetry.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/strategic-instrumentation.html",
+  "indicators": [
+    {
+      "id": "O.SI.1",
+      "title": "Center observability strategies around business and technical outcomes",
+      "description": "To maximize the impact of observability, it should be closely aligned with both business and technical goals. This means monitoring system performance, uptime, and error rates while understanding how these factors directly or indirectly influence business outcomes such as revenue, customer satisfaction, and market growth. An observability strategy must identify the metrics, logs, traces, and events necessary for collection and analysis, and prescribe appropriate tools and processes for gathering this data. Use technical KPIs such as the four golden signals (latency, traffic, errors, and saturation) to provide a set of minimum metrics to focus on when monitoring user-facing systems.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.si.1-center-observability-strategies-around-business-and-technical-outcomes.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "O.SI.2",
+      "title": "Centralize tooling for streamlined system instrumentation and telemetry data interpretation",
+      "description": "Centralized observability platforms are able to offer user-friendly, self-service capabilities to individual teams that simplify embedding visibility into system components and their dependencies. Adopt an observability platform that provides observability to teams using the XaaS (X as a Service) interaction mode. Onboarding to the platform should be easy for teams, or support auto-instrumentation to automatically monitor applications for a hands-off experience. The observability platform should offer capabilities to follow requests through the system, the services it interacts with, the state of the infrastructure, and the impact of each of these on user experience.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.si.2-centralize-tooling-for-streamlined-system-instrumentation-and-telemetry-data-interpretation.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "O.SI.3",
+      "title": "Instrument all systems for comprehensive telemetry data collection",
+      "description": "All systems should be fully-instrumented to collect the metrics, logs, events, and traces necessary for meeting key performance indicators (KPIs), service level objectives, and logging and monitoring strategies. Teams should integrate instrumentation libraries into the components of new systems and feature enhancements to capture relevant data points, while also ensuring that pipelines and associated tools used during build, testing, deployment, and release of the system are also instrumented. Chose libraries and tools should support the efficient collection, normalization, and aggregation of telemetry data. Strike a balance between thorough monitoring and the amount of work required to implement and maintain the monitoring solution.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.si.3-instrument-all-systems-for-comprehensive-telemetry-data-collection.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "O.SI.4",
+      "title": "Build health checks into every service",
+      "description": "Each service within a system should be configured to include a health check endpoint which provides real-time insight into how the system and its dependencies are performing. Usually manifested as a secure and private HTTP health endpoint (for example, /actuator/health), this feature serves as a critical component in monitoring the health status of the overall system, generally including information such as operating status, versions of software running, database response time, and memory consumption. Observability, governance, and testing tools can invoke these health check endpoints periodically, ensuring the continuous evaluation of system health.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.si.4-build-health-checks-into-every-service.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "O.SI.5",
+      "title": "Set and monitor service level objectives against performance standards",
+      "description": "Teams should define and document Service Level Objectives (SLOs) for every service, regardless of whether it is directly consumed by external customers or used internally. SLOs should be SMART (Specific, Measurable, Achievable, Relevant, and Time-bound). The creation of SLOs should be a collaborative effort involving both the business and technical teams. When defining SLOs, rather than using averages, it is preferable to use percentiles for measurement. Teams internally measure and monitor their SLOs to ensure they are meeting the defined business and technical objectives through Service Level Indicators (SLIs).",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.si.5-set-and-monitor-service-level-objectives-against-performance-standards.html",
+      "category": "RECOMMENDED"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "O.SI-AP1",
+      "title": "Excessive data collection",
+      "description": "Over-instrumentation leads to unnecessary data collection, escalating costs, and storage requirements. Prioritize collecting relevant data that provides valuable insights into the customer experience while interacting with systems and your organization's desired business outcomes. For use cases needing verbose datasets, implement aggressive data retention policies to balance the need for detailed, short-term data for efficient troubleshooting without excessive costs."
+    },
+    {
+      "id": "O.SI-AP2",
+      "title": "Lack of standardization",
+      "description": "Inconsistency in Service Level Agreements (SLAs), Service Level Objectives (SLOs), and Key Performance Indicators (KPIs), and metric formats impedes understanding and interpretation of metrics. DevOps principles emphasize communication, collaboration, and visibility, which inconsistent standards undermine. Establish standardized guidelines for defining and formatting these metrics, and use a centralized observability platform for tracking and enforcing these standards."
+    },
+    {
+      "id": "O.SI-AP3",
+      "title": "Monitoring in isolation",
+      "description": "Observing individual components in isolation decreases visibility into system interactions and dependencies, hindering root cause identification, adds delay to detection time, and can generate inaccurate alerts. Adopt a holistic observability approach through a centralized platform, taking into account the entire system and its interdependencies."
+    },
+    {
+      "id": "O.SI-AP4",
+      "title": "Reactive monitoring",
+      "description": "Reactive monitoring, triggered by incidents or issues, can increase downtime and incur additional cost over time. Embrace a proactive, continuous monitoring stance that tracks system performance and user behaviors. Implement thresholds, alerts, predictive analytics, and constant data collection across all system components to detect and address issues before affecting the end user."
+    },
+    {
+      "id": "O.SI-AP5",
+      "title": "Misaligned SLOs",
+      "description": "Service Level Objectives (SLOs) defined solely by business teams without the input from technical teams can result in unachievable targets, leading to frequent breaches of Service Level Agreements and missed KPIs. Defining SLOs should be a collaborative process involving both business and technical teams to align technical realities with business objectives and customer expectations."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "O.SI-M1",
+      "title": "Instrumented systems coverage",
+      "description": "The percentage of systems that are instrumented to collect telemetry data which provides broader visibility into the performance and health of the systems and allows teams to identify any gaps in their monitoring coverage.",
+      "formula": "(Number of instrumented systems / Total number of systems) × 100"
+    },
+    {
+      "id": "O.SI-M2",
+      "title": "SLO adherence",
+      "description": "The percentage of time a service meets Service Level Objectives (SLOs), indicating that the service is consistently meeting its performance and reliability targets, making for a better user experience.",
+      "formula": "(Time service meets SLOs / Total time) × 100"
+    }
+  ]
+}

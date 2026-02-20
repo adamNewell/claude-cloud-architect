@@ -1,0 +1,80 @@
+[
+  {
+    "id": "DALOPS01-BP01",
+    "title_full": "DALOPS01-BP01 Validate the data quality of source systems before transferring data for analytics",
+    "title": "Validate the data quality of source systems before transferring data for analytics",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-1.html",
+    "description": "Data quality can have an intrinsic impact on the success or failure of your organization's data analytics projects. To avoid committing significant resources to process potentially poor-quality data, your organization should understand the quality of the source data, and monitor the changes to data quality throughout the data pipeline. Data source validation can often be performed quickly on a subset of the latest data range to look for data defects such as missing values, anomalous data, or wrong data types.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Monitor health of analytics workload"],
+    "relatedIds": ["OPS04-BP01"],
+    "risk": "HIGH",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALOPS01-BP02",
+    "title_full": "DALOPS01-BP02 Monitor operational metrics of data processing jobs and the availability of source data",
+    "title": "Monitor operational metrics of data processing jobs and the availability of source data",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-1.html",
+    "description": "Data processing pipelines often consist of multiple steps that all need to run in sequence to output the desired data sets and meet business deadlines. Monitoring each job in the pipeline is key to ensure operational excellence. The operational metrics of the jobs themselves should be monitored, as well as the availability of source data, and that results are produced. Alert when new data has not arrived within the expected time and when data processing jobs don't complete on time or don't produce results.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Monitor health of analytics workload"],
+    "relatedIds": ["OPS04-BP02"],
+    "risk": "HIGH",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALOPS02-BP01",
+    "title_full": "DALOPS02-BP01 Use version control for job and application changes",
+    "title": "Use version control for job and application changes",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-2.html",
+    "description": "Using modern development practices, such as continuous integration/continuous delivery (CI/CD), can help ensure that changes are rolled out in a controlled and repeatable way. Use version control systems to track changes to analytics jobs, ETL scripts, and application code. This enables rollback capabilities, change auditing, and collaboration across teams.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Modernize deployment"],
+    "relatedIds": ["OPS05-BP01"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALOPS02-BP02",
+    "title_full": "DALOPS02-BP02 Create test data and provision staging environment",
+    "title": "Create test data and provision staging environment",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-2.html",
+    "description": "Your team should use test automation to verify infrastructure, code changes, and data updates at every stage of your deployment lifecycle. Create representative test datasets and maintain staging environments that mirror production to validate changes before deployment.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Modernize deployment"],
+    "relatedIds": ["OPS05-BP02"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALOPS02-BP03",
+    "title_full": "DALOPS02-BP03 Test and validate analytics jobs and application deployments",
+    "title": "Test and validate analytics jobs and application deployments",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-2.html",
+    "description": "The analytics processing often requires management of complex workflows including job scheduling, managing dependencies between jobs, and monitoring jobs. Implement automated testing for analytics jobs and validate deployments before promoting to production. Use orchestration tools for data movement and job coordination.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Modernize deployment"],
+    "relatedIds": ["OPS05-BP03"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  },
+  {
+    "id": "DALOPS02-BP04",
+    "title_full": "DALOPS02-BP04 Build standard operating procedures for deployment, test, rollback, and backfill tasks",
+    "title": "Build standard operating procedures for deployment, test, rollback, and backfill tasks",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/design-principle-2.html",
+    "description": "Document and automate standard operating procedures for common operational tasks including deployment, testing, rollback, and data backfill operations. This ensures consistent execution and reduces operational risk during changes to analytics workloads.",
+    "outcome": "",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Modernize deployment"],
+    "relatedIds": ["OPS05-BP04"],
+    "risk": "MEDIUM",
+    "lens": "DATA_ANALYTICS"
+  }
+]

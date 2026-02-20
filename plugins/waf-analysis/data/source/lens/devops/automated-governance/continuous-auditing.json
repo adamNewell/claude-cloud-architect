@@ -1,0 +1,93 @@
+{
+  "saga": "Automated Governance",
+  "sagaCode": "AG",
+  "capability": "Continuous Auditing",
+  "capabilityCode": "CA",
+  "description": "Facilitate the ongoing automated assessment of system configurations, activities, and operations against internal policies and regulatory standards to measure adherence. This capability allows organizations to glean real-time insights into their security posture, reducing the time and manual effort traditionally associated with auditing. Continuous auditing enhances an organization's ability to swiftly identify and respond to compliance issues, fostering an environment of proactive security and governance.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/continuous-auditing.html",
+  "indicators": [
+    {
+      "id": "AG.CA.1",
+      "title": "Establish comprehensive audit trails",
+      "description": "Recording and preserving all system activities, including user actions, system changes, and exceptions, for future analysis and compliance reporting. Use services like AWS CloudTrail to create a record of actions taken in your AWS environment.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-auditing.html"
+    },
+    {
+      "id": "AG.CA.2",
+      "title": "Optimize configuration item management",
+      "description": "Maintaining an accurate and up-to-date inventory of all configuration items, ensuring they are securely configured, and implementing automated tools to manage and monitor them.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-auditing.html"
+    },
+    {
+      "id": "AG.CA.3",
+      "title": "Implement systematic exception tracking and review processes",
+      "description": "Setting up processes to identify, track, and review exceptions to policies and standards, and ensuring that they are addressed in a timely and effective manner.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-auditing.html"
+    },
+    {
+      "id": "AG.CA.4",
+      "title": "Enable iterative internal auditing practices",
+      "description": "Conducting regular, ongoing audits of systems and processes, using automated tools and continuous monitoring to identify and address issues, and incorporating feedback and lessons learned into ongoing improvement efforts. An event-driven auditing approach enables immediate detection and response to compliance issues.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.ca.4-enable-iterative-internal-auditing-practices.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "AG.CA-AP1",
+      "title": "Inadequate audit trails",
+      "description": "Not keeping comprehensive audit trails makes it difficult to track actions performed in your environment. This makes it harder to detect suspicious activity or understand the cause of issues when they occur."
+    },
+    {
+      "id": "AG.CA-AP2",
+      "title": "Manual evidence review",
+      "description": "Relying on manual processes to collect, aggregate, and review audit data can be error prone and can lead to inconsistencies. Manual review can be time-consuming and often cannot keep pace with the pace of development which leads to reduced ability to quickly respond to compliance issues."
+    },
+    {
+      "id": "AG.CA-AP3",
+      "title": "Viewing audits as a one-time event",
+      "description": "Treating audits as periodic, isolated checks instead of a continuous process can result in significant gaps between audits. During this time, many compliance issues might go undetected."
+    },
+    {
+      "id": "AG.CA-AP4",
+      "title": "Expecting auditors to track every feature",
+      "description": "Anticipating that auditing teams will be able to keep up with the rapid pace of feature development and deployments while understanding the nuances of each change is an impractical expectation when practicing DevOps. The primary focus of the auditor should be on processes, controls, and patterns, rather than granular features."
+    },
+    {
+      "id": "AG.CA-AP5",
+      "title": "Overlooking developer training",
+      "description": "Assuming that development teams automatically know compliance and auditing best practices without proper training might result in them unknowingly introducing vulnerabilities or non-compliant features."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "AG.CA-M1",
+      "title": "Audit lead time",
+      "description": "The total duration taken to complete a single audit cycle, from the initiation of the audit to its completion. This metric can help in optimizing the audit process and allocating resources efficiently. Long audit times might suggest inefficiencies, bottlenecks, or a lack of automation.",
+      "formula": "Log the start and end time of each audit cycle. Calculate the difference to get the total time spent per audit."
+    },
+    {
+      "id": "AG.CA-M2",
+      "title": "Mean time between audits (MTBA)",
+      "description": "The average time interval between consecutive audits. This metric can help organizations determine if they are auditing frequently enough to catch potential vulnerabilities or compliance issues in a timely manner. If the time between audits is too long, vulnerabilities may go undetected for extended periods.",
+      "formula": "Log the date of each completed audit. Calculate the difference in dates between consecutive audits and then find the average over a given period, such as quarterly or yearly."
+    },
+    {
+      "id": "AG.CA-M3",
+      "title": "Known vulnerability age",
+      "description": "The duration that known vulnerabilities have remained unresolved in the system. This metric helps keep track of the age of vulnerabilities and can provide insights that drive the effectiveness and agility of the remediation process. High severity vulnerabilities that remain open for long periods indicate potential risks.",
+      "formula": "Calculate for each open vulnerability by subtracting the date it was identified from the current date to determine its age. Categorize the results by severity, such as critical, high, medium, and low."
+    },
+    {
+      "id": "AG.CA-M4",
+      "title": "Security control risk",
+      "description": "The potential risk posed by each system based on the effectiveness and health of its implemented security controls. This metric enables pinpointing which systems might be at higher risk due to insufficient or ineffective security controls.",
+      "formula": "Evaluate each system's security controls against a standardized framework or criteria. Weight scores based on the importance of the control to the overall system security, and aggregate to get an overall risk level for the system."
+    },
+    {
+      "id": "AG.CA-M5",
+      "title": "Exception rate",
+      "description": "The number of compliance exceptions, such as elevated permissions or bypassed controls, relative to the number of changes being made. This metric serves as an early warning system for potential vulnerabilities, emerging anti-patterns, or the need to update controls.",
+      "formula": "Divide the number of exceptions made for a given system by the number of changes made over a specific time frame. Regularly review the nature and severity of these exceptions to differentiate between minor deviations and major compliance breaches."
+    }
+  ]
+}

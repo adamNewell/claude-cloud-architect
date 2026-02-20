@@ -1,0 +1,152 @@
+{
+  "saga": "Automated Governance",
+  "sagaCode": "AG",
+  "capability": "Automated Compliance and Guardrails",
+  "capabilityCode": "ACG",
+  "description": "Integrate risk management, business governance adherence, and application and infrastructure governance mechanisms required to maintaining compliance within dynamic, constantly changing environments. This capability enables automatic enforcement of directive, detective, preventive, and responsive measures, using automated processes and policies. It helps organizations consistently uphold standards and regulations while minimizing the manual overhead traditionally associated with compliance management.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/automated-compliance-and-guardrails.html",
+  "indicators": [
+    {
+      "id": "AG.ACG.1",
+      "title": "Adopt a risk-based compliance framework",
+      "category": "FOUNDATIONAL",
+      "description": "Managing compliance in a DevOps model can initially feel even more challenging than traditional models due to the fast-paced, iterative, and distributed ways of workings. Risk-based compliance framework such as NIST Cybersecurity Framework, ISO 27001, or CIS Controls help to align your DevOps processes and tools with industry best practices and compliance requirements. These frameworks offer a structured methodology for managing cybersecurity risk in compliance with the organization's business needs. Select a relevant framework that fits your business and security needs and assess your current practices against this framework, identifying any gaps in compliance. Work towards addressing these gaps and continually monitor and reassess your practices to help ensure ongoing compliance. Leverage this well-architected guidance to improve your DevOps capabilities to more efficiently meet these compliance requirements. Use cloud-native services and tools to track compliance against your chosen framework.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.1-adopt-a-risk-based-compliance-framework.html"
+    },
+    {
+      "id": "AG.ACG.2",
+      "title": "Implement controlled procedures for introducing new services and features",
+      "category": "FOUNDATIONAL",
+      "description": "To maintain the balance between encouraging innovation and upholding compliance and governance requirements, platform teams need a scalable, controlled procedure for introducing new cloud vendor or third-party services to be used. DevOps culture encourages continuous learning and exploration of new technologies, tools, and services. Provide teams with the ability to explore and experiment with new features and services while maintaining organizational security and compliance standards. Structure these exploration opportunities in a controlled, secure manner, to promote agility without compromising integrity. Establish well-defined guardrails that uphold security and compliance when introducing new features and services. This includes access restrictions, acceptable use cases, and alignment with security policies. Create sandbox environments where teams can safely explore and test these features without compromising production environments or violating governance policies. Develop a systematic, scalable onboarding process which allows platform teams to enable guardrails and policies for governing usage of the service, which leads to enabling the feature or service in other environments, including production. Follow the principle of least privilege by granting teams access to use only specific actions or API calls for approved services.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.2-implement-controlled-procedures-for-introducing-new-services-and-features.html"
+    },
+    {
+      "id": "AG.ACG.3",
+      "title": "Automate deployment of detective controls",
+      "category": "FOUNDATIONAL",
+      "description": "Perform rapid and consistent detection of potential security issues or misconfigurations by deploying automated, centralized detective controls. Automated detective controls are guardrails which continuously monitor the environment, quickly identifying potential risks, and potentially mitigating them. Use a compliance as code approach to integrate compliance rules into deployment pipelines. Additionally, implement detective rules in the environment for real-time checks. Leveraging artificial intelligence (AI) and machine learning (ML) can further enhance the capability to monitor and detect non-compliant configurations or complex security threats.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.3-automate-deployment-of-detective-controls.html"
+    },
+    {
+      "id": "AG.ACG.4",
+      "title": "Strengthen security posture with ubiquitous preventative guardrails",
+      "category": "FOUNDATIONAL",
+      "description": "Perform rapid and consistent detection of potential security issues or misconfigurations by deploying automated, centralized detective controls. Automated detective controls are guardrails that continuously monitor the environment, quickly identifying potential risks, and potentially mitigating them. Guardrails can be placed at various stages of the development lifecycle, including being directly enforceable within the environment itself—providing the most control and security assurance. To provide a balance between agility and governance, use multiple layers of guardrails. Use environmental guardrails, such as access control limitations or API conditions, which enforce security measures and compliance ubiquitously across an environment. Embed similar detective and preventative checks within the deployment pipeline, which will provide faster feedback to development teams. The actual implementation of environmental guardrails can vary based on the specific tools and technologies used within the environment. An example of preventative guardrails in AWS are Service Control Policies (SCPs) and IAM conditions.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.4-strengthen-security-posture-with-ubiquitous-preventative-guardrails.html"
+    },
+    {
+      "id": "AG.ACG.5",
+      "title": "Automate compliance for data regulations and policies",
+      "category": "RECOMMENDED",
+      "description": "The rapid pace of development and decentralized nature of operating under in a DevOps environment can pose challenges for maintaining data privacy compliance. Automation and guardrails can greatly ease this process by integrating compliance checks and remediation actions throughout the development lifecycle. This extends to automated enforcement of data access and handling protocols, continuous monitoring of resource configurations for data sovereignty and residency requirements, and automated auditing and risk assessment. Implement automated tools that can enforce data access and handling policies. Set up continuous monitoring systems to assess compliance with data sovereignty and residency requirements. These tools should also be capable of automated auditing, risk assessment, and triggering incident response mechanisms when anomalies or threats are detected. By doing so, your organization can adapt swiftly to changing data privacy laws and regulations, bolster your data security governance, and reduce the risk of data breaches or non-compliance.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.5-automate-compliance-for-data-regulations-and-policies.html"
+    },
+    {
+      "id": "AG.ACG.6",
+      "title": "Implement auto-remediation for non-compliant findings",
+      "category": "RECOMMENDED",
+      "description": "Manual identification and remediation of non-compliance issues can be time-consuming and prone to errors. Automated systems can rapidly respond to non-compliant resources, misconfigurations, and insecure defaults as soon as they are detected. In the event of a non-compliance issue, an auto-remediation process should be triggered, which not only resolves the immediate issue but also initiates an alert to the developers. This is important because, while the auto-remediation resolves the problem at the system level, the developers need to be made aware of the problem so that they can correct the source of the error and prevent its recurrence. This dual approach of auto-remediation and developer notification promotes a learning environment and reduces the likelihood of recurring non-compliance issues. It allows developers to address the root cause of the configuration drift or non-compliance to prevent the continual reintroduction of the same error.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.6-implement-auto-remediation-for-non-compliant-findings.html"
+    },
+    {
+      "id": "AG.ACG.7",
+      "title": "Use automated tools for scalable cost management",
+      "category": "RECOMMENDED",
+      "description": "Automated cost management tools enable teams to remain agile and innovative while maintaining budgetary control. As deployment frequency increases due to DevOps improvements, it becomes important to put in place guardrails to control costs. Use automated cost tracking mechanisms, such as cost budgets and alerts, and tag resources for cost allocation. Use cloud native cost management tools to monitor and report cloud expenditure continuously. Ensure these tools can alert teams when costs are approaching or exceeding budgeted amounts, and where possible, consider implementing auto-remediation methods to optimize resource usage, apply savings plans or reserved instances, and decommission unused resources.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.7-use-automated-tools-for-scalable-cost-management.html"
+    },
+    {
+      "id": "AG.ACG.8",
+      "title": "Conduct regular scans to identify and remove unused resources",
+      "category": "RECOMMENDED",
+      "description": "Over time, unused resources can often be a byproduct of experimentation and more frequent deployments, including dormant servers, unused deployment resources, idle containers, redundant environments, and unused serverless functions. These resources can pile up to create a less than ideal operating environment if not managed effectively, leading to inefficiencies, inflated costs, system unreliability, and heightened security risks. Perform automated scans scoped to all deployed resources in your environment and pinpoint unused or outdated resources. This can be accomplished by using health check endpoints, reviewing logs, using metadata elements such as tags, or checking billing dashboards for utilization. Verify the status and compatibility of software running on these resources, especially if they have been disconnected or powered off for extended periods of time. These checks are especially useful for preventing zombie servers, which have the potential to be rebooted after long periods of disconnection and might be running outdated or incompatible software. Based on the verification results and the organization's policies, take action to remediate these resources, such as updating the software, decommissioning the resources, or integrating them back into the environment.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.8-conduct-regular-scans-to-identify-and-remove-unused-resources.html"
+    },
+    {
+      "id": "AG.ACG.9",
+      "title": "Integrate software provenance tracking throughout the development lifecycle",
+      "category": "RECOMMENDED",
+      "description": "Software provenance tracking inspects the origin and evolution of software components throughout their lifecycle to understand where a piece of software originated, its development and update history, and its distribution. Provenance tracking ensures the integrity of software, maintains compliance, and enhances the security of the software supply chain throughout the development lifecycle. Effective provenance tracking can prevent the introduction of insecure components, offer early detection of potential vulnerabilities, and provide insights for timely remediation. Developers are encouraged to use the best tools for the task at hand, often including third-party software components. These third-party elements can introduce an additional layer of complexity and potential risk. Implementing software provenance tracking mitigates these risks by promoting better visibility into the lifecycle of software components, thereby increasing accountability, transparency, and trust. Provenance tracking should be integrated into all stages of the development lifecycle. For instance, source code provenance should be tracked at the time of code check-in or commit into Version Control Systems like Git, while the provenance of third-party components should be verified at the time of component acquisition and usage using tools like Software Composition Analysis (SCA). Verify provenance at build and deploy time. Use digital signatures and hashing algorithms to verify the integrity and provenance of software artifacts as part of the deployment pipeline, validating the signature of an artifact against a trusted source before it is used.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.9-integrate-software-provenance-tracking-throughout-the-development-lifecycle.html"
+    },
+    {
+      "id": "AG.ACG.10",
+      "title": "Automate resolution of findings in tracking systems",
+      "category": "RECOMMENDED",
+      "description": "Automating the resolution of findings in tracking systems can accelerate the security incident response process, prevent untracked mitigation activities, and ensure accuracy in reporting processes. It also allows teams to focus more on development, resolving issues, and innovation, while automation handles the routine tracking and resolution tasks. Use tools that support automated tracking and resolution capabilities. When an issue is detected, a ticket should be created automatically in the tracking system. Once the issue is resolved, the system should be able to automatically validate the resolution and close the corresponding ticket. This approach reduces the chances of human error, ensures a faster response to issues, and is capable of providing comprehensive reporting and analytics capabilities to support continuous improvement of the security posture.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.10-automate-resolution-of-findings-in-tracking-systems.html"
+    },
+    {
+      "id": "AG.ACG.11",
+      "title": "Digital attestation verification for zero trust deployments",
+      "category": "RECOMMENDED",
+      "description": "Digital attestations are recommended to be created for each action that occurs during the development lifecycle. Attestations serve as evidence of compliance, which can be verified either during or post-deployment. Authorizing deployments by verifying attestations extends a zero trust security model to the development lifecycle. If attestations for the required quality assurance tests, pipeline stages, or manual approvals are missing or invalid, meaning that compliance and change management requirements were not met during the development lifecycle, the deployment can be either prevented or subjected to an exception mechanism for risk acceptance. Incorporate the creation of digital attestations into the development lifecycle. Before deployment, verify that the required attestations have been digitally signed by trusted cryptographic keys and that they meet the change management and compliance policies. If a deployment is found to be non-compliant, you can choose to respond in several ways depending on your security and governance requirements. It can be used as a detective control which allows the deployment to proceed while keeping an audit log of the non-compliance for future investigation. It can also be used as a preventive control, stopping the deployment from proceeding entirely. Pairing this with an exception mechanism you could enforce directive controls to accept the identified risks for a period of time.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.acg.11-digital-attestation-verification-for-zero-trust-deployments.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "AG.ACG-AP1",
+      "title": "Manual policy enforcement",
+      "description": "Relying on manual checks and balances to enforce policies and standards. It's difficult to maintain consistent governance and mitigate risks with manual methods, especially when dealing with high-velocity, constantly changing environments and systems. Use automated tools that enforce, monitor, and audit compliance standards consistently across environments."
+    },
+    {
+      "id": "AG.ACG-AP2",
+      "title": "Static compliance checks",
+      "description": "Only validating compliance during specific phases of the development lifecycle, such as at the end of development, instead of continuously throughout the lifecycle. This can lead to late-stage discoveries of non-compliance, which are costlier and more time-consuming to address. Implement continuous compliance checks throughout the development, including both during and after deployment."
+    },
+    {
+      "id": "AG.ACG-AP3",
+      "title": "Relying on manual remediation",
+      "description": "Manual remediation can lead to delays in identifying and resolving issues, extending vulnerability windows. It can also be an inefficient use of resources, leading to higher costs and increased risk of human error. Build auto-remediation processes that not only detect but also resolve non-compliant findings in real-time."
+    },
+    {
+      "id": "AG.ACG-AP4",
+      "title": "Over-reliance on preventative guardrails",
+      "description": "Solely relying on preventive measures and not considering detective or responsive controls. It's impossible to predict and prevent every potential non-compliance issue making it important to have a balanced mix of detective, preventive, and responsive controls in place."
+    },
+    {
+      "id": "AG.ACG-AP5",
+      "title": "Manual change validation",
+      "description": "With traditional change management, a Change Advisory Board (CAB) meeting would precede a release approval. The CAB verifies that proper actions have been taken to remediate change risk. This includes ensuring that a group of subject matter experts reviewed the change and that organizational requirements for quality assurance and governance are being followed, such as ensuring expected tests were run and that deployments occur within approved change windows. Traditional CAB approval could take from days to weeks to schedule and debate the changes. Use automated governance capabilities to automate these checks as part of the development lifecycle and continuously within your environment."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "AG.ACG-M1",
+      "title": "Billing variance",
+      "description": "The difference between forecasted and actual billing for cloud resources or other IT costs. This metric indicates potential inefficiencies or areas of cost-saving, as well as highlighting the accuracy of financial forecasting.",
+      "formula": "((Actual Billing - Forecasted Billing) / Forecasted Billing) * 100"
+    },
+    {
+      "id": "AG.ACG-M2",
+      "title": "Change failure rate",
+      "description": "The percentage of changes that fail. A change is considered a failure if it leads to degraded service or if it requires remediation, such as a hotfix or rollback. This metric provides insights into the quality and reliability of changes being made to a system. With effective automated governance in place, the expectation is that the change failure rate would decrease, as automated checks and balances catch potential issues before they're deployed into production.",
+      "formula": "(Number of Failed Changes / Total Number of Changes) * 100"
+    },
+    {
+      "id": "AG.ACG-M3",
+      "title": "Guardrail effectiveness score",
+      "description": "The ratio of successful preventions or detections by a specific guardrail to the number of false positives or negatives it produces. By assessing the efficiency and precision of individual guardrails, you can determine which rules are the most effective and which might need refinement or deprecation. Improve this metric by regularly reviewing and adjusting guardrail configurations, parameters, or logic to decrease false positives and negatives.",
+      "formula": "(Number of Successful Detections or Preventions / Total Number of Detections or Preventions) * 100"
+    },
+    {
+      "id": "AG.ACG-M4",
+      "title": "Percentage of automated change approvals",
+      "description": "The proportion of change approvals that were granted automatically by tools without manual intervention. This metric indicates a shift from manual change management to automated governance practices. Improve this metric by integrating more governance checks into automated pipelines and reduce reliance on manual CAB verification.",
+      "formula": "(Number of Automated Change Approvals / Total Number of Change Approvals) * 100"
+    },
+    {
+      "id": "AG.ACG-M5",
+      "title": "Non-compliance detection frequency",
+      "description": "The number of non-compliant findings detected over a given period. This metric can indicate the effectiveness of automated guardrails and the current risk level of the environment. Improve this metric by increasing the coverage and quality of automated checks and auto-remediation capabilities. Continuous review and refine controls based on detected findings.",
+      "formula": "Count of detected findings over a regular basis (monthly or quarterly)"
+    },
+    {
+      "id": "AG.ACG-M6",
+      "title": "Non-compliance response time",
+      "description": "The time taken from the detection of a non-compliance issue until initial remediation or response. Shorter non-compliance response times decrease the duration of potential exposure, minimizing potential risks and liabilities. Improve this metric by enhancing automated alerting systems, preparing clear escalation paths, and integrating automated remediation capabilities where possible.",
+      "formula": "Average time from detection timestamp to first responsive action timestamp over a given period"
+    }
+  ]
+}

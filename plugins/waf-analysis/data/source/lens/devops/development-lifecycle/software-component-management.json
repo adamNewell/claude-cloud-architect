@@ -1,0 +1,133 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Software Component Management",
+  "capabilityCode": "SCM",
+  "description": "There are many software components that are consumed and generated during the development lifecycle, including libraries, repositories, shared modules, build artifacts, and third-party dependencies. These components often have distributed technical ownership and are decoupled from one another. Software component management focuses on overseeing these individual components to enhance security and governance of the software supply chain. This includes routinely updating components to maintain their security and relevance, establishing clear usage guidelines, and creating an inventory of the relationships between components. Through this capability, you can strengthen the security, reliability, and integrity of software being built.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/software-component-management.html",
+  "indicators": [
+    {
+      "id": "DL.SCM.1",
+      "title": "Use a version control system with appropriate access management",
+      "category": "FOUNDATIONAL",
+      "description": "Version control systems enable tracking and managing of changes to code over time. They allow multiple developers to work on a project concurrently, provide a history of changes, and make it possible to revert to a previous version if necessary. Version control systems play a role in maintaining the integrity of software components, as they provide an auditable trail of all modifications made to the code base, authorizes users as they access the code base, and help to ensure that changes to the code base can be reverted or rolled back. Implement access management policies on the version control systems which supports a culture of code sharing and collaboration amongst teams in your organization. Having a mix of both open and private repositories allows for a balance between promoting code reuse and collaboration, and safeguarding sensitive information. Consider implementing role-based access control (RBAC) in your version control system.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.1-use-a-version-control-system-with-appropriate-access-management.html"
+    },
+    {
+      "id": "DL.SCM.2",
+      "title": "Keep feature branches short-lived",
+      "category": "FOUNDATIONAL",
+      "description": "In version control systems, feature branches provide a structured way to develop new functions or address defects. Traditional branching methods, such as GitFlow, lean towards creating long-lived feature branches which can introduce challenges including complex merges and divergent code bases. Modern branching strategies, including GitHub flow and trunk-based development, emphasize the significance of keeping feature branches short-lived to avoid these challenges. The core benefit of short-lived feature branches is the promotion of continuous integration. By frequently integrating code changes into the main releasable branch of the repository, teams discover integration problems early on. We recommend merging into the main releasable branch at least once per day.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.2-keep-feature-branches-short-lived.html"
+    },
+    {
+      "id": "DL.SCM.3",
+      "title": "Use artifact repositories with enforced authentication and authorization",
+      "category": "FOUNDATIONAL",
+      "description": "Artifact repositories and registries offer secure storage and management for artifacts generated during the build stage of the development lifecycle. Examples of artifacts that are stored in these repositories are container images, compiled software artifacts, third-party modules, and other shared code modules. Using an artifact repository streamlines artifact versioning, access control, traceability, and dependency management, contributing to efficient and reliable software releases. Artifact repositories are in the critical path for ensuring the integrity of the software that is deployed into your environments. All artifacts in the repository should be expected to be built and tested using trusted automated processes. Artifact repositories should not contain manually produced artifacts or allow existing artifacts to be altered by users.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.3-use-artifact-repositories-with-enforced-authentication-and-authorization.html"
+    },
+    {
+      "id": "DL.SCM.4",
+      "title": "Grant access only to trusted repositories",
+      "category": "FOUNDATIONAL",
+      "description": "To maintain the security, integrity, and quality of your software, restrict the usage of untrusted source code and artifact repositories. Untrusted repositories present risks, including potentially introducing vulnerabilities into your software and leaking sensitive code or information. Implement policies that control where developers can publish code, to prevent accidental exposure or internal threats. This should apply to both artifact and source code repositories across the organization. Protect against internal threat actors or inadvertently sharing code to public or untrusted git repositories by limiting the allowed repositories that developers can publish code to.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.4-grant-access-only-to-trusted-repositories.html"
+    },
+    {
+      "id": "DL.SCM.5",
+      "title": "Maintain an approved open-source software license list",
+      "category": "FOUNDATIONAL",
+      "description": "Manage and regularly update an allowed and forbidden open-source software (OSS) licenses list. This list should reflect which licenses are, or are not, compliant with laws, regulations, and security requirements applicable to your organization. Use this list to detect and prevent legal issues while using open-source components. Enforce the allowed and forbidden OSS licenses list by continuously assessing all OSS usage automatically as part of the build process. This can be enforced through quality assurance testing processes, like scanning the Software Bill of Materials (SBOM) with Software Composition Analysis (SCA) tooling.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.5-maintain-an-approved-open-source-software-license-list.html"
+    },
+    {
+      "id": "DL.SCM.6",
+      "title": "Maintain informative repository documentation",
+      "category": "FOUNDATIONAL",
+      "description": "Maintaining well-structured and informative repository documentation directly within the code base promotes collaboration, simplifies onboarding new team members, and improves the ability to maintain software over time. This documentation, often in the form of markdown files like README.md and CONTRIBUTING.md, contains information about reviewing, building, contributing to, and otherwise using the project. Every repository should contain detailed documentation providing an overview of the project, its purpose, instructions for building and deploying the project, guidelines for contributions, and methods for submitting feedback or issues.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.6-maintain-informative-repository-documentation.html"
+    },
+    {
+      "id": "DL.SCM.7",
+      "title": "Standardize vulnerability disclosure processes",
+      "category": "RECOMMENDED",
+      "description": "A standard vulnerability disclosure policy helps ensure consistent reporting and handling of potential vulnerabilities, which in turn enhances the security of the software development lifecycle. Implementing standardized vulnerability disclosure practices is recommended for optimizing DevOps, as it promotes security, helps manage risk effectively, and encourages the responsible reporting and handling of discovered vulnerabilities. A method for implementation is provided in RFC 9116, which provides a standardized process for vulnerability disclosure using a machine readable security.txt file.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.7-standardize-vulnerability-disclosure-processes.html"
+    },
+    {
+      "id": "DL.SCM.8",
+      "title": "Use a versioning specification to manage software components",
+      "category": "RECOMMENDED",
+      "description": "Apply a versioning specification across all software components within your development lifecycle. Use a versioning specification, such as Semantic Versioning (SemVer), to significantly simplify governance of software governance by providing a systematic approach to tracking different types of releases (major, minor, and patch). A well-organized, versioned code base offers a clear chronological history of modifications, enhancing manageability, maintainability, and navigability. Implementing version pinning for dependencies is a practical use case enabled by using a versioning specification.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.8-use-a-versioning-specification-to-manage-software-components.html"
+    },
+    {
+      "id": "DL.SCM.9",
+      "title": "Implement plans for deprecating and revoking outdated software components",
+      "category": "RECOMMENDED",
+      "description": "Maintaining an up-to-date and secure code base requires the proactive management of components, including removing outdated artifacts, libraries, and repositories. Not only does their removal reduce storage costs, but it also mitigates risks associated with deploying outdated or potentially vulnerable software. Develop clear plans for the deprecation and revocation of outdated components. These plans should include regular audits of the code base to identify deprecated or unused artifacts, libraries, and repositories. Establish timelines for deprecation and final removal of identified components.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.9-implement-plans-for-deprecating-and-revoking-outdated-software-components.html"
+    },
+    {
+      "id": "DL.SCM.10",
+      "title": "Generate a comprehensive software inventory for each build",
+      "category": "RECOMMENDED",
+      "description": "Maintain a comprehensive inventory of the components and dependencies that make up your software assists with identifying vulnerabilities and managing risks. This inventory, often taking the form of a Software Bill of Materials (SBOM), provides valuable insights into the composition of your software. Generate a comprehensive inventory as part of each build. This forms a continuous record of your software's composition, enabling quick and efficient identification and management of potential vulnerabilities or risks.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.scm.10-generate-a-comprehensive-software-inventory-for-each-build.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.SCM-AP1",
+      "title": "Avoiding version control",
+      "description": "Not using version control means that there's no historical record of code changes. This makes it hard to track down when a bug was introduced, who made specific changes, or how to roll back to a previous state leading to increased debugging time, potential loss of code, inability to collaborate effectively, and no traceability of changes. Use version control systems like Git for both code and infrastructure (IaC). Make sure to commit frequently with meaningful commit messages and maintain a clear change log."
+    },
+    {
+      "id": "DL.SCM-AP2",
+      "title": "Mutable artifacts",
+      "description": "Permitting alterations to existing artifacts in artifact repositories and registries undermines the integrity of the software supply chain. Instead, artifacts should be made immutable. Immutable artifacts help ensure consistent deployments and rollbacks. Mutable artifacts, on the other hand, introduce unpredictability and can be a vector for malicious alterations. Artifacts stored should be immutable with access control preventing overwriting or modifying existing artifacts."
+    },
+    {
+      "id": "DL.SCM-AP3",
+      "title": "Ignoring dependencies management",
+      "description": "A significant portion of modern applications consists of third-party libraries or dependencies. Ignoring these can introduce hidden vulnerabilities, versioning conflicts, or deprecated functionalities. This can lead to security breaches, unexpected behavior in applications, and makes debugging more challenging. Adopt a comprehensive dependency management strategy that not only tracks direct dependencies but also transitive (dependencies of dependencies). Use tools to regularly scan for vulnerabilities in your dependencies and update them as needed."
+    },
+    {
+      "id": "DL.SCM-AP4",
+      "title": "Using git submodules for sharing common code",
+      "description": "Git submodules can introduce a layer of complexity in development. It is easy to end up with a parent repository pointing to an outdated or even deleted commit in the submodule. Submodules can also introduce recursive nesting. This complexity can hinder development speed, increase the risk of errors, and introduce potential security concerns if a submodule is compromised. Consider alternative strategies such as monorepos for large-scale projects or microservices for better separation of concerns. Package managers can be used to share common libraries across multiple projects without the complexity of submodules."
+    },
+    {
+      "id": "DL.SCM-AP5",
+      "title": "Traditional branching strategies",
+      "description": "Traditional branching strategies, like GitFlow, involve multiple long-lived branches like feature, release, and hotfix, which can add overhead to the development process. For most modern web-based applications, especially those using continuous integration and continuous delivery (CI/CD) pipelines, this can slow down the release pace, extend integration times, and lead to complex merge conflicts. Adopt a simpler branching strategy like trunk-based development or GitHub flow, which emphasizes shorter-lived branches and more frequent merges to the main branch."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.SCM-M1",
+      "title": "Average branch lifespan",
+      "description": "This metric tracks the lifespan of feature branches. A shorter average lifespan indicates a more agile development process indicative of continuous integration. Track this metric by gathering data from version control systems and analyzing repository statistics.",
+      "formula": "Average duration from branch creation to merge into main branch"
+    },
+    {
+      "id": "DL.SCM-M2",
+      "title": "Open-source license violations",
+      "description": "The number of open-source components used that do not align with approved license lists. Tracking this metric can help monitor adherence to legal compliance requirements. Gather data by integrating license-checking tools, such Software Composition Analysis (SCA) tools, into pipelines and review the findings. Supplement this data by also including builds which do not include SCA scans.",
+      "formula": "Count of components with non-compliant licenses / Total components"
+    },
+    {
+      "id": "DL.SCM-M3",
+      "title": "Average time to resolve vulnerabilities",
+      "description": "Represents how quickly software vulnerabilities and security risks are mitigated. A reduced average time indicates a proactive security approach. To improve this metric, prioritize vulnerabilities based on severity, integrate security into the development lifecycle, enhance developer security collaboration, and introduce security training. Track this metric by recording timestamps of vulnerability detection and resolution, then calculate the average duration throughout a specific time frame.",
+      "formula": "Sum of all vulnerability resolution times / Number of vulnerabilities resolved"
+    },
+    {
+      "id": "DL.SCM-M4",
+      "title": "Software component health",
+      "description": "Measures the age, reuse frequency, and contribution to technical debt of each software component. Monitoring this metric provides insights into outdated components, development efficiency, and technical debt accumulation. To improve health, prioritize updating or retiring dated components and fostering reusable design patterns. Calculate code age using the difference between the current date and the date of the last update, count the number of projects which depends on the component, and use static code analysis tools to calculate a technical debt score.",
+      "formula": "Technical debt score = Cyclomatic Complexity + Duplicate Code + Other detectable forms of Software Entropy"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "HCIOPS01-BP01",
+    "title_full": "HCIOPS01-BP01 Define a formal risk management program",
+    "title": "Define a formal risk management program",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/prepare.html",
+    "description": "Create and document a risk management program designed to safeguard patient data, organizational assets, and reputation. Healthcare organizations should create a comprehensive risk management program that includes operational, clinical, strategic, financial, legal, environmental, and other potential risk domains. Create a risk authority team to evaluate the criticality of business processes and specify required availability levels.",
+    "outcome": "Healthcare organizations have a structured approach to managing risks across all domains, enabling informed decision-making about cloud architectures and operational priorities.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Prepare"],
+    "relatedIds": ["OPS01-BP01", "OPS01-BP03"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIOPS01-BP02",
+    "title_full": "HCIOPS01-BP02 Adopt policies and procedures for cloud governance",
+    "title": "Adopt policies and procedures for cloud governance",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/prepare.html",
+    "description": "Create policies and procedures to govern cloud workloads. Establish a control environment that meets compliance objectives and requirements. Understand the AWS shared responsibility model and establish strong customer compliance and governance practices including reviewing AWS security documentation, designing control objectives, identifying controls owned by outside parties, and verifying all controls are working.",
+    "outcome": "Healthcare organizations maintain adequate governance over their cloud environment with documented policies and procedures that demonstrate compliance with healthcare regulations and standards.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Prepare"],
+    "relatedIds": ["OPS01-BP01", "OPS01-BP02", "SEC01-BP01"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIOPS01-BP03",
+    "title_full": "HCIOPS01-BP03 Map security controls to compliance requirements",
+    "title": "Map security controls to compliance requirements",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/prepare.html",
+    "description": "Determine regulatory frameworks and security controls applicable to your business and cloud workload. Map applicable frameworks and controls to AWS controls to align with regulatory frameworks. Use a hub-and-spoke model by mapping to a common security framework like NIST 800-53, then leverage published mappings to other frameworks. Create a responsibility assignment matrix (RACI) that designates roles for regulatory controls.",
+    "outcome": "Security controls are systematically mapped to compliance requirements, simplifying multi-framework compliance and clarifying accountability for regulatory obligations.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Prepare"],
+    "relatedIds": ["OPS01-BP01", "SEC01-BP01"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIOPS01-BP04",
+    "title_full": "HCIOPS01-BP04 Educate employees on access to sensitive data",
+    "title": "Educate employees on access to sensitive data",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/prepare.html",
+    "description": "Ensure employees who may have access to sensitive healthcare data are trained on the rules and regulations. Train employees on what to do when viewing sensitive data, how and where to host or process that data, how to protect it, and breach disclosure requirements. Create and document a policy and procedure aligned to each control and safeguard to educate employees and demonstrate compliance posture.",
+    "outcome": "All employees with potential access to health data understand their responsibilities and regulatory obligations, creating a strong culture of compliance throughout the organization.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Prepare"],
+    "relatedIds": ["OPS01-BP02", "SEC01-BP07"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIOPS02-BP01",
+    "title_full": "HCIOPS02-BP01 Demonstrate continuous compliance",
+    "title": "Demonstrate continuous compliance",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/operate.html",
+    "description": "Architect and build with the ability to generate evidence that demonstrates continuous compliance. Identify resources in the cloud environment using AWS Config and AWS X-Ray. Restrict resources to pre-defined configurations using infrastructure as code. Implement compliance-as-code for configuration using AWS Config rules and conformance packs. Centralize security and compliance findings using AWS Security Hub. Map technical controls to compliance requirements using AWS Audit Manager.",
+    "outcome": "Healthcare organizations can continuously demonstrate their compliance posture through automated evidence collection and monitoring, simplifying audits and stakeholder reporting.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Operate"],
+    "relatedIds": ["OPS08-BP01", "OPS11-BP04", "SEC01-BP01"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIOPS02-BP02",
+    "title_full": "HCIOPS02-BP02 Automate remediation of compliance violations",
+    "title": "Automate remediation of compliance violations",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/operate.html",
+    "description": "Automate remediation of configurations that are out of compliance with technical controls for rapid, consistent application of policies. Use event-driven architectures to improve remediation times. Define controls using AWS Config and Security Hub, identify configuration changes using AWS Config and EventBridge, implement remediation using Lambda and Systems Manager, and rerun evaluation to verify compliance.",
+    "outcome": "Non-compliant resources are automatically detected and remediated, reducing time to compliance and minimizing the risk window for security vulnerabilities.",
+    "pillar": "OPERATIONAL_EXCELLENCE",
+    "area": ["Operate"],
+    "relatedIds": ["OPS08-BP01", "OPS11-BP05", "SEC01-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  }
+]

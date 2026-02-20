@@ -1,0 +1,138 @@
+{
+  "saga": "Quality Assurance",
+  "sagaCode": "QA",
+  "capability": "Non-functional Testing",
+  "capabilityCode": "NFT",
+  "description": "Non-functional testing evaluates the quality attributes of software systems, emphasizing how a solution performs and operates in various environments rather than its functional capabilities. Such tests help ensure that software meets the desired performance, reliability, usability, and other non-functional standards. By implementing non-functional testing, teams can consistently achieve scalable and efficient software solutions that meet both user and business requirements, elevating the overall user experience and software reliability.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/non-functional-testing.html",
+  "indicators": [
+    {
+      "id": "QA.NT.1",
+      "title": "Evaluate code quality through static testing",
+      "description": "Static testing is a proactive method of assessing the quality of code without needing to run it. It can be used to test application source code, as well as other design artifacts, documentation, and infrastructure as code (IaC) files. Static testing allows teams to spot misconfigurations, security vulnerabilities, or non-compliance with organizational standards in these components before they get applied in a real environment. Static testing should be available to developers on-demand in local environments, as well as automatically run in automated pipelines.",
+      "category": "FOUNDATIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.1-evaluate-code-quality-through-static-testing.html"
+    },
+    {
+      "id": "QA.NT.2",
+      "title": "Validate system reliability with performance testing",
+      "description": "Performance testing evaluates the responsiveness, throughput, reliability, and scalability of a system under a specific load. It helps ensure that the application performs adequately when it is subjected to both expected and peak loads without impacting user experience. Different performance tests should be run based on the nature of changes made to the system: load testing, stress testing, and endurance testing.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.2-validate-system-reliability-with-performance-testing.html"
+    },
+    {
+      "id": "QA.NT.3",
+      "title": "Prioritize user experience with UX testing",
+      "description": "User experience (UX) testing provides insight into the system's user interface and overall user experience, ensuring that they align with the diverse requirements of its user base. Adopting UX testing ensures that as the system evolves, its design remains intuitive, functional, and inclusive for end users. UX testing includes usability testing and accessibility testing.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.3-prioritize-user-experience-with-ux-testing.html"
+    },
+    {
+      "id": "QA.NT.4",
+      "title": "Enhance user experience gradually through experimentation",
+      "description": "Enhancing user experience requires taking a methodical approach to assessing how users behave when using your application and developing features that resonate with users. With experiments, teams can proactively assess the impact of new features on a subset of users before a full-scale rollout, reducing the risk of making the change and negatively impacting user experience. A/B testing is a popular technique for conducting experiments.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.4-enhance-user-experience-gradually-through-experimentation.html"
+    },
+    {
+      "id": "QA.NT.5",
+      "title": "Automate adherence to compliance standards through conformance testing",
+      "description": "Conformance testing, often referred to as compliance testing, verifies that a system meets internal and external compliance requirements. It compares the system's behaviors, functions, and capabilities with predefined criteria from recognized standards or specifications. Conformance testing integrated into deployment pipelines provides a solution by automating the creation of compliance attestations and documentation.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.5-automate-adherence-to-compliance-standards-through-conformance-testing.html"
+    },
+    {
+      "id": "QA.NT.6",
+      "title": "Experiment with failure using resilience testing to build recovery preparedness",
+      "description": "Resilience testing deliberately introduces controlled failures into a system to gauge its ability to withstand failure and recover during disruptive scenarios. Simulating failures in different parts of the system provides insight into how failures propagate and affect other components. This helps identify bottlenecks or single points of failure in the system. Types include chaos engineering, data recovery testing, and disaster recovery testing.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.6-experiment-with-failure-using-resilience-testing-to-build-recovery-preparedness.html"
+    },
+    {
+      "id": "QA.NT.7",
+      "title": "Verify service integrations through contract testing",
+      "description": "Contract testing helps ensure that different system components or services can seamlessly communicate and are compatible with each other. This involves creating contracts that detail interactions between services, capturing everything from request structures to expected responses. As changes are made, these contracts can be used by producing and consuming services to ensure they remain compatible.",
+      "category": "RECOMMENDED",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.7-verify-service-integrations-through-contract-testing.html"
+    },
+    {
+      "id": "QA.NT.8",
+      "title": "Practice eco-conscious development with sustainability testing",
+      "description": "Sustainability testing ensures that software products contribute to eco-conscious and energy-efficient practices that reflect a growing demand for environmentally responsible development. It encompasses energy efficiency, resource optimization, data efficiency, and lifecycle analysis to ensure software development meets performance expectations while also contributing positively to the organization's environmental goals.",
+      "category": "OPTIONAL",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.8-practice-eco-conscious-development-with-sustainability-testing.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "QA.NT-AP1",
+      "title": "Mistaking infrastructure resilience with system reliability",
+      "description": "While architectural traits like high availability and fault tolerance enhance a system's resilience, enabling it to recover from external disruptions, they do not inherently ensure application reliability. While infrastructure resilience ensures a system can recover from failure, application reliability ensures that it can consistently meet runtime expectations, especially under varying loads. Assessing the reliability of a system requires targeted non-functional performance tests to evaluate responsiveness, stability, and speed under various loads."
+    },
+    {
+      "id": "QA.NT-AP2",
+      "title": "Overlooking real-world conditions during testing",
+      "description": "Testing exclusively in controlled environments without considering real-world variables and unpredictability can lead to a false sense of assurance. Tests must account for diverse user behaviors, different network conditions, and the wide range of device combinations. Integrating real-world variables into testing ensures that software releases are robust and reliable in actual deployment scenarios. The most effective strategy to achieve this is by balancing testing in controlled environments with testing in production."
+    },
+    {
+      "id": "QA.NT-AP3",
+      "title": "Ignoring observability for performance tuning",
+      "description": "Resource optimization shouldn't be restricted to the early stages of the development lifecycle. As applications are used in production, their resource requirements may scale and lead to different outcomes that were not tested in a controlled environment. Real data regarding non-functional attributes, such as resource allocation, performance, compliance, sustainability and cost should be periodically reviewed and adjusted after deployment. Tools like AWS Trusted Advisor, AWS Compute Optimizer, and AWS Customer Carbon Footprint Tool can be used to tighten the relationship between quality assurance and observability."
+    },
+    {
+      "id": "QA.NT-AP4",
+      "title": "Not gathering genuine user feedback",
+      "description": "Relying solely on internal feedback for non-functional aspects can introduce biases and overlook real user pain points. Collect, analyze, and act on genuine user feedback regarding performance, usability, and other non-functional attributes. This feedback loop ensures software development remains aligned with user expectations, optimizing the overall user experience."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "QA.NT-M1",
+      "title": "Availability",
+      "description": "The percentage of time a system is operational and accessible to users. High availability helps to maintain user trust and ensure business continuity. A decrease in this metric can signify issues with infrastructure reliability or application stability.",
+      "formula": "(Total operational time / Total time period) × 100"
+    },
+    {
+      "id": "QA.NT-M2",
+      "title": "Latency",
+      "description": "The time it takes for a system to process a given task. This metric specifically considers the time taken from when a request is made to when a response is received. This metric offers insight into the responsiveness of an application, affecting user experience and system efficiency. Using percentiles and trimmed mean are good statistics for this measurement.",
+      "formula": "Time from request initiation to response receipt"
+    },
+    {
+      "id": "QA.NT-M3",
+      "title": "Cyclomatic complexity",
+      "description": "Cyclomatic complexity counts the distinct paths through a code segment. It reflects the complexity in the code's decision-making structure. Higher values can indicate code that can be harder to maintain, understand, or test, increasing the likelihood of errors.",
+      "formula": "(Edges - Nodes + 2 × Connected Components)"
+    },
+    {
+      "id": "QA.NT-M4",
+      "title": "Peak load threshold",
+      "description": "Represents the maximum number of simultaneous users or requests a system can handle before performance degrades. Understanding this threshold aids in capacity planning and ensures the system can cope with usage spikes.",
+      "formula": "Maximum concurrent users/requests at acceptable performance level"
+    },
+    {
+      "id": "QA.NT-M5",
+      "title": "Test case run time",
+      "description": "The duration taken to run a test case or a suite of test cases. Increasing duration may highlight bottlenecks in the test process or performance issues emerging in the software under test.",
+      "formula": "Test execution end time - Test execution start time"
+    },
+    {
+      "id": "QA.NT-M6",
+      "title": "Infrastructure utilization",
+      "description": "Percentage utilization of infrastructure resources such as CPU, memory, storage, and bandwidth. Infrastructure utilization helps in understanding if there are over-provisioned resources leading to cost overhead or under provisioned resources that could affect performance.",
+      "formula": "(Used resource capacity / Total available capacity) × 100"
+    },
+    {
+      "id": "QA.NT-M7",
+      "title": "Time to restore service",
+      "description": "The time taken to restore a service to its operational state after an incident or failure. Faster time to restore can indicate a more resilient system and optimized incident response processes. An ideal time to restore service must be capable of meeting recovery time objectives (RTO).",
+      "formula": "Service restoration completion time - Service disruption report time"
+    },
+    {
+      "id": "QA.NT-M8",
+      "title": "Application performance index (Apdex)",
+      "description": "Measures user satisfaction with application responsiveness using a scale from 0 to 1. A higher Apdex score indicates better application performance, likely resulting in improved user experience, while a lower score means that users might become frustrated.",
+      "formula": "(Satisfied + (Tolerating / 2)) / Total transactions"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "HCIREL01-BP01",
+    "title_full": "HCIREL01-BP01 Architect systems for elasticity",
+    "title": "Architect systems for elasticity",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/foundations.html",
+    "description": "Implement architectures that automatically adapt to changes in demand. Healthcare applications often have time-based peaks in demand, such as during business hours or events like open-enrollment. Leverage AWS Auto Scaling and Application Auto Scaling for supported services to right-size performance during all hours while minimizing excess cost.",
+    "outcome": "Healthcare systems automatically scale to meet demand patterns, ensuring optimal performance during peak periods while reducing costs during low-demand periods.",
+    "pillar": "RELIABILITY",
+    "area": ["Foundations"],
+    "relatedIds": ["REL01-BP01", "REL05-BP01", "PERF04-BP01"],
+    "risk": "MEDIUM",
+    "lens": "HEALTHCARE"
+  },
+  {
+    "id": "HCIREL02-BP01",
+    "title_full": "HCIREL02-BP01 Ensure acceptable network availability",
+    "title": "Ensure acceptable network availability",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/healthcare-industry-lens/workload-architecture.html",
+    "description": "Architect redundant and reliable network connections to ensure care continuity. Many healthcare applications require secure connectivity between cloud and on-premises resources. Establish redundant connections using AWS Direct Connect or failover to VPN. Consider business continuity and disaster recovery requirements when evaluating network setup, as certain healthcare applications like medical imaging or EHR systems require more consistent latency and connectivity.",
+    "outcome": "Healthcare applications maintain consistent, redundant network connectivity to support continuous patient care and critical healthcare operations.",
+    "pillar": "RELIABILITY",
+    "area": ["Workload Architecture"],
+    "relatedIds": ["REL02-BP01", "REL03-BP01", "REL11-BP01"],
+    "risk": "HIGH",
+    "lens": "HEALTHCARE"
+  }
+]

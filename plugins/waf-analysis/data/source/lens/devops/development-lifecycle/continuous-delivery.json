@@ -1,0 +1,106 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Continuous Delivery",
+  "capabilityCode": "CD",
+  "description": "Continuous Delivery is an automated software delivery practice that follows Continuous Integration (CI). It automatically deploys code changes that pass build validation to various environments, including production, with minimal human intervention. This DevOps practice extends to production environments and aims to ensure new features, fixes, and improvements are deployed fast and reliably, reducing lead times and improving overall deployment efficiency.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/continuous-delivery.html",
+  "indicators": [
+    {
+      "id": "DL.CD.1",
+      "title": "Deploy changes to production frequently",
+      "description": "Deploy changes to production frequently to enable rapid delivery of features and fixes, reducing lead times and enabling faster feedback cycles.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.2",
+      "title": "Deploy exclusively from trusted artifact repositories",
+      "description": "Ensure that deployments are only performed from trusted artifact repositories to maintain consistency, traceability, and security in the deployment process.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.3",
+      "title": "Integrate quality assurance into deployments",
+      "description": "Incorporate quality assurance checks and validations into your deployment pipeline to ensure code quality and catch issues before production.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.4",
+      "title": "Automate the entire deployment process",
+      "description": "Remove manual, error-prone deployment steps by automating the entire deployment process to improve reliability and reduce human errors.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.5",
+      "title": "Ensure on-demand deployment capabilities",
+      "description": "Implement capabilities to deploy on-demand, allowing teams to push changes to production whenever needed without waiting for scheduled maintenance windows.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.6",
+      "title": "Refine delivery pipelines using metrics for continuous improvement",
+      "description": "Use metrics and data-driven insights to continuously refine and improve your delivery pipelines, identifying bottlenecks and optimization opportunities.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    },
+    {
+      "id": "DL.CD.7",
+      "title": "Remove manual approvals to practice continuous deployment",
+      "description": "Eliminate manual approval gates where possible to enable continuous deployment, allowing validated changes to be deployed automatically to production.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-continuous-delivery.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.CD-AP1",
+      "title": "Large Batch Deployments",
+      "description": "Batching multiple changes into a single, large release can lead to increased risk and longer lead times. Deploying in smaller batches allows for faster feedback and quicker resolution of issues, ultimately leading to a more efficient and reliable delivery process."
+    },
+    {
+      "id": "DL.CD-AP2",
+      "title": "Manual Deployments",
+      "description": "Deployments done manually lack consistency, increase the chances of human error, and hinder the pace of delivering software changes. This practice contradicts the fundamental premise of continuous delivery and continuous deployment which emphasizes automation to ensure reliability and speed."
+    },
+    {
+      "id": "DL.CD-AP3",
+      "title": "Building More Than Once",
+      "description": "Not adhering to the 'build once, deploy many' principle during deployments. When code is built multiple times, there's a chance that inconsistencies occur due to different environments having different configurations, component versions, or updates. This can lead to deployment errors and failures in production that weren't encountered in pre-production environments. The solution is to build the artifact once and always deploy artifacts directly from trusted artifact repositories."
+    },
+    {
+      "id": "DL.CD-AP4",
+      "title": "Tightly Coupled Systems",
+      "description": "Developing and deploying in a tightly coupled architectural environment leads to numerous continuous delivery challenges. In tightly coupled systems, a change in one component often necessitates changes in others, leading to cascading updates and increased complexity. This makes isolation of changes difficult, increases lead times, and makes the system less resilient. The recommended approach is to architect loosely coupled systems using modular components or microservices, allowing independent updates and deployments."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.CD-M1",
+      "title": "Pipeline Stability",
+      "description": "The percentage of deployments that encounter failures, including failed deployments, required rollbacks, and incidents directly linked to deployments. This metric measures the reliability and stability of your deployment pipeline.",
+      "formula": "Pipeline Stability = (Failed Deployments + Rollbacks + Deployment-Related Incidents) / Total Deployments × 100"
+    },
+    {
+      "id": "DL.CD-M2",
+      "title": "Mean Time to Production (MTTP)",
+      "description": "The average time taken from when a code change is merged to when it's live in the production environment. This metric indicates how efficiently your organization can deliver changes to customers.",
+      "formula": "MTTP = Average of (Production Deployment Time - Code Merge Time)"
+    },
+    {
+      "id": "DL.CD-M3",
+      "title": "Operator Interventions",
+      "description": "The number of deployments run without human intervention, signifying the level of automation and reliability in the deployment process. Lower numbers indicate higher automation.",
+      "formula": "Operator Interventions = Count of Deployments Requiring Manual Intervention per Period"
+    },
+    {
+      "id": "DL.CD-M4",
+      "title": "Number of Changes Per Release",
+      "description": "The number of changes (code, configuration, or other components) included in each release. Smaller numbers of changes per release correlate with lower deployment risk and faster feedback cycles.",
+      "formula": "Changes Per Release = Count of Distinct Changes per Release"
+    },
+    {
+      "id": "DL.CD-M5",
+      "title": "Deployment Frequency",
+      "description": "How often code is deployed to production, indicating how quickly teams can deliver changes and fixes. Higher deployment frequency typically indicates mature continuous delivery practices.",
+      "formula": "Deployment Frequency = Number of Successful Deployments / Time Period (daily, weekly, or monthly)"
+    }
+  ]
+}

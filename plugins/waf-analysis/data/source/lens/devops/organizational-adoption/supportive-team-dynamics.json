@@ -1,0 +1,101 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Supportive Team Dynamics",
+  "capabilityCode": "STD",
+  "description": "Supportive team dynamics are essential to DevOps adoption as it promotes a sense of ownership, autonomy, shared accountability, and collaboration among team members. DevOps adoption requires teams to take on new responsibilities, such as cost optimization, operations, security, and availability. Historically, these new responsibilities might have been handled by teams outside of their own. Healthy, effective teams are able to incorporate new responsibilities, respond quickly to changing business needs, and maintain focus on delivering high-quality products to their customers.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/supportive-team-dynamics.html",
+  "indicators": [
+    {
+      "id": "OA.STD.1",
+      "title": "Organize teams into distinct topology types to optimize the value stream",
+      "description": "To optimize the value stream and achieve desired business outcomes, embrace the four team topologies model. Assess each team and categorize them into one of the four topologies: stream-aligned teams (responsible for delivering value to customers by focusing on specific product lines or customer segments), platform teams (create and maintain shared infrastructure, tools, and services), enabling teams (support other teams by providing just-in-time skills, knowledge, and expertise), and complicated subsystem teams (responsible for specialized subsystems within a larger system that require complex, deep domain knowledge). Organizing teams according to these topologies allows organizations to manage dependencies, enhance collaboration, and facilitate effective value delivery.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.1-organize-teams-into-distinct-topology-types-to-optimize-the-value-stream.html"
+    },
+    {
+      "id": "OA.STD.2",
+      "title": "Tailor operating models to business needs and team preferences",
+      "description": "Adopt operating models that align with the needs of the business goals, while considering the capabilities and preferences of individual teams. Selecting the right operating model involves evaluating the organization's requirements, such as decision-making processes, communication channels, and resource allocation. Keep in mind that multiple operating models can be used concurrently, catering to different use cases, levels of organizational maturity, and individual team and product needs. Not all operating models support a DevOps culture, and DevOps might not be suitable for every system.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.2-tailor-operating-models-to-business-needs-and-team-preferences.html"
+    },
+    {
+      "id": "OA.STD.3",
+      "title": "Prioritize shared accountability over individual achievements",
+      "description": "Encourage a culture of teamwork and shared accountability by establishing common goals and fostering collaboration and open communication. Create a sense of shared ownership and responsibility for achieving team success, encouraging members to support each other and provide constructive feedback. Regularly evaluate progress towards goals and celebrate successes together as a team. Prioritizing team success over individual accomplishments promotes a cohesive and high-performing team environment that is essential for successful DevOps adoption.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.3-prioritize-shared-accountability-over-individual-achievements.html"
+    },
+    {
+      "id": "OA.STD.4",
+      "title": "Structure teams around desired business outcomes",
+      "description": "To maximize value and effectiveness in product delivery, intentionally design team structures that reflect the desired architecture and interactions of the systems being built. Clearly define roles, responsibilities, and ownership for each team and align with the expected business outcomes. By designing teams and their communication structures to reflect the intended architecture and interactions of the system being built, organizations can achieve increased efficiency and more effective collaboration between teams, ultimately enhancing the overall product delivery process.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.4-structure-teams-around-desired-business-outcomes.html"
+    },
+    {
+      "id": "OA.STD.5",
+      "title": "Establish team norms that enhance work performance",
+      "description": "Optimize work performance by establishing norms that define clear roles, schedules, and processes for agile ceremonies. Agree on regular meeting schedules, such as daily stand-ups, sprint planning, backlog refinement, and sprint retrospectives if you are following Scrum. Define roles for each team member during ceremonies, clarifying responsibilities and purpose in the ceremony. Conduct regular process reviews to identify areas for improvement and refine the ceremony structure as needed. Encourage active participation and engagement in the ceremonies.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.5-establish-team-norms-that-enhance-work-performance.html"
+    },
+    {
+      "id": "OA.STD.6",
+      "title": "Provide teams ownership of the entire value stream for their product",
+      "description": "Establish teams that are able to own their respective value streams and products using a 'you build it, you run it' approach. The team responsible for building a system should also be responsible for running, maintaining, and overall owning it. These small, autonomous teams with a single-threaded focus minimize handoffs and make teams both the creators and custodians of their products. Value stream ownership does not mean preventing teams from working together. Teams not only own the development of their product, but also take responsibility of aspects like security and quality assurance. Invest in ongoing cross-functional training to help individual team members acquire skills that will make them successful within their value streams.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.6-provide-teams-ownership-of-the-entire-value-stream-for-their-product.html"
+    },
+    {
+      "id": "OA.STD.7",
+      "title": "Amplify the scale and impact of centralized functions",
+      "description": "As decentralized teams become responsible for their respective value streams and products, including responsibilities like security and quality assurance, centralized functions can often become bottlenecks. Adopt a Guardian Model within your organization to scale centralized functions. This involves embedding specialized champions or 'Guardians' within individual teams to enhance and scale the capabilities of centralized functions, such as security, quality, and audit. Embedding guardians directly into teams helps make specialized knowledge always available, reducing wait times and facilitating real-time, context-aware decision-making.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.7-amplify-the-scale-and-impact-of-centralized-functions.html"
+    },
+    {
+      "id": "OA.STD.8",
+      "title": "Promote cognitive diversity within teams",
+      "description": "Optimized DevOps teams should remain small and agile in how they deliver their products. This approach requires team members to have a wide range of cross-functional skills, from software development and testing to operations and security. Having a diverse mix of skills, experiences, and backgrounds within the team helps them effectively innovate to solve complex problems. Promote cognitive diversity within small teams by including members with varied ethnic, cultural, regional, gender, age, and other backgrounds. Avoid hiring bias and promote diversity and inclusion when forming teams.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.std.8-promote-cognitive-diversity-within-teams.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.STD-AP1",
+      "title": "Project-based teams",
+      "description": "If teams are structured around short-term projects rather than being aligned with products or services, it can prevent them from taking ownership of the value stream. Project-based teams tend to focus on completing tasks and moving on to the next assignment, rather than fostering long-term ownership, accountability, and continuous improvement. This can impact delivery speed, quality, and maintainability of resulting products. Shift the focus towards product-aligned teams that have ownership of their entire value stream, encouraging teams to take responsibility for the full lifecycle of the product, from idea to delivery and ongoing maintenance."
+    },
+    {
+      "id": "OA.STD-AP2",
+      "title": "Restrictive tool support",
+      "description": "If supporting teams support a limited set of tools, frameworks, or programming languages, it can discourage individual teams from adopting new tools or choosing the best tool for specific use cases. Requiring teams to use a standardized tool, which may be the wrong tool for the specific use case, can lead to sub-optimal solutions and decreased developer productivity. To overcome this, supportive teams should take a more flexible approach by creating solutions that are inclusive of using multiple tools, frameworks, and programming languages. This encourages teams to choose tools for their specific needs, creating an adaptable development environment that fosters a culture of experimentation and learning."
+    },
+    {
+      "id": "OA.STD-AP3",
+      "title": "Rigid hierarchical structures",
+      "description": "Traditional rigid hierarchical organizational structures can hinder the flow of information and introduce unnecessary dependencies between teams. When decisions are always made by executive leadership and individual teams lack autonomy, it can suppress innovation, delay time to market, and deter accountability. These structures can also discourage teams from collaborating freely, due to potential political dynamics or fear of overstepping boundaries. To address this, create an environment where teams have the autonomy to make decisions that align with their goals and the organization's business objectives. Encourage open channels of communication across all levels and departments."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.STD-M1",
+      "title": "Employee net promoter score (eNPS)",
+      "description": "Measure employees' engagement and satisfaction within the organization, gauging their likelihood to recommend the organization as an ideal workplace. This can provide insight into the overall health of the organizational culture and indicates the effectiveness of leadership in creating an inclusive and positive work environment. A higher eNPS can correlate with better productivity, lower turnover, and improved team dynamics.",
+      "formula": "Subtract the percentage of detractors (those who score 0-6) from promoters (those who score 9-10) to get the eNPS value. Neutral scores (7-8) can be ignored. Track using periodic, anonymized net promoter score surveys that require no more that 5-7 minutes to complete."
+    },
+    {
+      "id": "OA.STD-M2",
+      "title": "Cross-functional dependency tracking",
+      "description": "The number of dependencies a team has on other teams is measured by the frequency of interactions between teams. Dependencies can slow down work, indicate siloed teams, or point towards inefficient processes. The frequency of cross-team interactions can help gauge how siloed teams are and how effectively they are collaborating. This metric should improve as teams become more autonomous and fully responsible for their value stream.",
+      "formula": "Use time tracking tools, calendar analytics, and dependencies between work items in project management tools to track and categorize dependencies. On a regular basis, such as monthly or at the end of a sprint, calculate the average number of dependencies and the frequency of cross-team meetings."
+    },
+    {
+      "id": "OA.STD-M3",
+      "title": "Team health",
+      "description": "Hold periodic surveys that gauge team members' feelings and perceptions about collaboration, support, and team dynamics. These surveys create feedback loops that can highlight strengths, weaknesses, and areas for improvement. If following Scrum, this survey might take the form of a sprint retrospective. If not following Scrum, or for more granular feedback, administer surveys on a regular basis, such as monthly or quarterly.",
+      "formula": "Measure the percentage of positive responses over time and track trends as they emerge."
+    },
+    {
+      "id": "OA.STD-M4",
+      "title": "Team turnover",
+      "description": "The frequency that team members depart from a specific team. High turnover can indicate issues with team dynamics, satisfaction, or other underlying problems affecting team cohesion. Identify these issues early to maintain project consistency, team morale, and productivity. Monitor the reasons for departures using exit interviews, and progress towards resolving points of friction within the team.",
+      "formula": "On a regular basis, such as monthly or quarterly, calculate the turnover rate by taking the number of employees who left during that period divided by the average number of employees during the same period, then multiply by 100 for the percentage."
+    }
+  ]
+}

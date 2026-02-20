@@ -1,0 +1,128 @@
+[
+  {
+    "id": "FSIPERF01-BP01",
+    "title": "Use internal and external risk to determine performance requirements",
+    "description": "External regulatory, as well as internal risk requirements, are often a good place to start for performance requirements. For some systems, regulators release sector-wide guidance including potential stress tests. For others, regulators require that financial institutions have the capability to deliver on the operational resilience and the performance targets they have set for themselves.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Performance Requirements"]
+  },
+  {
+    "id": "FSIPERF01-BP02",
+    "title": "Factor in rate of increase in load and scale-out intervals",
+    "description": "Identify the upper bounds of the peak load against a system, as well as the amount of time needed to reach peak load. Load tests often overlook the rate of increase in traffic and create tests that scale up too quickly or too slowly. If the load test ramps up too quickly, the system may not be able to add capacity rapidly enough to meet the demand, which degrades performance and introduces errors. Load tests need to be run periodically and with every major release of the system.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Load Testing", "Capacity Planning"]
+  },
+  {
+    "id": "FSIPERF01-BP03",
+    "title": "Benchmark your solution",
+    "description": "Benchmark your existing solution and its components in order to understand their performance characteristics and capacity to exceed their current profiles. AWS services like AWS Lambda and CloudWatch can be useful tools for building, running and monitoring a load testing environment due to their low overhead for setup and extensive scaling capabilities.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Performance Optimization", "Testing"]
+  },
+  {
+    "id": "FSIPERF02-BP01",
+    "title": "Select your compute architecture based on workload requirements",
+    "description": "The optimal compute solution for a particular architecture depends on the workload deployment method, degree of automation, usage patterns, and configuration. Third-party solutions can bring their own requirements for infrastructure, which must also be considered. Different compute solutions may be chosen for each step of a process. Selecting the wrong compute solutions for an architecture can lead to lower performance efficiency. Some financial services computing workloads, like risk modeling, are typically loosely coupled and can benefit from event-driven architectures leveraging the scaling capacity of AWS serverless compute options like AWS Lambda and AWS Fargate, combined with messaging services including Amazon SQS and Amazon EventBridge. Containerized infrastructure can enable financial services institutions to achieve their goals for speed and scalability. For solutions with more specific performance requirements, AWS offers a wide range of Amazon EC2 instance types.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Compute Selection", "Architecture Design"]
+  },
+  {
+    "id": "FSIPERF03-BP01",
+    "title": "Select your storage architecture based on workload requirements",
+    "description": "When you select a storage solution, verify that it aligns with your access patterns to achieve the desired performance. It is simple to experiment with different storage types and configurations without having to make commitments. Financial services grid compute workloads can take advantage of Amazon FSx for Lustre, which provides a fully managed file system that's optimized for the performance and costs of workloads requiring file system access across thousands of Amazon EC2 instances. Consider whether your solutions can make use of caching services to improve performance, by storing frequently used data in memory, or bringing data closer to consumers. Financial services solutions have historically made use of databases as a key component, and AWS offers a wide range of database options. Select database options that align with your performance requirements, using different database technologies for different purposes.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Storage Selection", "Architecture Design", "Database Selection"]
+  },
+  {
+    "id": "FSIPERF03-BP02",
+    "title": "Consider changing needs over the entire lifecycle of your data",
+    "description": "Financial services workloads often have requirements to keep data available for many years to help meet regulatory requirements, leading to significant amounts of data being retained. Amazon S3 and Amazon Glacier storage classes provide the optimal solution for many data retention requirements with their almost unlimited capacity and predictable performance. Consider the use of the services' own lifecycle policies to help meet your requirements. These services offer integrated lifecycle-based policies for moving data between tiers of storage based on access patterns and user-defined requirements. If the features of a single service do not meet your requirements, combine multiple storage services to satisfy requirements, rather than selecting a single storage service to help meet your requirements.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Data Lifecycle Management", "Storage Optimization"]
+  },
+  {
+    "id": "FSIPERF04-BP01",
+    "title": "Use AWS services to optimize your network routes",
+    "description": "Proximity to data sources, both internal and external, and the distance between components can be a key factor for financial services workloads, like high-frequency automated trading systems, so make use of AWS services to sit your solution as close as possible to dependencies. Where this location is outside of an AWS Region, make use of AWS edge location solutions such as AWS Outposts and AWS Local Zones to deploy workloads in the most suitable location. Use AWS Direct Connect to provide the shortest and most reliable path to AWS resources for components hosted outside of AWS. Use Amazon CloudFront to cache static content closer to use cases, and AWS Global Accelerator to route connections to the closest possible source. When using multiple AWS Regions, use Route 53 latency-based routing to serve requests from the AWS Region with the lowest latency.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Network Optimization", "Low-Latency Design"]
+  },
+  {
+    "id": "FSIPERF04-BP02",
+    "title": "Use Amazon EC2 instances and features to optimize your networking",
+    "description": "Consider network performance when selecting Amazon EC2 instances, with specific network optimized variants indicated by the n-suffix, and bare metal instances offering direct access to the underlying host, further optimizing the networking stack. Within an Amazon VPC, when inter-process communication latency, throughput, and consistency is a consideration, use Amazon EC2 Placement Groups to have greater control over the location of your virtual instances and optimize network communication, resulting in improved network performance reduction in latency and increased packet processing rates.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Network Optimization", "EC2 Configuration"]
+  },
+  {
+    "id": "FSIPERF05-BP01",
+    "title": "Use Application Performance Monitoring (APM) tools",
+    "description": "Use APM tools to provide your organization the capability to verify that application performance meets its defined requirements. AWS offers features and services to monitor and subsequently right-size the cloud services that you need to meet performance requirements. For example, you can monitor and set alarms on latency and error rates for each user request using Amazon CloudWatch metrics and alarms, or on your downstream dependencies, or on the success and failure of key operations. Amazon CloudWatch Synthetics can be used to create canaries, configurable scripts that run on a schedule, or to monitor your endpoints, and APIs. Make use of services including Amazon Managed Service for Prometheus to monitor and alert on containers, Amazon Managed Grafana to visualize metrics and logs, and the wide range of features found in Amazon CloudWatch.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Monitoring", "Performance Tracking"]
+  },
+  {
+    "id": "FSIPERF05-BP02",
+    "title": "Integrate performance testing into the release cycle",
+    "description": "Rather than considering performance testing to be a separate part of the workload release cycle, integrate performance testing into your release process and CI/CD tooling. This allows you to record and evaluate performance metrics across releases, being aware of and taking action when metrics change as early as possible.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "MEDIUM",
+    "area": ["Testing", "Release Management"]
+  },
+  {
+    "id": "FSIPERF05-BP03",
+    "title": "Verify consistency and failure recovery during load tests",
+    "description": "You must verify data consistency and recovery during periods of high load. Ensuring that your workload's RTO and RPO is still valid under the highest load can uncover gaps in your architecture and operational resilience.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Testing", "Resilience", "Data Consistency"]
+  },
+  {
+    "id": "FSIPERF05-BP04",
+    "title": "Understand performance of the system under peak load and in failure scenarios",
+    "description": "Include testing of common failure scenarios in your performance testing suites to understand your workload behaviour in these situations and determine areas for improvement. Extend the range of performance testing scenarios to cover testing at loads beyond current peak loads, and testing the scaling processes themselves of the application to understand how the environment behaves under increasing load. Under common or anticipated failure scenarios, workloads should exhibit predictable failure patterns with performance degrading gracefully using techniques such as fail-open behavior, and the transformation of hard dependencies into soft dependencies.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Testing", "Failure Recovery", "Scaling"]
+  },
+  {
+    "id": "FSIPERF05-BP05",
+    "title": "Include dependencies in your load tests",
+    "description": "Financial institutions need to map resources they need to continuously deliver their important business services. These resources are your people, processes, technology, facilities, and information, including third-party service providers. This mapping allows the identification of operational dependencies, vulnerabilities, and threats. Incorporating the dependencies of your workload (such as on financial messaging providers) as part of your performance tests enables you to demonstrate the overall resiliency of your workload.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Testing", "Dependency Management"]
+  },
+  {
+    "id": "FSIPERF06-BP01",
+    "title": "Understand your priorities and architect to meet them",
+    "description": "Financial services workloads often have to make trade-offs in their architecture to meet their most important goals and KPIs, where performance of the system is deemed more important than other factors, or vice-versa. For example, a low-latency trading system needs to preserve the performance of the system above all other factors, and be prepared to compromise on the cost of infrastructure to meet their goals. Within the workload it may be necessary to trade-off between persistent capacity and elasticity to make sure that the application always has the ability to handle peak workloads without needing timed or reactive scaling up. When choosing services consider performance determinism. AWS serverless services like AWS Lambda and AWS Fargate can bring significant performance benefits due to their ability to scale elastically on demand, but this is often coupled with less fine control over the underlying environment. Where the workload performance must be as consistent as possible, consider using Amazon EC2. Consider trade-offs in your application architecture, for example using VPC Peering instead of AWS Transit Gateway to minimize the number of network hops for your most critical traffic.",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "lens": "FINANCIAL_SERVICES",
+    "risk": "HIGH",
+    "area": ["Architecture Design", "Trade-off Analysis"]
+  }
+]

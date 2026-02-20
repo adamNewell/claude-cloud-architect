@@ -1,0 +1,122 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Code Review",
+  "capabilityCode": "CR",
+  "description": "Code reviews serve as a mechanism for light and frictionless change management in a DevOps environment. They enforce separation of duties which helps ensure that multiple people are involved in approving and merging changes to the code base. Implementing code reviews helps organizations streamline change processes, enhance software quality, create a culture of shared responsibility, and significantly improve reliability.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/code-review.html",
+  "indicators": [
+    {
+      "id": "DL.CR.1",
+      "title": "Standardize coding practices",
+      "description": "Establish and maintain consistent coding standards across the organization to ensure code quality and maintainability.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.2",
+      "title": "Perform peer review for code changes",
+      "description": "Implement mandatory peer reviews before code is merged to catch errors early and distribute knowledge across the team.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.3",
+      "title": "Establish clear completion criteria for code tasks",
+      "description": "Define explicit acceptance criteria and completion standards for code reviews to ensure consistency in evaluation.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.4",
+      "title": "Comprehensive code reviews with an emphasis on business logic",
+      "description": "Ensure code reviews focus on business logic and overall design, not just syntax and style issues.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.5",
+      "title": "Foster a constructive and inclusive review culture",
+      "description": "Create a positive review environment that encourages feedback, knowledge sharing, and continuous improvement.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.6",
+      "title": "Initiate code reviews using pull requests",
+      "description": "Use pull requests as the standard mechanism for initiating and managing code reviews in your version control system.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.7",
+      "title": "Create consistent and descriptive commit messages using a specification",
+      "description": "Establish a commit message specification to ensure clear, consistent documentation of code changes throughout the repository.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    },
+    {
+      "id": "DL.CR.8",
+      "title": "Designate code owners for expert review",
+      "description": "Identify and designate code owners for specific areas of the codebase to ensure expert review and maintain domain knowledge.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-code-review.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.CR-AP1",
+      "title": "Infrequent code reviews",
+      "description": "Skipping or only occasionally performing code reviews misses opportunities to catch errors early and can lead to isolated development work. Regular, mandatory code reviews before merging improve quality, enable faster error detection, incorporate additional perspectives, and facilitate knowledge sharing."
+    },
+    {
+      "id": "DL.CR-AP2",
+      "title": "Excessive required reviewers",
+      "description": "Overloading the review process by involving too many reviewers can lead to bottlenecks and unwarranted delays. Define a practical number of reviewers based on code complexity and criticality."
+    },
+    {
+      "id": "DL.CR-AP3",
+      "title": "Lack of automated feedback",
+      "description": "Neglecting automated tools extends review duration by requiring peers to focus on trivial issues rather than complex logic. Incorporate automated code review tools to complement manual reviews, while avoiding over-reliance on automation that can create a false sense of security."
+    },
+    {
+      "id": "DL.CR-AP4",
+      "title": "Large batch reviews",
+      "description": "Combining multiple unrelated code changes into a single request clutters reviews and lengthens review cycles, making it difficult to identify and address individual issues. Submit smaller, focused pull requests instead."
+    },
+    {
+      "id": "DL.CR-AP5",
+      "title": "Unconstructive reviews",
+      "description": "Code reviews with harsh tones or unhelpful feedback create a negative environment that demoralizes developers and impedes progress. Maintain a positive review culture through reviewer training, emphasizing clear, constructive, and specific feedback with healthy escalation methods."
+    },
+    {
+      "id": "DL.CR-AP6",
+      "title": "Lack of action on findings",
+      "description": "Code review findings that are not acted upon or followed up make the review process redundant and perpetuate recurring issues. Implement systems to track feedback and ensure prompt action on necessary changes."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.CR-M1",
+      "title": "Review Time to Merge (RTTM)",
+      "description": "Duration from the start of the review process to code merge. Indicates gaps in the review process and potential bottlenecks in the approval workflow.",
+      "formula": "Timestamp of Code Merge - Timestamp of Review Start"
+    },
+    {
+      "id": "DL.CR-M2",
+      "title": "Reviewer Load",
+      "description": "Number of open pull requests assigned to each reviewer. High loads indicate bottlenecks; low loads with high RTTM indicate insufficient focus on reviews.",
+      "formula": "Count of Pull Requests per Reviewer"
+    },
+    {
+      "id": "DL.CR-M3",
+      "title": "Code Ownership Health",
+      "description": "Evaluates codebase coverage by designated code owners, ensuring enough domain experts review relevant code sections.",
+      "formula": "Current Code Owners (from CODEOWNERS file) vs. Benchmark Target where Benchmark Target = Total Pull Requests ÷ Avg PRs per Code Owner (accounting for availability)"
+    },
+    {
+      "id": "DL.CR-M4",
+      "title": "Merge Request Type Distribution",
+      "description": "Distribution of merge requests by type (new features, enhancements, maintenance, bug fixes). Helps identify patterns in code change types.",
+      "formula": "Categorize each PR by type and monitor distribution percentage (monthly/quarterly)"
+    },
+    {
+      "id": "DL.CR-M5",
+      "title": "Change Failure Rate",
+      "description": "Rate at which code changes lead to errors or bugs after merge. High rates indicate review and testing issues.",
+      "formula": "(Post-Merge Failures ÷ Total Merges) × 100% measured over specific timeframe (monthly/quarterly)"
+    }
+  ]
+}

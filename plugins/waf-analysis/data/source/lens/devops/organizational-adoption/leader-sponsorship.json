@@ -1,0 +1,65 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Leader Sponsorship",
+  "capabilityCode": "LS",
+  "description": "Leader sponsorship of DevOps adoption initiatives helps verify that the organization's leadership is committed to and actively supports the adoption of DevOps practices. Effective leader sponsorship involves setting a clear vision and strategy for DevOps adoption, communicating expectations and goals to the entire organization, allocating resources and budget for necessary changes, and modeling desired behaviors. Leaders who actively support DevOps adoption can remove barriers to adoption, facilitate organizational change, motivate team members to embrace new ways of working, and accelerate the organization's transition to a successful DevOps environment.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/leader-sponsorship.html",
+  "indicators": [
+    {
+      "id": "OA.LS.1",
+      "title": "Appoint a decision-making leader to own DevOps adoption",
+      "description": "DevOps adoption requires a dedicated leader to help facilitate continued progress, make resource decisions, and gain alignment with leaders throughout the organization. This leadership role, inspired by Amazon's single-threaded leadership concept, becomes the person within the company fully dedicated and accountable for DevOps adoption with no competing priorities. The leader must have decision-making authority and support from executives (CEO, CTO, CIO, or CISO) and ideally reports directly to senior executives to drive organizational decisions, structure teams, and allocate responsibilities.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ls.1-appoint-a-decision-making-leader-to-own-devops-adoption.html"
+    },
+    {
+      "id": "OA.LS.2",
+      "title": "Align DevOps adoption with business objectives",
+      "description": "DevOps adoption should be aligned to broader business goals, fully supported by leadership, with other teams also adopting capabilities to streamline their individual value streams. Synchronizing DevOps adoption and the overall business strategy means that the resources and effort put into adopting DevOps are also directly improving business outcomes. This involves conducting assessments of current practices, integrating DevOps capability implementation into organizational planning processes, and revisiting the prioritized DevOps capability list regularly.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ls.2-align-devops-adoption-with-business-objectives.html"
+    },
+    {
+      "id": "OA.LS.3",
+      "title": "Drive continued improvement through business reviews",
+      "description": "While adopting DevOps, many small teams begin to form which own and operate their own value stream of the business. Leaders must be able to report on DevOps progress and outcomes while maintaining visibility across a decentralized operating model. This requires creating structured, data-driven mechanisms such as conducting regular business review meetings and tracking key performance indicators (KPIs). These mechanisms help leaders pinpoint areas of inefficiencies, uncover opportunities to innovate, and create a culture of continual feedback, measurement, and refinement.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/oa.ls.3-drive-continued-improvement-through-business-reviews.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.LS-AP1",
+      "title": "Diluted Leadership Focus",
+      "description": "When the single-threaded leader accountable for DevOps has other priorities and doesn't dedicate full attention, the initiative suffers. Leaders handling multiple initiatives can lead to overlooked opportunities, less time for critical decision making, and reduced overall engagement. To avoid this, designate a decision-making leader whose primary responsibility is DevOps adoption to provide dedicated leadership to the transition."
+    },
+    {
+      "id": "OA.LS-AP2",
+      "title": "Forcing DevOps Adoption",
+      "description": "Single-threaded leadership taking a hierarchical, enforcement approach to DevOps adoption causes teams to view it as imposed external change. This leads to resistance from teams, de-motivation and frustration among team members, and rejection of the initiative. Instead, use a supportive, bottom-up approach by engaging with enthusiastic early adopters first, supporting them to demonstrate progress, letting early adopters advocate within their teams, gathering feedback from teams, and providing value and improvements to address frustrations."
+    },
+    {
+      "id": "OA.LS-AP3",
+      "title": "Short-term Priority Shifting",
+      "description": "Changing business priorities too frequently undermines the long-term commitment required for DevOps adoption. DevOps transformation is a 'marathon, not a sprint' that demands consistent focus. Disruptions lead to reduced confidence in DevOps practices, low team morale, and fragmented workflows. Develop a long-term strategy recognizing DevOps value and inspire organizational leaders to maintain unwavering commitment to adoption despite immediate business pressures."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.LS-M1",
+      "title": "DevOps Adoption Percentage",
+      "description": "The percentage of DevOps capabilities that have been implemented compared to the number of desired capabilities. Measures the organization's total progress towards adopting DevOps capabilities and can reveal trends indicating leadership's prioritization and pace of organizational adoption.",
+      "formula": "(Implemented DevOps Capabilities / Desired DevOps Capabilities) × 100 = Percentage"
+    },
+    {
+      "id": "OA.LS-M2",
+      "title": "Employee Net Promoter Score (eNPS)",
+      "description": "Measures employees' engagement and satisfaction within the organization, gauging their likelihood to recommend it as an ideal workplace. Indicates organizational culture health and leadership effectiveness in creating an inclusive, positive work environment. Higher eNPS correlates with better productivity, lower turnover, and improved team dynamics.",
+      "formula": "eNPS = % of Promoters (score 9-10) - % of Detractors (score 0-6)"
+    },
+    {
+      "id": "OA.LS-M3",
+      "title": "Time to Fill Vacancy",
+      "description": "The average duration from when a DevOps-related job vacancy is opened until it is filled, including the full sourcing process. Evaluates the organization's ability to attract talent and provides insights into organizational reputation and leadership effectiveness.",
+      "formula": "Average of (Job Posting Date to Offer Acceptance Date) across multiple hires"
+    }
+  ]
+}

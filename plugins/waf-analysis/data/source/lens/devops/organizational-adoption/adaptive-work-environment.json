@@ -1,0 +1,81 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Adaptive Work Environment",
+  "capabilityCode": "AWE",
+  "description": "An adaptive work environment allows organizations to maximize team performance and collaboration across different work modes (onsite, remote, or hybrid). It provides the necessary tools, processes, and support to enable teams to collaborate efficiently, share knowledge, adapt to changing circumstances, and maintain productivity and agility. The adaptive work environment is built on four foundational pillars: inclusive collaboration options, flexible work schedules, adaptable workspaces, and regular team-building activities.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/adaptive-work-environment.html",
+  "indicators": [
+    {
+      "id": "OA.AWE.1",
+      "title": "Equip teams with feature-rich tools for virtual collaboration",
+      "description": "Provide teams with robust tools that enable effective virtual communication and collaboration",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-adaptive-work-environment.html"
+    },
+    {
+      "id": "OA.AWE.2",
+      "title": "Offer inclusive options for both virtual and on-site collaboration",
+      "description": "Support hybrid work models that accommodate both remote and in-office team members",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-adaptive-work-environment.html"
+    },
+    {
+      "id": "OA.AWE.3",
+      "title": "Balance work schedules for diverse global teams",
+      "description": "Manage schedules to accommodate teams across different time zones and geographies",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-adaptive-work-environment.html"
+    },
+    {
+      "id": "OA.AWE.4",
+      "title": "Provide adaptable workspaces for effective on-site collaboration",
+      "description": "Design flexible physical workspaces that support collaborative on-site work",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-adaptive-work-environment.html"
+    },
+    {
+      "id": "OA.AWE.5",
+      "title": "Organize team-building activities and social events to foster a sense of community and promote collaboration",
+      "description": "Plan activities and events that strengthen team bonds and community culture",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-adaptive-work-environment.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.AWE-AP1",
+      "title": "Insufficient Collaboration Tools",
+      "description": "Relying on outdated tools that do not support efficient communication and collaboration between team members. Modern collaboration tools provide feature-rich environments which help facilitate effective team interactions, regardless of geographical location."
+    },
+    {
+      "id": "OA.AWE-AP2",
+      "title": "Exclusionary Practices",
+      "description": "Using collaboration tools and practices that are not inclusive could alienate some team members and lead to a lack of engagement and participation. Inclusivity helps ensure that all team members feel engaged and can contribute equally."
+    },
+    {
+      "id": "OA.AWE-AP3",
+      "title": "Rigid Ways of Working",
+      "description": "Mandating strict working conditions without accommodating individual needs and time zones. This is particularly problematic for global teams spread across different time zones."
+    },
+    {
+      "id": "OA.AWE-AP4",
+      "title": "Inflexible Workspaces",
+      "description": "Having static workspaces that do not cater to different team needs and collaboration styles, making it difficult for team members to work together efficiently."
+    },
+    {
+      "id": "OA.AWE-AP5",
+      "title": "Neglecting Team-Building Activities",
+      "description": "Failing to organize regular team-building activities and social events prevents the opportunity to strengthen team relationships and build trust among team members."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.AWE-M1",
+      "title": "Employee Net Promoter Score (eNPS)",
+      "description": "Measures employees' engagement and satisfaction within the organization, gauging their likelihood to recommend the organization as an ideal workplace. Provides insight into organizational culture health and leadership effectiveness in creating an inclusive, positive work environment. Higher eNPS correlates with better productivity, lower turnover, and improved team dynamics.",
+      "formula": "eNPS = % of Promoters (9-10) - % of Detractors (0-6)"
+    },
+    {
+      "id": "OA.AWE-M2",
+      "title": "Developer Efficacy Score",
+      "description": "Measures the efficiency and satisfaction of developers based on their access to and use of necessary tools, resources, and processes. Provides insight into work environment adaptability and how well it caters to developer needs. A higher efficacy score indicates a well-adapted environment where developers feel empowered and equipped.",
+      "formula": "Developer Efficacy Score = % of High Scorers (7-10) - % of Low Scorers (1-4)"
+    }
+  ]
+}

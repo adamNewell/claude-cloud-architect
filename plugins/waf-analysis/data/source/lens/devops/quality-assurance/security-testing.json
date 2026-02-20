@@ -1,0 +1,127 @@
+{
+  "saga": "Quality Assurance",
+  "sagaCode": "QA",
+  "capability": "Security Testing",
+  "capabilityCode": "ST",
+  "description": "Security testing identifies potential vulnerabilities, threats, risks, and other security weaknesses in a system. It safeguards the integrity, confidentiality, and availability of the system and its data. Inspected components include safety faults, infrastructure weaknesses, network threats, software vulnerabilities, and other hazards. Effective security testing involves a mix of manual penetration testing and automated vulnerability scans, offering insights into potential breaches or exposures.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/security-testing.html",
+  "indicators": [
+    {
+      "id": "QA.ST.1",
+      "title": "Evolve vulnerability management processes to be conducive of DevOps practices",
+      "description": "Vulnerability management requires an ongoing, iterative process consistent with agile development practices. Automated vulnerability scanning should be integrated into deployment pipelines to provide feedback to developers early on, following the shift-left approach. Configure tools to automatically generate alerts and tickets when vulnerabilities are detected, and use vulnerability management dashboards to monitor and analyze threats. Adopt a culture where security is everyone's responsibility, with clear collaboration between development and security teams.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.1-evolve-vulnerability-management-processes-to-be-conducive-of-devops-practices.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.2",
+      "title": "Normalize security testing findings",
+      "description": "Given the diversity of security testing tools, findings often emerge in different formats. Establish a common framework for normalizing the interpretation and ranking of vulnerabilities. Select a recognized scoring system such as CVSS as the baseline for vulnerability ranking. Configure tools to automatically map findings to the chosen system using standards like SARIF or OCSF Schema. Centralize findings into a single dashboard to create a unified view of security posture and ensure everyone involved understands the chosen scoring system.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.2-normalize-security-testing-findings.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.3",
+      "title": "Use application risk assessments for secure software design",
+      "description": "Application risk assessments integrate security considerations directly into the software development lifecycle. During design reviews, security experts should assist with making secure design choices. Use threat modeling to identify possible attack vectors and protective measures. Translate identified risks into actionable user stories with abuse scenarios and add them to the backlog. Attach test cases to each story to validate effective resolution and establish a clear definition of done for developers.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.3-use-application-risk-assessments-for-secure-software-design.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.4",
+      "title": "Enhance source code security with static application security testing",
+      "description": "Static Application Security Testing (SAST) identifies potential vulnerabilities in source code before deployment. Choose a SAST tool compatible with your application's languages and frameworks, and integrate it into your CI pipeline. Consider the tool's false positive rate when selecting, as high rates can erode trust. Introduce SAST rulesets incrementally to prevent developer burnout, starting with a core set and expanding as the team becomes accustomed to addressing security feedback. Regularly update and refine enabled rules to maintain effectiveness.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.4-enhance-source-code-security-with-static-application-security-testing.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.5",
+      "title": "Evaluate runtime security with dynamic application security testing",
+      "description": "Dynamic Application Security Testing (DAST) detects vulnerabilities in running applications by simulating real-world attacks. This enables uncovering vulnerabilities not detectable through static testing. Choose a DAST tool with broad vulnerability coverage including OWASP Top 10 recognition, and verify seamless integration with your systems. While DAST false positive rates are generally lower than SAST, still pay attention to this metric and the tool's ability to provide actionable insights to avoid eroding developer trust.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.5-evaluate-runtime-security-with-dynamic-application-security-testing.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.6",
+      "title": "Validate third-party components using software composition analysis",
+      "description": "Software Composition Analysis (SCA) assesses risks from open-source software and third-party components by scanning software bill of materials and dependency manifest files. Select tools with comprehensive vulnerability databases pulling from NVD and CVE. Integrate SCA into the CI pipeline to automatically scan for vulnerabilities, and periodically scan existing repositories. Centrally store SBOMs to provide a consistent, versioned record of all software components and offer a holistic view for managing vulnerabilities at organizational scale.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.6-validate-third-party-components-using-software-composition-analysis.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "QA.ST.7",
+      "title": "Conduct proactive exploratory security testing activities",
+      "description": "Conduct frequent exploratory security testing including penetration testing, red teaming, and vulnerability disclosure or bug bounty programs. Penetration tests use ethical hackers to detect vulnerabilities by mimicking threat actors. Red teaming emulates real-world adversaries in full-scale simulations targeting technology, people, and processes. Vulnerability disclosure and bug bounty programs invite external researchers to examine software. Use automation for baseline tests to enable human testers to focus on complex scenarios. Communicate findings to development teams quickly for rapid remediation.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.7-conduct-proactive-exploratory-security-testing-activities.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "QA.ST.8",
+      "title": "Improve security testing accuracy using interactive application security testing",
+      "description": "Interactive Application Security Testing (IAST) combines strengths of SAST and DAST by using embedded agents with access to application code, memory, stack traces, and requests/responses. IAST's real-time observability provides contextual understanding that reduces false positives compared to other methods. Include IAST agents during the build process in testing environments to monitor system behavior. In production, disable or set agents to passive mode to avoid performance overhead. IAST is optional for DevOps adoption, as many organizations find sufficient coverage with SAST and DAST.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.st.8-improve-security-testing-accuracy-using-interactive-application-security-testing.html",
+      "category": "OPTIONAL"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "QA.ST-AP1",
+      "title": "Overconfidence in test results",
+      "description": "Being overly confident about a low false-positive rate and not considering the potential of false negatives can lead to genuine threats being ignored, which may be exploited by attackers. Regularly re-evaluate and adjust security testing tools and methodologies. Consider periodic third-party security audits and human-driven exploratory testing to get an external perspective on the system's security posture."
+    },
+    {
+      "id": "QA.ST-AP2",
+      "title": "Not considering internal threats",
+      "description": "Focusing security testing solely on external threats while neglecting potential insider threats, whether malicious or unintentional, can lead to unmitigated attack vectors. Testing should encompass all potential threat actors. Include scenarios in your testing strategy that emulate insider threats, such as permissions escalation, data exfiltration from internal roles, and social engineering. Continuously raise awareness, train employees on best practices, and regularly review access permissions."
+    },
+    {
+      "id": "QA.ST-AP3",
+      "title": "Neglecting software supply chain attacks",
+      "description": "Not regularly monitoring or safeguarding against potential threats in the software supply chain, from third-party libraries to development tools, can compromise systems even if proprietary code is secure. Adopt a comprehensive software supply chain security strategy, including regularly updating and auditing third-party components, monitoring development environments, and ensuring secure software development practices are followed by all components used to build, test, deploy, and operate systems."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "QA.ST-M1",
+      "title": "Escaped defect rate",
+      "description": "The number of defects found by users post-release compared to those identified during testing. A higher rate suggests gaps in the testing process and areas where user flows are not effectively tested. An effective security testing process should aim to reduce this rate by increasing the vulnerability discovery rate.",
+      "formula": "Number of post-release defects / Total defects identified"
+    },
+    {
+      "id": "QA.ST-M2",
+      "title": "False positive rate",
+      "description": "The ratio of identified security threats that are later determined to be non-actionable or actual threats. Too many false positives can lead to alert fatigue, causing genuine threats to be overlooked. This metric indicates the accuracy and relevance of security testing tools.",
+      "formula": "Number of false positives / Total number of security alerts raised"
+    },
+    {
+      "id": "QA.ST-M3",
+      "title": "Mean time to detect",
+      "description": "The average time it takes for an organization to detect a security breach or vulnerability. A shorter mean time indicates that testing, monitoring, and alert systems are effective, leading to faster detection of issues. With effective security testing, vulnerabilities can be detected faster, ideally before production deployment.",
+      "formula": "Total detection time / Number of vulnerabilities detected (measured over a period such as monthly or quarterly)"
+    },
+    {
+      "id": "QA.ST-M4",
+      "title": "Mean time to remediate",
+      "description": "The average time it takes for an organization to address and resolve a detected security issue. A shorter mean time implies the organization can act quickly to mitigate risks. Strong security testing practices ensure you are well-equipped to understand and remediate vulnerabilities when detected, leading to faster resolution.",
+      "formula": "Total remediation time / Number of security issues resolved (measured over a period such as monthly or quarterly)"
+    },
+    {
+      "id": "QA.ST-M5",
+      "title": "Test pass rate",
+      "description": "The percentage of test cases that pass successfully. This metric provides an overview of the software's health and readiness for release. If both the test pass rate and the escaped defect rate are high, it could indicate that security tests are not effective enough. A declining pass rate can indicate emerging security issues.",
+      "formula": "Number of successful tests / Total tests run × 100%"
+    },
+    {
+      "id": "QA.ST-M6",
+      "title": "Test case run time",
+      "description": "The duration taken to run a test case or suite of test cases. Increasing duration may highlight bottlenecks in the test process or performance issues in the software under test. Improve this metric by optimizing test scripts, enhancing testing infrastructure, and running tests in parallel.",
+      "formula": "Timestamp difference between start and end of test case execution"
+    },
+    {
+      "id": "QA.ST-M7",
+      "title": "Vulnerability discovery rate",
+      "description": "The number of vulnerabilities discovered during the testing phase per defined time period or release. This metric helps assess the effectiveness of the security testing process. A higher rate paired with low false positives indicates effective testing, though if high over time, may indicate recurring coding vulnerabilities. An unusually low rate could indicate ineffective tests or lack of coverage.",
+      "formula": "Number of vulnerabilities detected / Time period or release cycle"
+    }
+  ]
+}

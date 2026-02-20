@@ -1,0 +1,114 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Everything as Code",
+  "capabilityCode": "EAC",
+  "description": "Everything as code is a software development practice that seeks to apply the same principles of version control, testing, and deployment to enhance maintainability and scalability of all aspects of the development lifecycle, including networking infrastructure, documentation, and configuration. This practice adds the ability to automate more, leading to faster, more consistent, and more reliable development cycles. By using code for as many use cases as possible, developers can achieve a higher level of quality, reduce the risk of errors, and increase the speed at which they can deploy new features and updates.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/everything-as-code.html",
+  "indicators": [
+    {
+      "id": "DL.EAC.1",
+      "title": "Organize infrastructure as code for scale",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.1-organize-infrastructure-as-code-for-scale.html"
+    },
+    {
+      "id": "DL.EAC.2",
+      "title": "Modernize networks through infrastructure as code",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.2-modernize-networks-through-infrastructure-as-code.html"
+    },
+    {
+      "id": "DL.EAC.3",
+      "title": "Codify data operations",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.3-codify-data-operations.html"
+    },
+    {
+      "id": "DL.EAC.4",
+      "title": "Implement continuous configuration for enhanced application management",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.4-implement-continuous-configuration-for-enhanced-application-management.html"
+    },
+    {
+      "id": "DL.EAC.5",
+      "title": "Integrate technical and operational documentation into the development lifecycle",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.5-integrate-technical-and-operational-documentation-into-the-development-lifecycle.html"
+    },
+    {
+      "id": "DL.EAC.6",
+      "title": "Use general-purpose programming languages to generate Infrastructure-as-Code",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.6-use-general-purpose-programming-languages-to-generate-infrastructure-as-code.html"
+    },
+    {
+      "id": "DL.EAC.7",
+      "title": "Automate compute image generation and distribution",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.eac.7-automate-compute-image-generation-and-distribution.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.EAC-AP1",
+      "title": "Checking in secrets",
+      "description": "Storing sensitive data, such as API keys, passwords, or other secrets, directly in the code base or version control system is a critical security vulnerability. Checking in secrets exposes sensitive credentials to anyone with access to the repository and, if the repository is public, to the world. Instead, use management tools or services to store and retrieve secrets securely."
+    },
+    {
+      "id": "DL.EAC-AP2",
+      "title": "Manual modifications to infrastructure",
+      "description": "Making manual changes to infrastructure can be time consuming and error prone, leading to inconsistencies that can be difficult to troubleshoot and resolve. Actively prevent users from making manual changes to environments and workloads to ensure consistent and reliable deployments."
+    },
+    {
+      "id": "DL.EAC-AP3",
+      "title": "Outdated or incomplete documentation",
+      "description": "Ignoring documentation or treating it as an afterthought can lead to knowledge gaps, misunderstandings about system behavior, and misleading users. As the system changes over time, documentation needs to be continuously updated to align with the current system state."
+    },
+    {
+      "id": "DL.EAC-AP4",
+      "title": "Ignoring configuration drift",
+      "description": "Failing to track and manage changes to your system's configuration can result in configuration drift, where the actual configuration state deviates from the desired state. Over time this can lead to system instability, security vulnerabilities, and operational inefficiencies. Use continuous configuration management practices and automated governance capabilities to keep configurations in a known and secure state."
+    },
+    {
+      "id": "DL.EAC-AP5",
+      "title": "Bypassing code review and testing",
+      "description": "Failing to review and test IaC changes, including data, documentation, configuration, and networking components is an anti-pattern that can lead to data inconsistencies, data loss, and system instability. It's important to apply the same quality assurance practices to IaC as you would to application code."
+    },
+    {
+      "id": "DL.EAC-AP6",
+      "title": "Inefficient IaC development practices",
+      "description": "Treating IaC differently from application code, especially by not using version control, diminishes developer experience and increases deployment risk. By not versioning IaC files, teams lose the ability to track changes over time, identify when specific changes were made, or correlate infrastructure changes with system behavior. Additionally, storing large, monolithic IaC files makes development and management of IaC more complex. Mitigate these challenges by segmenting IaC into modular units consistent with the system's architecture and maintain them within version control systems."
+    },
+    {
+      "id": "DL.EAC-AP7",
+      "title": "Monolithic network architectures",
+      "description": "Designing a network where different components are tightly coupled leads to reduced flexibility and increased complexity. This pattern can make troubleshooting and scaling particularly challenging, as changes in one component may inadvertently impact others. Instead, create a modular network design expressed through multiple, well-organized IaC files where components are loosely coupled and can be individually managed, maintained, and scaled."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.EAC-M1",
+      "title": "Infrastructure code coverage",
+      "description": "The percentage of infrastructure components managed by infrastructure as code (IaC) compared to the total number. High infrastructure code coverage implies improved manageability, reproducibility, and automation capabilities for systems.",
+      "formula": "(Number of infrastructure components managed as code / Total number of infrastructure components) * 100"
+    },
+    {
+      "id": "DL.EAC-M2",
+      "title": "Configuration drift rate",
+      "description": "The percentage of infrastructure components drifting from their intended configuration over time. Configuration drift can introduce security vulnerabilities, performance issues, and general system instability. Implement configuration management tools, routinely run drift detection processes, and automate corrective actions to improve this metric.",
+      "formula": "(Number of drifted configurations / Total number of configurations) * 100"
+    },
+    {
+      "id": "DL.EAC-M3",
+      "title": "Documentation update frequency",
+      "description": "The average frequency that documentation is updated relative to code or system changes. Stale or out-of-date documentation can lead to operational inefficiencies, onboarding issues, and system misuse. This metric can be improved by defining documentation as code, automating the release of documentation through a delivery pipeline, and prompting developers to update docs as part of the development lifecycle.",
+      "formula": "Number of documentation changes / Number of system changes (measured over the same time frame)"
+    },
+    {
+      "id": "DL.EAC-M4",
+      "title": "Time to provision infrastructure",
+      "description": "The time taken to provision a new infrastructure component or environment using IaC. A key advantage of using code to define infrastructure is improved change lead time and deployment frequency through the reduction of inconsistent and manual infrastructure provisioning practices.",
+      "formula": "Time interval between initiation and completion of infrastructure provisioning tasks"
+    },
+    {
+      "id": "DL.EAC-M5",
+      "title": "Mean time to recover (MTTR)",
+      "description": "The average time taken to restore a system after a failure. Ensure IaC is testable, automate infrastructure provisioning, and maintain configuration consistency across deployments to reduce MTTR.",
+      "formula": "Average recovery time over a designated period (measured from incident start to system restoration)"
+    }
+  ]
+}

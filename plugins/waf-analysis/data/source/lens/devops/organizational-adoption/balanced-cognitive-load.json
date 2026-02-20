@@ -1,0 +1,101 @@
+{
+  "saga": "Organizational Adoption",
+  "sagaCode": "OA",
+  "capability": "Balanced Cognitive Load",
+  "capabilityCode": "BCL",
+  "description": "Balanced cognitive load is a capability that focuses on maintaining an appropriate level of challenge for team members—neither overwhelming them nor under-stimulating them. The underlying concept is that appropriate cognitive demand encourages learning and mastery without causing burnout or disengagement. This balance is essential for creating sustainable, high-performing DevOps teams. Balanced cognitive load promotes individual job satisfaction, improves performance by enabling team members to process information effectively and retain knowledge, and supports DevOps excellence by fostering a healthy environment for innovation and adaptability.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/balanced-cognitive-load.html",
+  "indicators": [
+    {
+      "id": "OA.BCL.1",
+      "title": "Clarify purpose and direction to improve cognitive well-being",
+      "description": "Provide clear purpose and direction to team members",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.2",
+      "title": "Automate repetitive tasks to reduce toil",
+      "description": "Reduce manual, repetitive work through automation",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.3",
+      "title": "Reduce troubleshooting and technical debt through continuous improvement",
+      "description": "Minimize troubleshooting needs and technical debt",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.4",
+      "title": "Boost team efficiency by limiting work in progress",
+      "description": "Improve efficiency by constraining concurrent work items",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.5",
+      "title": "Establish clear escalation paths and encourage constructive disagreement",
+      "description": "Create escalation procedures and foster healthy debate",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.6",
+      "title": "Provide teams the autonomy to make decision that align with organizational objectives",
+      "description": "Empower teams to make independent decisions aligned with goals",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.7",
+      "title": "Cultivate a psychologically-safe culture for experimentation",
+      "description": "Build a safe environment for teams to experiment and innovate",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.8",
+      "title": "Determine team sizes based on cognitive capacity",
+      "description": "Right-size teams according to cognitive load capacity",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.9",
+      "title": "Use guiding principles to make consistent team decisions",
+      "description": "Apply consistent principles for decision-making across teams",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    },
+    {
+      "id": "OA.BCL.10",
+      "title": "Make informed decisions using data",
+      "description": "Use data-driven insights for decision-making",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-balanced-cognitive-load.html"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "OA.BCL-AP1",
+      "title": "Imbalanced Workload",
+      "description": "Both overloading team members with too many tasks or responsibilities and underutilizing them by assigning insufficient responsibilities or challenges can lead to reduced productivity. An imbalanced workload can hinder an individual's ability to learn and retain knowledge, ultimately impeding the effectiveness of DevOps adoption. Strike the right balance between challenging team members and avoiding burnout to foster a productive and engaged team."
+    },
+    {
+      "id": "OA.BCL-AP2",
+      "title": "Oversized Teams",
+      "description": "Forming excessively large teams that exceed the cognitive limit of effectively managing relationships as described by Dunbar's number (approximately 150 people). As teams grow beyond this size, there is a risk that communication, collaboration, and decision making will suffer, reducing the team's overall effectiveness. Create smaller teams that can communicate more effectively, make better decisions, and deliver higher-quality products and services. This is especially important in the beginning stages of product development; try to keep your teams as small as you can for as long as you can."
+    },
+    {
+      "id": "OA.BCL-AP3",
+      "title": "Lack of Autonomy and Psychological Safety",
+      "description": "Cultivating an environment that lacks autonomy and intolerance to failure can lead to risk aversion and an unwillingness to experiment and innovate. In environments that micromanage or over prioritize being risk adverse, individuals tend to shift focus from delivering value to avoiding failure, resulting in sub-optimal outcomes and slower delivery. Embrace a culture of psychological safety that encourages autonomy, experimentation, and risk-taking. Allowing individuals to make decisions and experiment can lead to significant breakthroughs and innovations, as well as higher job satisfaction and performance."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "OA.BCL-M1",
+      "title": "Team Size Ratio",
+      "description": "Compares the actual team size against the recommended team size based on cognitive limits. Individual teams should be less than 10 people, and team of teams should be less than 150 people (Dunbar's number).",
+      "formula": "Team Size Ratio = Current Team Size / Recommended Team Size"
+    },
+    {
+      "id": "OA.BCL-M2",
+      "title": "Burnout Assessment Scores",
+      "description": "Evaluates team members' well-being using burnout assessment surveys to identify exhaustion, cynicism, and professional efficacy as indicators of burnout. Recommended tool: Maslach Burnout Inventory. Frequency: Quarterly or biannually. Track trends over time and monitor intervention effectiveness to ensure positive well-being trends.",
+      "formula": "Burnout Score = Assessment of Exhaustion + Cynicism - Professional Efficacy (using Maslach Burnout Inventory)"
+    }
+  ]
+}

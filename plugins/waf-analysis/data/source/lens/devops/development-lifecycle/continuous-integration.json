@@ -1,0 +1,122 @@
+{
+  "saga": "Development Lifecycle",
+  "sagaCode": "DL",
+  "capability": "Continuous Integration",
+  "capabilityCode": "CI",
+  "description": "Continuous integration (CI) is a software development practice where developers make regular, small alterations to the code and integrate them into a releasable branch of the code repository. The newly integrated code is autonomously built, tested, and validated in a consistent and repeatable manner. CI allows developers to receive feedback swiftly, identify potential issues in the early stages of the development lifecycle, and address them before they escalate in complexity and cost.",
+  "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/continuous-integration.html",
+  "indicators": [
+    {
+      "id": "DL.CI.1",
+      "title": "Integrate code changes regularly and frequently",
+      "description": "Working in small batches, characterized by regular, small changes to a code base, enhances software delivery performance. It reduces the time to receive feedback on changes, which is required to enable continuous integration. This way of working is an improvement over traditional phased development approaches, which often leads to delayed feedback due to large batches of work. By making smaller, more frequent changes, teams can uncover and fix bugs earlier in the development lifecycle, simplifying the process of updating, testing, and releasing software. Features should be broken down into independent work units that align with agile principles. Developers should strive to integrate multiple small, releasable changes to the code base at least once per day.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.1-integrate-code-changes-regularly-and-frequently.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "DL.CI.2",
+      "title": "Trigger builds automatically upon source code modifications",
+      "description": "Continuous integration (CI) tools should be configured to regularly monitor the source code repository for any changes. Alternatively, set up the source code repository to send an event upon each commit. This implementation creates an environment where developers can focus on coding and commit their changes, leaving the system to handle building, testing, and deploying the application. Having this process in place aligns with the continuous integration principle of failing fast. It offers immediate feedback on the impact of changes, whether they cause a minor regression or a major bug, allowing for prompt correction.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.2-trigger-builds-automatically-upon-source-code-modifications.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "DL.CI.3",
+      "title": "Ensure automated quality assurance for every build",
+      "description": "As code changes become more frequent in a DevOps environment, it becomes important to reduce the time it takes to get feedback on those changes. Adding automated quality assurance (QA) tests into the continuous integration pipeline enables rapidly validating changes and receiving fast feedback. Add stages to the pipeline which run pre-deployment checks to validate that code changes work alongside the existing code base. These checks should automatically trigger functional, non-functional, and security tests against the integrated code base and build artifacts.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.3-ensure-automated-quality-assurance-for-every-build.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "DL.CI.4",
+      "title": "Provide consistent, actionable feedback to developers",
+      "description": "To identify and address issues as quickly as possible, it's important that developers receive consistent and actionable feedback, regardless of the technologies and tools being used. This consistency streamlines the process of addressing failures across diverse development environments, contributing to more efficient DevOps practices. Implement this by configuring your CI pipeline to send automatic failure notifications, offering clear, actionable resolution guidance. Any failures in the process should send feedback to the developer automatically, describing the failure clearly with actionable guidance for resolution.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.4-provide-consistent-actionable-feedback-to-developers.html",
+      "category": "FOUNDATIONAL"
+    },
+    {
+      "id": "DL.CI.5",
+      "title": "Sequence build actions strategically for prompt feedback",
+      "description": "By optimizing the sequence of actions or tasks in your continuous integration pipeline, feedback can be timely, allowing developers to quickly react and make necessary changes. This practice reduces the risk of delayed releases due to late detection of issues. Initiate long-duration actions earlier and run them in parallel with other actions, preventing bottlenecks. Tasks less prone to failure or of lower importance should be scheduled later to prioritize higher impact tasks.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.5-sequence-build-actions-strategically-for-prompt-feedback.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "DL.CI.6",
+      "title": "Refine integration pipelines with build metrics",
+      "description": "Use key metrics—whether sourced from this guidance, established frameworks like DORA or SPACE, or custom to your organization—to optimize your continuous integration process. Metrics such as deployment frequency, change lead time, failure rate, and time to recover serve as outcome-based lagging indicators. These indicators span many DevOps capabilities to provide insights into the efficiency and reliability of the full delivery process. Embed observability practices into your integration pipelines, incorporating monitoring and logging observability capabilities.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.6-refine-integration-pipelines-with-build-metrics.html",
+      "category": "RECOMMENDED"
+    },
+    {
+      "id": "DL.CI.7",
+      "title": "Validate the reproducibility of builds",
+      "description": "Every build for a specific version of source code should ideally be able to generate the same outputs from the same inputs. The implementation of reproducible builds primarily involves the creation of an immutable and consistently created build environment and controlling the inputs for each and every build. Between each build, the environment should be destroyed and recreated so that it is immutable. Use infrastructure as code (IaC) and containerization to help with automating the creation of the environment in a repeatable and consistent way.",
+      "href": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ci.7-validate-the-reproducibility-of-builds.html",
+      "category": "OPTIONAL"
+    }
+  ],
+  "antiPatterns": [
+    {
+      "id": "DL.CI-AP1",
+      "title": "Infrequent check-in of code",
+      "description": "To detect issues as early as possible, developers should check-in their changes to the code base as often as possible. If developers are committing code infrequently, it can lead to longer feedback loops, and problems may go unnoticed for longer periods of time."
+    },
+    {
+      "id": "DL.CI-AP2",
+      "title": "Manually building and testing changes",
+      "description": "A key benefit of continuous integration is the ability to automatically build and test code changes. If teams rely on manual testing or building, it will slow down the development process and make it harder to detect issues early on."
+    },
+    {
+      "id": "DL.CI-AP3",
+      "title": "Having builds run on a preset schedule rather than on commit",
+      "description": "One of the main benefits of continuous integration is that it enables teams to detect issues as soon as possible, which is why builds should be triggered automatically every time changes are committed to the repository. If builds are only run on a preset schedule, it can lead to longer feedback loops and more issues slipping through."
+    },
+    {
+      "id": "DL.CI-AP4",
+      "title": "Low coverage or inaccurate tests",
+      "description": "The quality of the tests used during the continuous integration process is essential to its overall effectiveness. If tests are incomplete, missing, or inaccurate, issues are likely to slip through undetected."
+    },
+    {
+      "id": "DL.CI-AP5",
+      "title": "Only testing in production",
+      "description": "Continuous integration requires building, testing, and validating new changes to the code base. If teams are waiting to test changes only in production, it can lead to longer feedback loops, and issues may go unnoticed until they reach the end users."
+    },
+    {
+      "id": "DL.CI-AP6",
+      "title": "Failure to provide useful feedback to developers during a build",
+      "description": "Rapid and consistent feedback to developers is one of the core benefits of continuous integration. If feedback is not useful, it can be hard for developers to address issues, and it can slow down the development process."
+    },
+    {
+      "id": "DL.CI-AP7",
+      "title": "Lack of collaboration",
+      "description": "Continuous integration requires collaboration between developers, operations, security, and other stakeholders. If teams are not collaborating effectively, it can lead to issues slipping through, longer feedback loops, and slower development times."
+    }
+  ],
+  "metrics": [
+    {
+      "id": "DL.CI-M1",
+      "title": "Frequency of integration",
+      "description": "The average number of times developers integrate their code with the main codebase. This metric provides insight into the team's adherence to Continuous Integration practices, facilitating early issue detection and improved collaboration.",
+      "formula": "Track this metric using logs from the version control system to observe how often developers are merging code to a main releasable branch. Improve this metric by educating developers on the benefits of regular integration and implementing automated reminders or tools that encourage developers to integrate changes after a set number of code modifications or elapsed time."
+    },
+    {
+      "id": "DL.CI-M2",
+      "title": "Build success rate",
+      "description": "The ratio of successful builds to total builds, expressed as a percentage. This metric helps teams understand the stability of their build infrastructure, quality of code changes, and the effectiveness of their tests.",
+      "formula": "Track the number of successful builds over a period of time and divide by the total number of builds, then multiply by 100 to get the percentage."
+    },
+    {
+      "id": "DL.CI-M3",
+      "title": "Pipeline stability",
+      "description": "The percentage of build failures due to reasons other than code errors. This metric measures the reliability of the continuous integration pipeline, including its configuration and infrastructure. A high rate of such failures indicates that your continuous integration pipeline may need attention.",
+      "formula": "Track this metric using continuous integration pipeline logs to calculate the percentage of build failures that are due to infrastructure or configuration issues compared to the total number of build failures. To improve pipeline stability, routinely audit and update the pipeline, ensure consistent build environments, and reduce external dependencies that are prone to failure."
+    },
+    {
+      "id": "DL.CI-M4",
+      "title": "Mean time to build (MTTB)",
+      "description": "The average time required to run a complete successful build cycle, from when a code change triggers the build to its full validation. Using this metric, teams can pinpoint bottlenecks in their build process.",
+      "formula": "Measure the duration from when the build is triggered to its completion, considering only successful builds, and calculate the average over a defined period. Improve this metric by minimizing dependencies, leveraging caching, running tasks in parallel, and using more powerful or distributed build systems."
+    }
+  ]
+}

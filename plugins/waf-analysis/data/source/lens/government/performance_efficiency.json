@@ -1,0 +1,54 @@
+[
+  {
+    "area": ["Outcomes reporting"],
+    "description": "Document the public and governmental reporting mechanisms. Government services are expected to be reliable. Demonstrate how the public would have visibility to the reliability of the service through public dashboards, reporting, performance metrics, or annual reports. In some jurisdictions, this public reporting might include program reviews, where funds to deliver the service were allocated in the budget process. Encourage the organization to consider public performance reporting in their forward planning for the service.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/performance-efficiency-pillar.html",
+    "id": "GOV10-BP01",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "relatedIds": ["PERF01-BP01", "PERF01-BP02"],
+    "risk": "MEDIUM",
+    "title": "Document public and governmental reporting mechanisms",
+    "title_full": "GOV10-BP01 Document public and governmental reporting mechanisms"
+  },
+  {
+    "area": ["Outcomes reporting"],
+    "description": "Document the measurement and monitoring approach. Service and product owners must verify that government services are measuring and monitoring in a way that aligns with an agency's key performance indicators (KPIs), as well as to monitor for service performance and user satisfaction. Encourage the organization to include agency, policy, and mandate measures in the monitoring for the service.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/performance-efficiency-pillar.html",
+    "id": "GOV10-BP02",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "relatedIds": ["PERF04-BP01", "PERF04-BP02"],
+    "risk": "HIGH",
+    "title": "Document measurement and monitoring approach aligned with agency KPIs",
+    "title_full": "GOV10-BP02 Document measurement and monitoring approach aligned with agency KPIs"
+  },
+  {
+    "area": ["Outcomes reporting"],
+    "description": "Document the compliance foundations and the cost or effort for ongoing compliance and audit. Identify opportunities to keep the duplication of efforts to a minimum, and maximize opportunities to automate and streamline compliance where possible. Encourage the organization to demonstrate and measure efforts to streamline and automate compliance, and to demonstrate and report costs avoided throughout the delivery of the service. Support the customer to build the foundations for compliance from the beginning.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/performance-efficiency-pillar.html",
+    "id": "GOV10-BP03",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "relatedIds": ["PERF04-BP03"],
+    "risk": "MEDIUM",
+    "title": "Document compliance foundations and automate where possible",
+    "title_full": "GOV10-BP03 Document compliance foundations and automate where possible"
+  },
+  {
+    "area": ["Change management"],
+    "description": "Document the process, cost, and resourcing for change using a range of likely change scenarios. These scenarios include changes to load (for example, major expected changes, unexpected public usage, or malicious events) and changes to service ranging from simple changes (such as updating content and minor feature changes), to new functionality and major changes. This can help to identify and manage performance efficiency as demand changes and technologies evolve, and can help identify structural or operational challenges for change agility.",
+    "href": "https://docs.aws.amazon.com/wellarchitected/latest/government-lens/performance-efficiency-pillar.html",
+    "id": "GOV11-BP01",
+    "lens": "GOVERNMENT",
+    "outcome": "",
+    "pillar": "PERFORMANCE_EFFICIENCY",
+    "relatedIds": ["PERF01-BP03", "PERF01-BP04", "PERF01-BP05"],
+    "risk": "HIGH",
+    "title": "Document change process and resourcing for various scenarios",
+    "title_full": "GOV11-BP01 Document change process and resourcing for various scenarios"
+  }
+]
