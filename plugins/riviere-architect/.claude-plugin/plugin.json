@@ -1,6 +1,6 @@
 {
   "name": "riviere-architect",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
   "author": {
     "name": "Adam Newell",

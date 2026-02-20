@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Architecture plugins that extend what Claude Code can see, map, and build",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "pluginRoot": "./plugins"
   },
   "plugins": [
@@ -14,7 +14,7 @@
       "name": "riviere-architect",
       "source": "./plugins/riviere-architect",
       "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "keywords": [
         "architecture",
         "documentation",
