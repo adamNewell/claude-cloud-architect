@@ -64,8 +64,6 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 ## Variables
 
 WIKI_DATA: <path_to_wiki_or_url> (optional — pass as first argument; omit to skip wiki steps. Accepts: directory path, single .md file, multi-repo wikis/ parent directory, or .wiki.git URL)
-REPO_DISCOVERY: true/false (auto-detected based on IaC file presence; set to false to skip discovery even when IaC files exist)
-
 **NEVER** call any `riviere builder` write command from subagents. Concurrency is treated as untenable for graph writes. Subagents stage output only; the coordinator executes all writes sequentially.
 **NEVER** invent domain names — always check `.riviere/config/domains.md` first.
 **NEVER** use plan mode in extraction steps — execute directly. Plan mode pauses for user approval at each step, breaking the self-chaining progression; the configuration files (domains.md, metadata.md, component-definitions.md) already replace the need for exploratory codebase analysis that plan mode provides.
@@ -134,10 +132,6 @@ Do not proceed past catastrophic failure without explicit user direction.
 ### Setup (Required First Run)
 
 **MANDATORY:** Read `steps/setup.md` to verify prerequisites before beginning.
-
-### Discover Linked Repos (Conditional)
-
-If IaC files are detected in any provided repository, read `steps/discover-repos.md` to scan for cross-repo references. This step runs between Setup and Explore. Skip if `REPO_DISCOVERY` is false or no IaC files are found.
 
 ### Entry Point
 

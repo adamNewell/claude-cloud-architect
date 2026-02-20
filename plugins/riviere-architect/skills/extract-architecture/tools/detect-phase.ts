@@ -13,7 +13,7 @@
  *      Called by step orchestrators at the start and end of each step.
  *
  * Phase order:
- *   setup → discover → explore → configure → extract → connect → annotate → validate → complete
+ *   setup → explore → configure → extract → connect → annotate → validate → complete
  *
  * Usage:
  *   bun detect-phase.ts                                          # detect and display
@@ -44,7 +44,7 @@ RECORD MODE (--step + --status):
   Called by step orchestrators at step boundaries.
 
 PHASE ORDER
-  setup → discover → explore → configure → extract → connect → annotate → validate → complete
+  setup → explore → configure → extract → connect → annotate → validate → complete
 
 USAGE
   bun detect-phase.ts [options]
@@ -89,7 +89,6 @@ const STEP_STATUS = statusIdx >= 0 ? args[statusIdx + 1] ?? null : null;
 
 const STEPS = [
   "setup",
-  "discover",
   "explore",
   "configure",
   "extract",
@@ -103,7 +102,6 @@ type StepName = (typeof STEPS)[number];
 
 const STEP_FILES: Record<string, string> = {
   setup: "steps/setup.md",
-  discover: "steps/discover-repos.md",
   explore: "steps/explore-orchestrator.md",
   configure: "steps/configure-orchestrator.md",
   extract: "steps/extract-orchestrator.md",
@@ -114,7 +112,6 @@ const STEP_FILES: Record<string, string> = {
 
 const STEP_LABELS: Record<string, string> = {
   setup: "Setup",
-  discover: "Discover Linked Repos",
   explore: "Step 1 — Explore",
   configure: "Step 2 — Configure",
   extract: "Step 3 — Extract",
@@ -298,18 +295,6 @@ function detectPhaseFromArtifacts(): { step: string; status: "started" | "comple
   const metaFiles = listFiles(WORK_DIR, "meta-", ".md");
   if (metaFiles.length > 0) {
     return { step: "explore", status: "completed" };
-  }
-
-  // Check for discovered-repos.json (discover step output)
-  const hasDiscoveredRepos = existsSync(resolve(WORK_DIR, "discovered-repos.json"));
-  if (hasDiscoveredRepos) {
-    return { step: "discover", status: "completed" };
-  }
-
-  // Check for repo-discovery.yaml (discover step in progress)
-  const hasDiscoveryConfig = existsSync(resolve(CONFIG_DIR, "repo-discovery.yaml"));
-  if (hasDiscoveryConfig) {
-    return { step: "discover", status: "started" };
   }
 
   // .riviere/ exists but no work artifacts

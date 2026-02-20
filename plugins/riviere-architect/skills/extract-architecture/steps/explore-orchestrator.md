@@ -41,17 +41,9 @@ Before finalizing domain discoveries, ask:
 - **Can you explain this domain's purpose in one sentence to a non-technical person?** If not, the boundary is unclear and needs user confirmation.
 - **Are there components that don't fit any discovered domain?** These are signals of a missing domain or a miscategorized component.
 
-## Include Discovered Repos
-
-If `.riviere/work/discovered-repos.json` exists (written by the Discover step), read it and include any discovered repos with `"status": "available"` alongside user-provided repos. These repos are treated identically — one subagent per repo.
-
-Repos with `"status": "not_cloned"` are skipped with a warning:
-
-> "Skipping {repo-name} — not cloned locally. Clone it and re-run to include."
-
 ## Spawn Subagents
 
-Spawn one subagent per repository (including discovered repos with local paths). Each subagent receives `steps/explore-subagent.md`
+Spawn one subagent per repository. Each subagent receives `steps/explore-subagent.md`
 as its instruction set.
 
 ```text
@@ -80,9 +72,48 @@ The tool reads all `.riviere/work/domains-{repo}.md` files, applies three merge 
 If the tool exits with code 2, conflicts were detected — present them to the user for
 resolution before continuing.
 
-### 2. Confirm with user
+### 2. Discover nested dependencies (loop)
 
-Present the consolidated domain list from `domains.md`:
+Read the `### Internal Dependencies` table from each `.riviere/work/meta-{repo}.md`. Deduplicate
+by repo name — the same dependency referenced from multiple repos produces one entry.
+
+If `.riviere/config/repo-discovery.yaml` exists, use it to filter: only repos matching the
+configured `github_org`, `ecr_account_id`, or `npm_scope` are considered internal. If the config
+doesn't exist and internal dependencies were found, ask the user for org context to create it.
+
+Optionally run the IaC scanner for additional coverage on repos that contain IaC files:
+
+```bash
+bun tools/discover-linked-repos.ts --project-root "$PROJECT_ROOT" {REPO_PATHS...}
+```
+
+Merge tool output with subagent findings. Deduplicate across both sources.
+
+**If new internal repos were discovered** (not already explored):
+
+1. Present them to the user:
+   > "Subagents found references to these additional internal repos:
+   > - **orders-api** (ECR image in `ecs-stack.ts:42`)
+   > - **shared-lib** (`@org/shared-lib` import in `package.json`)
+   >
+   > Should I explore these too? Repos not available locally will need cloning first."
+
+2. For each confirmed repo that exists locally, spawn a new explore subagent (same instructions as above).
+
+3. After new subagents complete, merge their domain discoveries into `domains.md`.
+
+4. **Repeat from the top of this step:** Check the new subagents' Internal Dependencies for further
+   undiscovered repos. Continue until no new repos are found or all remaining repos are not locally available.
+
+Track explored repos in a visited set to prevent cycles. Write the final manifest to
+`.riviere/work/discovered-repos.json` for reference by later steps.
+
+**If no new repos discovered:** Proceed to step 3.
+
+### 3. Confirm domains with user
+
+Present the consolidated domain list from `domains.md` (now including domains from all
+repos — both originally provided and discovered during the loop):
 
 > "Here are the domains discovered across all repositories. Do these boundaries look correct?
 > Any name changes or merges needed before we continue?"
@@ -90,7 +121,7 @@ Present the consolidated domain list from `domains.md`:
 Incorporate any corrections into `domains.md` now — this is the last chance before the
 domain names propagate through the rest of the graph.
 
-### 3. Merge metadata
+### 4. Merge metadata
 
 Read all `.riviere/work/meta-{repo}.md` files and write `.riviere/config/metadata.md`:
 

@@ -177,6 +177,27 @@ the component `[?]` for review.
 | MQTT subscriptions |          |         |
 | UI pages           |          |         |
 
+### Internal Dependencies
+References to other internal repositories found during scanning. Include IaC references
+(ECR images, Lambda code paths, Terraform module sources) and code-level references
+(org-scoped package imports, cross-repo service calls).
+
+| Referenced Repo | Source Type | Evidence | Location |
+| --------------- | ----------- | -------- | -------- |
+| {repo-name}     | {ecr_image / lambda_path / tf_module / internal_package / service_call} | {the literal reference} | {file:line} |
+
+Leave this table empty if no internal repo references were found.
+
+**What to look for:**
+- ECR image URIs matching the org's AWS account (e.g., `123456.dkr.ecr.*.amazonaws.com/{name}`)
+- Lambda `Code.fromAsset('../path')`, `CodeUri: ../path/`, `filename = "../path"`
+- Terraform `source = "../module"` or `source = "git::https://github.com/{org}/repo"`
+- Org-scoped npm imports (e.g., `@org/internal-lib`)
+- Service client calls referencing other internal services by name or URL
+
+**Filtering:** Only report references that appear to be internal/organizational. Skip well-known
+open-source packages (aws-sdk, lodash, express, etc.) and public registries.
+
 ### Notes
 {Anything unusual about this repository's structure or conventions}
 ```

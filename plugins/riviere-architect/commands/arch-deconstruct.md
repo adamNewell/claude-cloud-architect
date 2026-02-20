@@ -1,7 +1,7 @@
 ---
 model: opus
 description: Full architecture deconstruction using the riviere-architect workflow. Runs all 6 phases — wiki ingestion, domain mapping, rule definition, component extraction, linking, enrichment, and validation — to produce a complete architecture graph. USE WHEN documenting an existing codebase, extracting architecture for a new team member, creating architecture decision records, or understanding a system you didn't build.
-argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-discovery] [--skip-enrich] [--quick-validate] [--wiki-path=<path>]
+argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-enrich] [--quick-validate] [--wiki-path=<path>]
 ---
 
 # Arch Deconstruct
@@ -18,7 +18,6 @@ Run the complete riviere-architect 6-phase workflow against one or more reposito
 REPO_PATHS:    from $ARGUMENTS — space-separated repo paths. Required.
 SKIP_WIKI:     from $ARGUMENTS — if `--skip-wiki` present, skip Phases 0A and 0B. Default: false.
 WIKI_PATH:     from $ARGUMENTS — `--wiki-path=<path>` overrides wiki generation; runs only Wiki Index. Default: none.
-SKIP_DISCOVERY: from $ARGUMENTS — if `--skip-discovery` present, skip linked repo discovery. Default: false (auto-detected from IaC presence).
 SKIP_ENRICH:   from $ARGUMENTS — if `--skip-enrich` present, skip Annotate. Default: false (enrichment is slow).
 QUICK_VALIDATE: from $ARGUMENTS — if `--quick-validate` present, skip orphan loop in Validate; single pass only.
 MULTI_REPO:    true if more than one REPO_PATH provided.
@@ -68,12 +67,6 @@ Starting wiki setup...
 **If WIKI_PATH provided:** Skip Wiki Build. Follow `steps/wiki-index.md` only with the provided path.
 
 **Otherwise:** Follow `steps/wiki-build.md`, then `steps/wiki-index.md`.
-
-### Step 1.5: Discover Linked Repos (conditional)
-
-**If SKIP_DISCOVERY:** Skip to Step 2.
-
-Follow `steps/discover-repos.md`. The step auto-detects IaC files and skips if none found.
 
 ### Step 2: Explore — Understand Codebase
 
