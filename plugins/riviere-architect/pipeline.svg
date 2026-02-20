@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" width="100%">
+  <defs>
+    <pattern id="sg" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#0e2540" stroke-width="0.5"/>
+    </pattern>
+    <pattern id="bg" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#sg)"/>
+      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#112d4a" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="240" fill="#08121f"/>
+  <rect width="1200" height="240" fill="url(#bg)"/>
+
+  <!-- Blueprint border frame -->
+  <rect x="5" y="5" width="1190" height="230" fill="none" stroke="#1d478a" stroke-width="1.5"/>
+  <rect x="8" y="8" width="1184" height="224" fill="none" stroke="#142f5e" stroke-width="0.5"/>
+
+  <!-- Corner registration marks -->
+  <line x1="0" y1="18" x2="24" y2="18" stroke="#2d69c8" stroke-width="1.2"/>
+  <line x1="18" y1="0" x2="18" y2="24" stroke="#2d69c8" stroke-width="1.2"/>
+  <circle cx="18" cy="18" r="1.5" fill="none" stroke="#2d69c8" stroke-width="0.8"/>
+
+  <line x1="1176" y1="18" x2="1200" y2="18" stroke="#2d69c8" stroke-width="1.2"/>
+  <line x1="1182" y1="0" x2="1182" y2="24" stroke="#2d69c8" stroke-width="1.2"/>
+  <circle cx="1182" cy="18" r="1.5" fill="none" stroke="#2d69c8" stroke-width="0.8"/>
+
+  <line x1="0" y1="222" x2="24" y2="222" stroke="#2d69c8" stroke-width="1.2"/>
+  <line x1="18" y1="216" x2="18" y2="240" stroke="#2d69c8" stroke-width="1.2"/>
+  <circle cx="18" cy="222" r="1.5" fill="none" stroke="#2d69c8" stroke-width="0.8"/>
+
+  <line x1="1176" y1="222" x2="1200" y2="222" stroke="#2d69c8" stroke-width="1.2"/>
+  <line x1="1182" y1="216" x2="1182" y2="240" stroke="#2d69c8" stroke-width="1.2"/>
+  <circle cx="1182" cy="222" r="1.5" fill="none" stroke="#2d69c8" stroke-width="0.8"/>
+
+  <!-- Title band -->
+  <text x="600" y="30" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace"
+        font-size="9.5" fill="#4a9eff" letter-spacing="4" opacity="0.9">ARCHITECTURE EXTRACTION PIPELINE  ·  RIVIÈRE ARCHITECT</text>
+  <line x1="16" y1="38" x2="1184" y2="38" stroke="#1d478a" stroke-width="0.75"/>
+
+  <!-- ====== BOX 0: YOUR CODEBASE ====== -->
+  <rect x="90" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="91.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="145" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">INPUT</text>
+  <line x1="92" y1="70" x2="198" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="90,60 90,50 100,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="190,50 200,50 200,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="90,122 90,132 100,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="190,132 200,132 200,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="145" y="96" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="9" fill="#dbeafe" font-weight="bold" letter-spacing="0.5">YOUR</text>
+  <text x="145" y="110" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="9" fill="#dbeafe" font-weight="bold" letter-spacing="0.5">CODEBASE</text>
+
+  <!-- Arrow 0→1 -->
+  <line x1="201" y1="91" x2="213" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="213,87 220,91 213,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 1: EXPLORE ====== -->
+  <rect x="220" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="221.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="275" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 01</text>
+  <line x1="222" y1="70" x2="328" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="220,60 220,50 230,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="320,50 330,50 330,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="220,122 220,132 230,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="320,132 330,132 330,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="275" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#dbeafe" font-weight="bold" letter-spacing="1">EXPLORE</text>
+  <text x="275" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">scan</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="331" y1="91" x2="343" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="343,87 350,91 343,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 2: CONFIGURE ====== -->
+  <rect x="350" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="351.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="405" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 02</text>
+  <line x1="352" y1="70" x2="458" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="350,60 350,50 360,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="450,50 460,50 460,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="350,122 350,132 360,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="450,132 460,132 460,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="405" y="98" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="9" fill="#dbeafe" font-weight="bold" letter-spacing="0.5">CONFIGURE</text>
+  <text x="405" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">define rules</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="461" y1="91" x2="473" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="473,87 480,91 473,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 3: EXTRACT ====== -->
+  <rect x="480" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="481.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="535" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 03</text>
+  <line x1="482" y1="70" x2="588" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="480,60 480,50 490,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="580,50 590,50 590,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="480,122 480,132 490,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="580,132 590,132 590,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="535" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#dbeafe" font-weight="bold" letter-spacing="1">EXTRACT</text>
+  <text x="535" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">components</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="591" y1="91" x2="603" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="603,87 610,91 603,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 4: CONNECT ====== -->
+  <rect x="610" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="611.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="665" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 04</text>
+  <line x1="612" y1="70" x2="718" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="610,60 610,50 620,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="710,50 720,50 720,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="610,122 610,132 620,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="710,132 720,132 720,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="665" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#dbeafe" font-weight="bold" letter-spacing="1">CONNECT</text>
+  <text x="665" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">links</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="721" y1="91" x2="733" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="733,87 740,91 733,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 5: ENRICH ====== -->
+  <rect x="740" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="741.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="795" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 05</text>
+  <line x1="742" y1="70" x2="848" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="740,60 740,50 750,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="840,50 850,50 850,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="740,122 740,132 750,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="840,132 850,132 850,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="795" y="103" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="10.5" fill="#dbeafe" font-weight="bold" letter-spacing="1">ENRICH</text>
+  <text x="795" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">semantics</text>
+
+  <!-- Arrow 5→6 -->
+  <line x1="851" y1="91" x2="863" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="863,87 870,91 863,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 6: VALIDATE ====== -->
+  <rect x="870" y="50" width="110" height="82" fill="#0b1d30" stroke="#2563eb" stroke-width="1.5" rx="1"/>
+  <rect x="871.5" y="51.5" width="107" height="18" fill="#0f2850" rx="0.5"/>
+  <text x="925" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#60a5fa" letter-spacing="2">STEP 06</text>
+  <line x1="872" y1="70" x2="978" y2="70" stroke="#1a3a6a" stroke-width="0.5"/>
+  <polyline points="870,60 870,50 880,50" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="970,50 980,50 980,60" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="870,122 870,132 880,132" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <polyline points="970,132 980,132 980,122" fill="none" stroke="#60a5fa" stroke-width="2"/>
+  <text x="925" y="98" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="9" fill="#dbeafe" font-weight="bold" letter-spacing="0.5">VALIDATE</text>
+  <text x="925" y="120" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7.5" fill="#3b6eb5" font-style="italic">orphans</text>
+
+  <!-- Arrow 6→7 -->
+  <line x1="981" y1="91" x2="993" y2="91" stroke="#3b82f6" stroke-width="1.5"/>
+  <polygon points="993,87 1000,91 993,95" fill="#3b82f6"/>
+
+  <!-- ====== BOX 7: GRAPH.JSON (OUTPUT) ====== -->
+  <rect x="1000" y="50" width="110" height="82" fill="#12100a" stroke="#d97706" stroke-width="1.8" rx="1"/>
+  <rect x="1001.5" y="51.5" width="107" height="18" fill="#1c1505" rx="0.5"/>
+  <text x="1055" y="65" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#fbbf24" letter-spacing="2">OUTPUT</text>
+  <line x1="1002" y1="70" x2="1108" y2="70" stroke="#3d2800" stroke-width="0.5"/>
+  <polyline points="1000,60 1000,50 1010,50" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <polyline points="1100,50 1110,50 1110,60" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <polyline points="1000,122 1000,132 1010,132" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <polyline points="1100,132 1110,132 1110,122" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <text x="1055" y="91" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="9" fill="#fef9c3" font-weight="bold">graph.json</text>
+  <text x="1055" y="106" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#b45309">{ components,</text>
+  <text x="1055" y="118" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="7" fill="#b45309">  links, meta }</text>
+
+  <!-- ====== BOTTOM ANNOTATION AREA ====== -->
+
+  <!-- Notes block -->
+  <rect x="16" y="144" width="240" height="76" fill="#0a1525" stroke="#1d478a" stroke-width="0.75"/>
+  <rect x="17" y="145" width="238" height="14" fill="#0d1e36"/>
+  <line x1="17" y1="159" x2="255" y2="159" stroke="#1a3a6a" stroke-width="0.5"/>
+  <text x="136" y="156" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#2d69c8" letter-spacing="3">NOTES</text>
+  <text x="26" y="169" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#334a6e">1. (Optional) Use DeepWiki to generate documentation</text>
+  <text x="26" y="180" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#334a6e">2. Parallelized architecture exploration</text>
+  <text x="26" y="191" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#334a6e">3. Capture domains spanning multiple repositories</text>
+  <!-- <text x="26" y="202" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#334a6e">4. 45–60% data loss if writes parallelized</text>
+  <text x="26" y="213" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#334a6e">5. Domains may span multiple repositories</text> -->
+
+  <!-- Drawing information block -->
+  <rect x="720" y="144" width="464" height="76" fill="#0a1525" stroke="#1d478a" stroke-width="0.75"/>
+  <rect x="721" y="145" width="462" height="14" fill="#0d1e36"/>
+  <line x1="721" y1="159" x2="1183" y2="159" stroke="#1a3a6a" stroke-width="0.5"/>
+  <text x="952" y="156" text-anchor="middle"
+        font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#2d69c8" letter-spacing="3">DRAWING INFORMATION</text>
+
+  <!-- Vertical dividers -->
+  <line x1="830" y1="159" x2="830" y2="220" stroke="#1a3a6a" stroke-width="0.5"/>
+  <line x1="940" y1="159" x2="940" y2="220" stroke="#1a3a6a" stroke-width="0.5"/>
+  <line x1="1060" y1="159" x2="1060" y2="220" stroke="#1a3a6a" stroke-width="0.5"/>
+  <!-- Horizontal divider -->
+  <line x1="721" y1="189" x2="1183" y2="189" stroke="#1a3a6a" stroke-width="0.5"/>
+
+  <!-- Row 1 field labels -->
+  <text x="730" y="170" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">DRAWN BY</text>
+  <text x="840" y="170" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">DATE</text>
+  <text x="950" y="170" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">SCALE</text>
+  <text x="1070" y="170" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">DWG NO.</text>
+
+  <!-- Row 1 values -->
+  <text x="730" y="182" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">CLAUDE CODE</text>
+  <text x="840" y="182" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">2026-02</text>
+  <text x="950" y="182" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">1:1</text>
+  <text x="1070" y="182" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">RA-PIPE-001</text>
+
+  <!-- Row 2 field labels -->
+  <text x="730" y="200" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">TITLE</text>
+  <text x="840" y="200" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">PROJECT</text>
+  <text x="1070" y="200" font-family="'Courier New', Courier, monospace" font-size="6" fill="#2d69c8" letter-spacing="1">REV</text>
+
+  <!-- Row 2 values -->
+  <text x="730" y="213" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">PIPELINE DIAGRAM</text>
+  <text x="840" y="213" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">RIVIERE ARCHITECT</text>
+  <text x="1070" y="213" font-family="'Courier New', Courier, monospace" font-size="6.5" fill="#5a7fa8">A</text>
+</svg>

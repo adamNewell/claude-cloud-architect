@@ -1,0 +1,357 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080c16"/>
+      <stop offset="50%" style="stop-color:#0c1220"/>
+      <stop offset="100%" style="stop-color:#0f1729"/>
+    </linearGradient>
+
+    <!-- Prong colors: amber=deterministic, cyan=semantic, green=agentic -->
+    <linearGradient id="amberG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    <linearGradient id="cyanG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#0891b2"/>
+    </linearGradient>
+    <linearGradient id="greenG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+
+    <!-- Title gradient -->
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#93c5fd"/>
+      <stop offset="40%" style="stop-color:#67e8f9"/>
+      <stop offset="100%" style="stop-color:#6ee7b7"/>
+    </linearGradient>
+
+    <!-- Top: LLM gradient -->
+    <linearGradient id="llmGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#818cf8"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+
+    <!-- Convergence gradient (interlaced) -->
+    <linearGradient id="convergeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="33%" style="stop-color:#06b6d4"/>
+      <stop offset="66%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+
+    <filter id="blur1"><feGaussianBlur stdDeviation="50"/></filter>
+    <filter id="blur2"><feGaussianBlur stdDeviation="25"/></filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="textBlur">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+
+    <!-- Clip for interlaced slices -->
+    <clipPath id="sliceClip">
+      <rect x="290" y="430" width="700" height="80"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Ambient glow behind each prong zone -->
+  <ellipse cx="300" cy="290" rx="160" ry="120" fill="#f59e0b" opacity="0.03" filter="url(#blur1)"/>
+  <ellipse cx="640" cy="290" rx="160" ry="120" fill="#06b6d4" opacity="0.04" filter="url(#blur1)"/>
+  <ellipse cx="980" cy="290" rx="160" ry="120" fill="#10b981" opacity="0.03" filter="url(#blur1)"/>
+  <!-- Top glow -->
+  <ellipse cx="640" cy="80" rx="300" ry="80" fill="#818cf8" opacity="0.04" filter="url(#blur1)"/>
+  <!-- Bottom convergence glow -->
+  <ellipse cx="640" cy="470" rx="350" ry="60" fill="#67e8f9" opacity="0.03" filter="url(#blur1)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#1e3a5f" stroke-width="0.4" opacity="0.08">
+    <line x1="0" y1="128" x2="1280" y2="128"/>
+    <line x1="0" y1="256" x2="1280" y2="256"/>
+    <line x1="0" y1="384" x2="1280" y2="384"/>
+    <line x1="0" y1="512" x2="1280" y2="512"/>
+    <line x1="256" y1="0" x2="256" y2="640"/>
+    <line x1="512" y1="0" x2="512" y2="640"/>
+    <line x1="768" y1="0" x2="768" y2="640"/>
+    <line x1="1024" y1="0" x2="1024" y2="640"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- TOP: LLM / Architect source node       -->
+  <!-- ═══════════════════════════════════════ -->
+  <g filter="url(#glow)">
+    <rect x="530" y="42" width="220" height="52" rx="26" fill="#111827" stroke="#818cf8" stroke-width="1.5"/>
+    <text x="640" y="74" text-anchor="middle" fill="#c4b5fd" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" letter-spacing="2">LLM / ARCHITECT</text>
+  </g>
+
+  <!-- Fan-out lines from LLM to three prongs -->
+  <g stroke-width="1.5" fill="none" opacity="0.6">
+    <!-- LLM → Deterministic (left) -->
+    <path d="M 580 94 Q 440 140 300 180" stroke="#f59e0b"/>
+    <!-- LLM → Semantic (center) -->
+    <path d="M 640 94 L 640 180" stroke="#06b6d4"/>
+    <!-- LLM → Agentic (right) -->
+    <path d="M 700 94 Q 840 140 980 180" stroke="#10b981"/>
+  </g>
+
+  <!-- Small arrow tips on fan-out -->
+  <g opacity="0.6">
+    <polygon points="296,178 308,174 304,186" fill="#f59e0b"/>
+    <polygon points="636,178 644,178 640,190" fill="#06b6d4"/>
+    <polygon points="976,174 984,178 972,186" fill="#10b981"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- MIDDLE: Three prong cards              -->
+  <!-- ═══════════════════════════════════════ -->
+
+  <!-- PRONG 1: Deterministic Code Rules (left, amber) -->
+  <g filter="url(#glow)">
+    <rect x="180" y="195" width="240" height="190" rx="10" fill="#0f1420" stroke="#f59e0b" stroke-width="1.2" opacity="0.9"/>
+    <rect x="180" y="195" width="240" height="5" rx="2.5" fill="url(#amberG)" opacity="0.7"/>
+
+    <!-- Icon: code brackets -->
+    <text x="210" y="237" fill="#fbbf24" font-family="monospace" font-size="22" opacity="0.9">{}</text>
+    <text x="250" y="235" fill="#fcd34d" font-family="system-ui" font-size="13" font-weight="600">Deterministic</text>
+    <text x="250" y="253" fill="#92400e" font-family="system-ui" font-size="11">Code Rules</text>
+
+    <!-- Rule items -->
+    <g fill="#b45309" font-family="monospace" font-size="9.5" opacity="0.7">
+      <text x="200" y="280">grep patterns</text>
+      <text x="200" y="312">decorator matching</text>
+      <text x="200" y="328">path conventions</text>
+      <text x="200" y="344">schema validation</text>
+    </g>
+    <!-- Not yet implemented -->
+    <g fill="#b45309" font-family="monospace" font-size="9.5" opacity="0.3" filter="url(#textBlur)">
+      <text x="200" y="296">AST traversal</text>
+    </g>
+    <!-- Decorative dots -->
+    <g fill="#f59e0b" opacity="0.15">
+      <circle cx="390" cy="280" r="1.5"/>
+      <circle cx="397" cy="280" r="1.5"/>
+      <circle cx="404" cy="280" r="1.5"/>
+      <circle cx="390" cy="296" r="1.5"/>
+      <circle cx="397" cy="296" r="1.5"/>
+      <circle cx="390" cy="312" r="1.5"/>
+    </g>
+
+    <text x="300" y="375" text-anchor="middle" fill="#f59e0b" font-family="system-ui" font-size="9" opacity="0.4">PRECISE  ·  FAST  ·  REPEATABLE</text>
+  </g>
+
+  <!-- PRONG 2: Semantic Retrieval (center, cyan) -->
+  <g filter="url(#glow)">
+    <rect x="520" y="195" width="240" height="190" rx="10" fill="#0f1420" stroke="#06b6d4" stroke-width="1.2" opacity="0.9"/>
+    <rect x="520" y="195" width="240" height="5" rx="2.5" fill="url(#cyanG)" opacity="0.7"/>
+
+    <!-- Icon: vector dots -->
+    <circle cx="546" cy="228" r="4" fill="#06b6d4" opacity="0.6"/>
+    <circle cx="558" cy="222" r="3" fill="#22d3ee" opacity="0.4"/>
+    <circle cx="552" cy="238" r="2.5" fill="#67e8f9" opacity="0.5"/>
+    <text x="572" y="235" fill="#22d3ee" font-family="system-ui" font-size="13" font-weight="600">Semantic</text>
+    <text x="572" y="253" fill="#155e75" font-family="system-ui" font-size="11">Retrieval</text>
+
+    <!-- Retrieval items -->
+    <g fill="#0e7490" font-family="monospace" font-size="9.5" opacity="0.7">
+      <text x="540" y="312">wiki context</text>
+    </g>
+    <!-- Not yet implemented -->
+    <g fill="#0e7490" font-family="monospace" font-size="9.5" opacity="0.3" filter="url(#textBlur)">
+      <text x="540" y="280">embeddings</text>
+      <text x="540" y="296">similarity ranking</text>
+      <text x="540" y="328">documentation RAG</text>
+      <text x="540" y="344">concept mapping</text>
+    </g>
+    <!-- Decorative vector lines -->
+    <g stroke="#06b6d4" stroke-width="0.5" opacity="0.12">
+      <line x1="730" y1="275" x2="745" y2="290"/>
+      <line x1="735" y1="275" x2="740" y2="295"/>
+      <line x1="730" y1="300" x2="745" y2="310"/>
+    </g>
+
+    <text x="640" y="375" text-anchor="middle" fill="#06b6d4" font-family="system-ui" font-size="9" opacity="0.4">CONTEXTUAL  ·  RANKED  ·  DEEP</text>
+  </g>
+
+  <!-- PRONG 3: Agentic Search (right, green) -->
+  <g filter="url(#glow)">
+    <rect x="860" y="195" width="240" height="190" rx="10" fill="#0f1420" stroke="#10b981" stroke-width="1.2" opacity="0.9"/>
+    <rect x="860" y="195" width="240" height="5" rx="2.5" fill="url(#greenG)" opacity="0.7"/>
+
+    <!-- Icon: agent nodes -->
+    <circle cx="888" cy="226" r="6" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="900" cy="236" r="4" fill="none" stroke="#34d399" stroke-width="1" opacity="0.5"/>
+    <line x1="893" y1="230" x2="897" y2="234" stroke="#10b981" stroke-width="0.8" opacity="0.5"/>
+    <text x="914" y="235" fill="#34d399" font-family="system-ui" font-size="13" font-weight="600">Agentic</text>
+    <text x="914" y="253" fill="#065f46" font-family="system-ui" font-size="11">Search</text>
+
+    <!-- Agentic items -->
+    <g fill="#047857" font-family="monospace" font-size="9.5" opacity="0.7">
+      <text x="880" y="280">multi-repo scan</text>
+      <text x="880" y="296">parallel workers</text>
+      <text x="880" y="312">call-chain tracing</text>
+      <text x="880" y="328">cross-domain links</text>
+      <text x="880" y="344">orphan resolution</text>
+    </g>
+    <!-- Decorative connection dots -->
+    <g fill="#10b981" opacity="0.12">
+      <circle cx="1070" cy="285" r="2"/>
+      <circle cx="1080" cy="295" r="1.5"/>
+      <circle cx="1075" cy="305" r="2"/>
+      <line x1="1070" y1="287" x2="1078" y2="294" stroke="#10b981" stroke-width="0.5"/>
+      <line x1="1079" y1="297" x2="1075" y2="303" stroke="#10b981" stroke-width="0.5"/>
+    </g>
+
+    <text x="980" y="375" text-anchor="middle" fill="#10b981" font-family="system-ui" font-size="9" opacity="0.4">ADAPTIVE  ·  THOROUGH  ·  PARALLEL</text>
+  </g>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- Convergence lines from prongs → bottom -->
+  <!-- ═══════════════════════════════════════ -->
+  <g stroke-width="1.5" fill="none" opacity="0.5">
+    <!-- Deterministic → convergence zone -->
+    <path d="M 300 385 Q 400 420 460 440" stroke="#f59e0b"/>
+    <!-- Semantic → convergence zone -->
+    <path d="M 640 385 L 640 440" stroke="#06b6d4"/>
+    <!-- Agentic → convergence zone -->
+    <path d="M 980 385 Q 880 420 820 440" stroke="#10b981"/>
+  </g>
+
+  <!-- Convergence arrow tips -->
+  <g opacity="0.5">
+    <polygon points="456,437 465,435 460,447" fill="#f59e0b"/>
+    <polygon points="636,438 644,438 640,450" fill="#06b6d4"/>
+    <polygon points="824,435 815,437 820,447" fill="#10b981"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- BOTTOM: Interlaced convergence slices  -->
+  <!-- ═══════════════════════════════════════ -->
+
+  <!-- Interlaced slice bars — knowledge from each prong weaving together -->
+  <g clip-path="url(#sliceClip)" filter="url(#softGlow)">
+    <!-- Row 1: alternating thin slices -->
+    <rect x="290" y="432" width="46" height="7" rx="1" fill="#f59e0b" opacity="0.55"/>
+    <rect x="340" y="432" width="46" height="7" rx="1" fill="#06b6d4" opacity="0.55"/>
+    <rect x="390" y="432" width="46" height="7" rx="1" fill="#10b981" opacity="0.55"/>
+    <rect x="440" y="432" width="46" height="7" rx="1" fill="#f59e0b" opacity="0.45"/>
+    <rect x="490" y="432" width="46" height="7" rx="1" fill="#06b6d4" opacity="0.45"/>
+    <rect x="540" y="432" width="46" height="7" rx="1" fill="#10b981" opacity="0.45"/>
+    <rect x="590" y="432" width="46" height="7" rx="1" fill="#f59e0b" opacity="0.55"/>
+    <rect x="640" y="432" width="46" height="7" rx="1" fill="#06b6d4" opacity="0.55"/>
+    <rect x="690" y="432" width="46" height="7" rx="1" fill="#10b981" opacity="0.55"/>
+    <rect x="740" y="432" width="46" height="7" rx="1" fill="#f59e0b" opacity="0.45"/>
+    <rect x="790" y="432" width="46" height="7" rx="1" fill="#06b6d4" opacity="0.45"/>
+    <rect x="840" y="432" width="46" height="7" rx="1" fill="#10b981" opacity="0.45"/>
+    <rect x="890" y="432" width="46" height="7" rx="1" fill="#f59e0b" opacity="0.55"/>
+    <rect x="940" y="432" width="46" height="7" rx="1" fill="#06b6d4" opacity="0.55"/>
+
+    <!-- Row 2: offset, tighter weave -->
+    <rect x="313" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.4"/>
+    <rect x="355" y="443" width="38" height="6" rx="1" fill="#f59e0b" opacity="0.4"/>
+    <rect x="397" y="443" width="38" height="6" rx="1" fill="#06b6d4" opacity="0.4"/>
+    <rect x="439" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.35"/>
+    <rect x="481" y="443" width="38" height="6" rx="1" fill="#f59e0b" opacity="0.35"/>
+    <rect x="523" y="443" width="38" height="6" rx="1" fill="#06b6d4" opacity="0.35"/>
+    <rect x="565" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.4"/>
+    <rect x="607" y="443" width="38" height="6" rx="1" fill="#f59e0b" opacity="0.4"/>
+    <rect x="649" y="443" width="38" height="6" rx="1" fill="#06b6d4" opacity="0.4"/>
+    <rect x="691" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.35"/>
+    <rect x="733" y="443" width="38" height="6" rx="1" fill="#f59e0b" opacity="0.35"/>
+    <rect x="775" y="443" width="38" height="6" rx="1" fill="#06b6d4" opacity="0.35"/>
+    <rect x="817" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.4"/>
+    <rect x="859" y="443" width="38" height="6" rx="1" fill="#f59e0b" opacity="0.4"/>
+    <rect x="901" y="443" width="38" height="6" rx="1" fill="#06b6d4" opacity="0.4"/>
+    <rect x="943" y="443" width="38" height="6" rx="1" fill="#10b981" opacity="0.4"/>
+
+    <!-- Row 3: even tighter — merging into one -->
+    <rect x="305" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.3"/>
+    <rect x="339" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.3"/>
+    <rect x="373" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.3"/>
+    <rect x="407" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.25"/>
+    <rect x="441" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.25"/>
+    <rect x="475" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.25"/>
+    <rect x="509" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.3"/>
+    <rect x="543" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.3"/>
+    <rect x="577" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.3"/>
+    <rect x="611" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.25"/>
+    <rect x="645" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.25"/>
+    <rect x="679" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.25"/>
+    <rect x="713" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.3"/>
+    <rect x="747" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.3"/>
+    <rect x="781" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.3"/>
+    <rect x="815" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.25"/>
+    <rect x="849" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.25"/>
+    <rect x="883" y="453" width="30" height="5" rx="1" fill="#f59e0b" opacity="0.25"/>
+    <rect x="917" y="453" width="30" height="5" rx="1" fill="#06b6d4" opacity="0.3"/>
+    <rect x="951" y="453" width="30" height="5" rx="1" fill="#10b981" opacity="0.3"/>
+
+    <!-- Row 4: nearly merged — thin slivers blending -->
+    <rect x="300" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.2"/>
+    <rect x="325" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.2"/>
+    <rect x="350" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.2"/>
+    <rect x="375" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.18"/>
+    <rect x="400" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.18"/>
+    <rect x="425" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.18"/>
+    <rect x="450" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.2"/>
+    <rect x="475" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.2"/>
+    <rect x="500" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.2"/>
+    <rect x="525" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.18"/>
+    <rect x="550" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.18"/>
+    <rect x="575" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.18"/>
+    <rect x="600" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.2"/>
+    <rect x="625" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.2"/>
+    <rect x="650" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.2"/>
+    <rect x="675" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.18"/>
+    <rect x="700" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.18"/>
+    <rect x="725" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.18"/>
+    <rect x="750" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.2"/>
+    <rect x="775" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.2"/>
+    <rect x="800" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.2"/>
+    <rect x="825" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.18"/>
+    <rect x="850" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.18"/>
+    <rect x="875" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.18"/>
+    <rect x="900" y="462" width="22" height="4" rx="1" fill="#f59e0b" opacity="0.2"/>
+    <rect x="925" y="462" width="22" height="4" rx="1" fill="#06b6d4" opacity="0.2"/>
+    <rect x="950" y="462" width="22" height="4" rx="1" fill="#10b981" opacity="0.2"/>
+
+    <!-- Row 5: fully merged bar -->
+    <rect x="310" y="470" width="660" height="6" rx="3" fill="url(#convergeGrad)" opacity="0.35"/>
+
+    <!-- Row 6: solid unified glow -->
+    <rect x="340" y="480" width="600" height="4" rx="2" fill="url(#convergeGrad)" opacity="0.2"/>
+  </g>
+
+  <!-- Convergence zone border (very subtle) -->
+  <rect x="285" y="426" width="710" height="64" rx="6" fill="none" stroke="#334155" stroke-width="0.5" opacity="0.2" stroke-dasharray="4,8"/>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- BOTTOM: Unified Architecture result    -->
+  <!-- ═══════════════════════════════════════ -->
+  <g filter="url(#glow)">
+    <rect x="460" y="500" width="360" height="44" rx="22" fill="#0f1729" stroke="url(#convergeGrad)" stroke-width="1.5"/>
+    <text x="640" y="528" text-anchor="middle" fill="url(#titleGrad)" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" letter-spacing="1.5">UNIFIED ARCHITECTURE EXTRACTION</text>
+  </g>
+
+  <!-- Arrow from convergence to unified -->
+  <line x1="640" y1="490" x2="640" y2="500" stroke="#475569" stroke-width="1" opacity="0.4"/>
+  <polygon points="636,498 644,498 640,506" fill="#475569" opacity="0.4"/>
+
+  <!-- ═══════════════════════════════════════ -->
+  <!-- Title at very bottom                   -->
+  <!-- ═══════════════════════════════════════ -->
+  <text x="640" y="585" text-anchor="middle" fill="url(#titleGrad)" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="700" letter-spacing="-0.5">
+    Riviere Architect
+  </text>
+  <text x="640" y="612" text-anchor="middle" fill="#475569" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="400">
+    Three lenses converging on one architecture
+  </text>
+</svg>

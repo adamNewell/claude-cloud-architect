@@ -90,6 +90,14 @@ Present final stats:
 - Total links (sync vs async)
 - Domains covered
 
+Write the source hash so future runs can detect whether re-extraction is needed:
+
+```bash
+bun tools/check-hash.ts --write
+```
+
+This records the current git HEAD SHA for every repository in `.riviere/config/source-hash.json`. On the next run, Setup will compare these SHAs against current HEAD and report FRESH or STALE.
+
 **Graph extraction complete.**
 
 ## What You Now Have

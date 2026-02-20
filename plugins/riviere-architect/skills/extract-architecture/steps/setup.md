@@ -24,12 +24,30 @@ echo "=== extract-architecture prerequisites ===" && \
   (npx riviere --version > /dev/null 2>&1 && echo "PASS  riviere-cli" || echo "FAIL  riviere-cli — run: npm install -g @living-architecture/riviere-cli") && \
   (bun --version > /dev/null 2>&1 && echo "PASS  bun" || echo "FAIL  bun — install at https://bun.sh") && \
   (ls SKILL.md > /dev/null 2>&1 && echo "PASS  working directory" || echo "FAIL  working directory — cd to the skill root (directory containing SKILL.md)") && \
-  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts tools/replay-staged-links.ts tools/replay-staged-enrichments.ts tools/replay-staged-components.ts tools/split-checklist.ts tools/merge-domains.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
+  (ls tools/init-graph.ts tools/validate-graph.ts tools/ingest-wiki.ts tools/generate-link-candidates.ts tools/replay-staged-links.ts tools/replay-staged-enrichments.ts tools/replay-staged-components.ts tools/split-checklist.ts tools/merge-domains.ts tools/check-hash.ts > /dev/null 2>&1 && echo "PASS  tools/" || echo "FAIL  tools/ — one or more tool files missing") && \
   (ls ../../cookbook/riviere/cli.md ../../cookbook/qmd/cli.md > /dev/null 2>&1 && echo "PASS  cookbooks" || echo "FAIL  cookbooks — ../../cookbook/riviere/cli.md or ../../cookbook/qmd/cli.md missing") && \
   ([ -f "SKILL.md" ] && echo "PASS  skill root (SKILL.md found in current directory)" || echo "FAIL  skill root — run this script from the extract-architecture/ directory containing SKILL.md")
 ```
 
 All six lines must show PASS before continuing.
+
+## Check Existing State
+
+If `.riviere/` already exists from a previous run, check whether the source repositories have changed before proceeding:
+
+```bash
+if [ -d ".riviere" ]; then bun tools/check-hash.ts; fi
+```
+
+Act on the exit code:
+
+| Exit Code | Meaning                                          | Action                                                                                                                                                                                                                |
+| --------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0` FRESH | All source repos unchanged since last extraction | Ask the user: **query the existing graph** (no re-extraction needed) or **re-extract anyway** (e.g. extraction rules changed). Stop here if they choose to query.                                                     |
+| `1` STALE | One or more repos have new commits               | Inform the user which repos changed. Recommend re-running from **Step 3 (Extract)** if only code changed, or from **Step 1 (Explore)** if domain boundaries may have shifted. Ask for confirmation before proceeding. |
+| `2` NEW   | No hash stored (first run, or hash was deleted)  | Proceed normally — no prior extraction to worry about.                                                                                                                                                                |
+
+> **Single-repo vs multi-repo:** The check covers all repositories discovered in the previous run. A single-repo extraction stores one entry; a multi-repo extraction stores one entry per repo. Both cases use the same command.
 
 ## Initialize Workspace
 

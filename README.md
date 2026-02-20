@@ -1,96 +1,71 @@
-# Claude Code Marketplace Template
+<p align="center">
+  <img src="banner.svg" alt="Claude Skills" width="100%" />
+</p>
 
-A multi-plugin Claude Code marketplace repository. Add this marketplace to Claude Code and install any plugin with a single command.
+# Claude Skills
 
-## Add this marketplace
-
-```
-/plugin marketplace add yourusername/claude-marketplace-template
-```
+A curated collection of Claude Code plugins — skills, agents, commands, and hooks that extend what Claude can do in your codebase.
 
 ## Plugins
 
-| Plugin | Type | Description |
-| ------ | ---- | ----------- |
-|        |      |             |
+| Plugin | Description | Keywords |
+|--------|-------------|----------|
+| [riviere-architect](plugins/riviere-architect/) | Extract and map existing software architecture as structured, queryable component graphs | `architecture` `system-design` `documentation` `diagrams` |
 
-## Install a plugin
+## Quick Start
 
+### 1. Add this marketplace
+
+```bash
+/plugin marketplace add adamNewell/claude-skills
 ```
-/plugin install mcp-plugin@my-marketplace --scope project
-/plugin install skill-plugin@my-marketplace --scope user
+
+### 2. Install a plugin
+
+```bash
+/plugin install riviere-architect --scope project
 ```
 
 **Scopes:**
 
-- `user` — available in all your projects (`~/.claude/settings.json`)
-- `project` — shared via version control (`.claude/settings.json`)
-- `local` — personal, gitignored (`.claude/settings.local.json`)
+| Scope | Effect |
+|-------|--------|
+| `user` | Available in all your projects (`~/.claude/settings.json`) |
+| `project` | Shared via version control (`.claude/settings.json`) |
+| `local` | Personal, gitignored (`.claude/settings.local.json`) |
 
-## Repo structure
+## Repository Structure
 
 ```
-.
-├── .claude-plugin/
-│   └── marketplace.json        # Marketplace manifest (required)
+claude-skills/
 ├── plugins/
-│   ├── mcp-plugin/             # One directory per plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json     # Plugin manifest
-│   │   ├── .mcp.json           # MCP server config
-│   │   └── README.md
-│   ├── skill-plugin/
-│   │   ├── .claude-plugin/plugin.json
-│   │   ├── skills/
-│   │   │   └── hello-world/SKILL.md
-│   │   └── README.md
-│   ├── command-plugin/
-│   │   ├── .claude-plugin/plugin.json
-│   │   ├── commands/
-│   │   │   ├── summarize.md
-│   │   │   └── todo.md
-│   │   └── README.md
-│   └── hooks-plugin/
-│       ├── .claude-plugin/plugin.json
-│       ├── hooks/
-│       │   ├── hooks.json
-│       │   ├── pre-bash.js
-│       │   ├── post-write.js
-│       │   └── on-notify.js
-│       └── README.md
+│   └── riviere-architect/          # Architecture extraction plugin
+│       ├── skills/                 # Auto-invoked skills
+│       ├── agents/                 # Specialized subagents
+│       ├── commands/               # Slash commands
+│       ├── cookbook/                # CLI reference docs
+│       └── hooks/                  # Lifecycle hooks
 └── scripts/
-    └── validate.ts             # Validate all plugin manifests
+    └── validate.ts                 # Plugin manifest validator
 ```
 
-## Validate plugins
+## Plugin Component Types
 
-```bash
-bun scripts/validate.ts              # validate all plugins
-bun scripts/validate.ts mcp-plugin   # validate one plugin
-```
+| Directory | Type | Description |
+|-----------|------|-------------|
+| `skills/name/SKILL.md` | Skills | Auto-invoked by Claude based on context |
+| `agents/*.md` | Agents | Specialized subagents Claude can spawn |
+| `commands/*.md` | Slash commands | `/command` invocable by users |
+| `hooks/hooks.json` | Hooks | Lifecycle event handlers |
+| `cookbook/` | Reference docs | On-demand CLI and tool documentation |
 
-## Adding a new plugin
+## Adding a Plugin
 
-1. Create `plugins/my-plugin/`
-2. Create `plugins/my-plugin/.claude-plugin/plugin.json` with at minimum `{ "name": "my-plugin" }`
-3. Add your component directories (`commands/`, `skills/`, `hooks/`, etc.)
-4. Register in `.claude-plugin/marketplace.json` under `"plugins"`
-5. Run `bun scripts/validate.ts my-plugin`
+1. Create `plugins/my-plugin/.claude-plugin/plugin.json` with `{ "name": "my-plugin" }`
+2. Add component directories (`skills/`, `commands/`, `agents/`, etc.)
+3. Register in `.claude-plugin/marketplace.json` under `"plugins"`
+4. Validate: `bun scripts/validate.ts my-plugin`
 
-## Plugin component types
+## License
 
-| Directory / File       | Type           | Description                             |
-| ---------------------- | -------------- | --------------------------------------- |
-| `commands/*.md`        | Slash commands | `/command` invocable by users           |
-| `skills/name/SKILL.md` | Skills         | Auto-invoked by Claude based on context |
-| `agents/*.md`          | Agents         | Specialized subagents Claude can spawn  |
-| `hooks/hooks.json`     | Hooks          | Lifecycle event handlers                |
-| `.mcp.json`            | MCP servers    | External tool/data integrations         |
-| `.lsp.json`            | LSP servers    | Language intelligence providers         |
-| `outputStyles/`        | Output styles  | Custom response formatting              |
-
-## References
-
-- [Claude Code Plugin Docs](https://code.claude.com/docs/en/plugins)
-- [Plugin Manifest Reference](https://code.claude.com/docs/en/plugins-reference)
-- [Marketplace Distribution](https://code.claude.com/docs/en/plugin-marketplaces)
+MIT

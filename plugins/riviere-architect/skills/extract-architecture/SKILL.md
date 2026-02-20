@@ -46,6 +46,7 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 | `tools/merge-domains.ts`             | Merge per-repo domain discoveries          | `bun tools/merge-domains.ts --add-to-graph`                       |
 | `tools/ingest-wiki.ts`               | Index wiki content into qmd                | `bun tools/ingest-wiki.ts ./wiki "Project Wiki"`                  |
 | `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts`                                     |
+| `tools/check-hash.ts`               | Check/write source repo staleness hash     | `bun tools/check-hash.ts` / `bun tools/check-hash.ts --write`     |
 | `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts`                           |
 
 ## Troubleshooting & Recovery
