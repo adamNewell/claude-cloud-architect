@@ -5,6 +5,12 @@
 Coordinate repository scanning to understand codebase structure, conventions, and domain
 boundaries. Produce canonical reference documents for subsequent steps.
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step explore --status started
+```
+
 ## Setup
 
 Create the staging directory and initialize the domain registry:
@@ -174,6 +180,12 @@ When filling the Module Inference section above, prioritize signals in this orde
 - **Subagent returns incomplete output (missing meta or domains file):** Re-spawn that subagent for the affected repository only. Do not re-run all subagents.
 - **Domain name collision between subagents (same concept, different names):** Do NOT pick one automatically — present both names to the user with the discovered evidence and ask them to decide.
 - **`domains.md` merge produces duplicate rows:** Deduplicate by canonical name before presenting to user. If truly duplicate, keep the one with more repositories listed.
+
+## Record Completion
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step explore --status completed
+```
 
 ## Completion
 

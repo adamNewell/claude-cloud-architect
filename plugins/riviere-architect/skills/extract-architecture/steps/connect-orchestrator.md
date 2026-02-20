@@ -4,6 +4,12 @@
 
 Trace operational connections between components to create the flow graph.
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step connect --status started
+```
+
 ## Prerequisites
 
 - Graph with extracted components from Step 3.
@@ -124,6 +130,12 @@ config files, and re-run the affected step.
 - **Worker sub-checklist is empty after split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Check `.riviere/work/checklist-split-report.json` for unmatched lines and verify path formats.
 - **Replay tool reports failures (exit code 2):** Open `.riviere/work/link-replay-report.json`, present malformed/failed lines to the user, and retry after fixes.
 - **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
+
+## Record Completion
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step connect --status completed
+```
 
 ## Completion
 

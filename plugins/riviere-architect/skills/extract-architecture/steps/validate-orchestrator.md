@@ -4,6 +4,12 @@
 
 Check the graph for orphans and schema compliance.
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step validate --status started
+```
+
 ## Prerequisites
 
 - Graph with enriched components from Step 5.
@@ -97,6 +103,10 @@ bun tools/check-hash.ts --project-root "$PROJECT_ROOT" --write
 ```
 
 This records the current git HEAD SHA for every repository in `.riviere/config/source-hash.json`. On the next run, Setup will compare these SHAs against current HEAD and report FRESH or STALE.
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step validate --status completed
+```
 
 **Graph extraction complete.**
 

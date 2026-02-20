@@ -4,6 +4,12 @@
 
 Add semantic information to DomainOps — state changes, business rules, and operation behavior.
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step annotate --status started
+```
+
 ## Prerequisites
 
 - Graph with linked components from Step 4.
@@ -83,6 +89,12 @@ config files, and re-run the affected step.
 - **`enrich` CLI call fails:** Do NOT retry in parallel. Retry sequentially, one at a time. Log any that fail twice and present to user.
 - **Worker staged JSONL contains malformed JSON:** Skip the malformed line, log it, and continue. After all workers complete, present malformed lines to user for manual review.
 - **DomainOp checklist items remain unchecked after merge:** Re-inspect the source file for that component — the subagent may have been unable to locate business logic. Flag as `[NEEDS-REVIEW]` rather than leaving blank.
+
+## Record Completion
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step annotate --status completed
+```
 
 ## Completion
 

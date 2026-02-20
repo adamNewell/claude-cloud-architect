@@ -87,6 +87,12 @@ The workflow loads cookbooks on demand — do not load all upfront:
 | `../../cookbook/riviere/cli.md` | Command index, exit codes, concurrency rules, phase mapping | Any step using `npx riviere builder`      |
 | `../../cookbook/qmd/cli.md`     | qmd collections, context queries, embedding lookups         | Wiki Index step or qmd-based repo queries |
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step setup --status completed
+```
+
 ## Completion
 
 All checks PASS and workspace initialized. Proceed to `steps/explore-orchestrator.md`.

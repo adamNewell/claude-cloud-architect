@@ -4,6 +4,12 @@
 
 Coordinate component extraction across repositories and populate the graph.
 
+## Record Progress
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step extract --status started
+```
+
 ## Prerequisites
 
 - Read `.riviere/config/metadata.md` for conventions
@@ -122,6 +128,12 @@ Graph: `.riviere/[project-name]-[commit].json`
 - **`replay-staged-components.ts` reports failures (exit code 2):** Open `.riviere/work/component-replay-report.json` for details. Failed components are logged with stdout/stderr. Fix the staged JSONL and re-run the tool — it skips already-added components.
 - **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.md` and `.riviere/config/component-definitions.md` before scanning.
 - **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.md` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.
+
+## Record Completion
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step extract --status completed
+```
 
 ## Completion
 

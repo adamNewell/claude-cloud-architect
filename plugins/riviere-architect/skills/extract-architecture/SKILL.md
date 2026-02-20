@@ -48,6 +48,7 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 | `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts --project-root "$PROJECT_ROOT"`                                     |
 | `tools/check-hash.ts`               | Check/write source repo staleness hash     | `bun tools/check-hash.ts --project-root "$PROJECT_ROOT"` / `bun tools/check-hash.ts --project-root "$PROJECT_ROOT" --write`     |
 | `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts --project-root "$PROJECT_ROOT"`                           |
+| `tools/detect-phase.ts`             | Detect/record current extraction phase     | `bun tools/detect-phase.ts --project-root "$PROJECT_ROOT"`                                       |
 
 ## Troubleshooting & Recovery
 
@@ -76,6 +77,18 @@ Before diving into steps, understand the non-obvious challenges this workflow is
 - **Domain ≠ Repository** — A business domain often spans multiple repos. Agents that assume one repo = one domain will produce a broken graph. The `domains.md` registry exists precisely to prevent this.
 - **Module inference fragility** — Inferring which module a component belongs to requires a priority chain (code signal -> path rule -> name convention -> fallback). Skipping straight to name guessing produces noisy, unreliable graphs.
 - **Orphans as diagnostic signal** — Orphaned components (>20% of total) almost always indicate a systematic linking failure in Step 4, not individual missed links. Fixing orphans one-by-one when the root cause is a pattern gap wastes significant time.
+
+## Context Recovery (After Compaction)
+
+If the conversation is compacted mid-extraction, run this immediately to recover state:
+
+```bash
+bun tools/detect-phase.ts --project-root "$PROJECT_ROOT"
+```
+
+This outputs: current phase, completed steps, project root, repo roots, domains, and component/link counts. Read the indicated step file to resume.
+
+If `progress.json` exists (authoritative), it is used directly. Otherwise, the tool infers the phase from `.riviere/` artifacts and writes `progress.json` for future use.
 
 ## Catastrophic Recovery
 
