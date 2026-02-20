@@ -1,6 +1,6 @@
 {
   "name": "riviere-architect",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
   "author": {
     "name": "Adam Newell",
@@ -15,9 +15,15 @@
   ],
   "agents": [
     "./agents/annotate-staging-agent.md",
-    "./agents/extract-staging-agent.md"
+    "./agents/configure-agent.md",
+    "./agents/connect-staging-agent.md",
+    "./agents/explore-agent.md",
+    "./agents/extract-staging-agent.md",
+    "./agents/trace-staging-agent.md",
+    "./agents/validate-agent.md"
   ],
   "commands": "./commands/",
   "hooks": "./hooks/hooks.json",
+  "skills": "./skills/",
   "license": "MIT"
 }
