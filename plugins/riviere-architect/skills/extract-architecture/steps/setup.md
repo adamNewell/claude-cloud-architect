@@ -4,18 +4,21 @@ Run the verification script below. Fix any FAIL lines before proceeding. If all 
 
 ## Working Directories
 
-Two directory contexts are used throughout this workflow:
+Three directory contexts are used throughout this workflow:
 
 | Context                           | Purpose                                      | Commands that run here            |
 | --------------------------------- | -------------------------------------------- | --------------------------------- |
-| **Skill root** (`SKILL_ROOT`)     | Contains SKILL.md, tools/, steps/, .riviere/ | `bun tools/*.ts` commands         |
+| **Skill root** (`SKILL_ROOT`)     | Contains SKILL.md, tools/, steps/            | `bun tools/*.ts` commands         |
+| **Project root** (`PROJECT_ROOT`) | User's CWD; where `.riviere/` is created     | Write/Read for `.riviere/` files  |
 | **Repository root** (`REPO_ROOT`) | The codebase being analyzed                  | `grep`, `find`, source file reads |
 
-`SKILL_ROOT` is the directory containing SKILL.md. All `bun tools/` commands must be run from here — the tools resolve paths relative to this directory.
+`SKILL_ROOT` is the directory containing SKILL.md. All `bun tools/` commands must be run from here.
+
+`PROJECT_ROOT` is the user's current working directory when the skill is invoked. All `.riviere/` artifacts (config, work files, graph) live here. **Record this value at the start of the session** — it is passed to every tool via `--project-root`.
 
 `REPO_ROOT` is the root of each repository being analyzed. Use absolute paths when referencing source files in subagent instructions and step prompts.
 
-When a step says "run from skill root", use `SKILL_ROOT`. When scanning source code, resolve against `REPO_ROOT`.
+When a step says "run from skill root", use `SKILL_ROOT`. When scanning source code, resolve against `REPO_ROOT`. When reading/writing `.riviere/` files or invoking tools, use `PROJECT_ROOT`.
 
 ## Verify
 
@@ -36,7 +39,7 @@ All six lines must show PASS before continuing.
 If `.riviere/` already exists from a previous run, check whether the source repositories have changed before proceeding:
 
 ```bash
-if [ -d ".riviere" ]; then bun tools/check-hash.ts; fi
+if [ -d "$PROJECT_ROOT/.riviere" ]; then bun tools/check-hash.ts --project-root "$PROJECT_ROOT"; fi
 ```
 
 Act on the exit code:
@@ -52,10 +55,10 @@ Act on the exit code:
 ## Initialize Workspace
 
 ```bash
-mkdir -p .riviere/work .riviere/config
+mkdir -p "$PROJECT_ROOT/.riviere/work" "$PROJECT_ROOT/.riviere/config"
 ```
 
-> **Directory note:** `.riviere/` is created inside `SKILL_ROOT`. All step files read and write to `.riviere/` relative to the skill root. When spawning subagents to scan source code, pass `REPO_ROOT` as an absolute path explicitly — do not assume it matches `SKILL_ROOT`.
+> **Directory note:** `.riviere/` is created inside `PROJECT_ROOT` (the user's project directory). All step files read and write `.riviere/` files there. All `bun tools/*.ts` invocations must include `--project-root "$PROJECT_ROOT"`. When spawning subagents to scan source code, pass `REPO_ROOT` as an absolute path explicitly.
 
 ## Concurrency Policy (Mandatory)
 

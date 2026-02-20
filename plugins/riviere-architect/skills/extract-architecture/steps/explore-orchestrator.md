@@ -56,7 +56,7 @@ After all subagents complete:
 ### 1. Merge domain discoveries
 
 ```bash
-bun tools/merge-domains.ts
+bun tools/merge-domains.ts --project-root "$PROJECT_ROOT"
 ```
 
 The tool reads all `.riviere/work/domains-{repo}.md` files, applies three merge rules

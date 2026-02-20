@@ -38,6 +38,7 @@ OPTIONS
   --prefix <string>        Output filename prefix (default: checklist)
                            Produces: {prefix}-{repo-name}.md
   --meta-dir <path>        Directory containing meta-*.md files (default: .riviere/work)
+  --project-root <path>    Resolve .riviere/ paths relative to this directory (default: cwd)
   --help, -h               Show this help
 
 EXAMPLES
@@ -127,9 +128,16 @@ function main(): void {
     process.exit(1);
   }
 
-  const outputDir = resolve(argValue("--output-dir") ?? ".riviere/work");
+  // --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+  const PROJECT_ROOT = resolve(argValue("--project-root") ?? ".");
+
+  const outputDir = argValue("--output-dir")
+    ? resolve(argValue("--output-dir")!)
+    : resolve(PROJECT_ROOT, ".riviere/work");
   const prefix = argValue("--prefix") ?? "checklist";
-  const metaDir = resolve(argValue("--meta-dir") ?? ".riviere/work");
+  const metaDir = argValue("--meta-dir")
+    ? resolve(argValue("--meta-dir")!)
+    : resolve(PROJECT_ROOT, ".riviere/work");
 
   const roots = discoverRepoRoots(metaDir);
   if (roots.size === 0) {

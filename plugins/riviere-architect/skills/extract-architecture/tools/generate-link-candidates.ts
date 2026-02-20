@@ -52,6 +52,10 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   process.exit(0);
 }
 
+// --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+const prIdx = process.argv.indexOf("--project-root");
+const PROJECT_ROOT = path.resolve(prIdx >= 0 && process.argv[prIdx + 1] ? process.argv[prIdx + 1] : ".");
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Component {
@@ -156,12 +160,19 @@ const LINK_TYPE: Record<string, "sync" | "async"> = {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const repoPaths = process.argv.slice(2);
+  // Filter out --project-root and its value from positional args
+  const rawArgs = process.argv.slice(2);
+  const repoPaths: string[] = [];
+  for (let i = 0; i < rawArgs.length; i++) {
+    if (rawArgs[i] === "--project-root") { i++; continue; }
+    if (rawArgs[i] === "--help" || rawArgs[i] === "-h") continue;
+    repoPaths.push(rawArgs[i]);
+  }
 
   if (repoPaths.length === 0) {
     console.error(
       "Usage: bun generate-link-candidates.ts <repo-path...>\n" +
-        "  Reads .riviere/work/extract-*.jsonl from the current directory.\n" +
+        "  Reads .riviere/work/extract-*.jsonl from the project root.\n" +
         "  repo-paths are used to resolve filePath fields to absolute paths."
     );
     process.exit(1);
@@ -169,9 +180,9 @@ async function main() {
 
   // ── 1. Load all Extract JSONL ──────────────────────────────────────────────
 
-  const workDir = ".riviere/work";
+  const workDir = path.join(PROJECT_ROOT, ".riviere/work");
   if (!existsSync(workDir)) {
-    console.error(`No .riviere/work directory found. Run Extract first.`);
+    console.error(`No .riviere/work directory found at ${PROJECT_ROOT}. Run Extract first.`);
     process.exit(1);
   }
 

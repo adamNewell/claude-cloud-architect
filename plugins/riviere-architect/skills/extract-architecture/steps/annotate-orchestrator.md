@@ -32,7 +32,7 @@ showed 45–60% data loss per round when calls run simultaneously. Workers must 
 1. Split the DomainOp checklist into per-repository sub-checklists:
 
 ```bash
-bun tools/split-checklist.ts --checklist .riviere/step-5-checklist.md --prefix enrich
+bun tools/split-checklist.ts --project-root "$PROJECT_ROOT" --checklist "$PROJECT_ROOT/.riviere/step-5-checklist.md" --prefix enrich
 ```
 
 The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
@@ -61,7 +61,7 @@ cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
 2. Replay staged enrichment commands sequentially:
 
 ```bash
-bun tools/replay-staged-enrichments.ts
+bun tools/replay-staged-enrichments.ts --project-root "$PROJECT_ROOT"
 ```
 
 The tool reads `.riviere/work/annotate-staged-*.jsonl`, validates each JSON line, and executes

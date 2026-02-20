@@ -93,7 +93,7 @@ Present final stats:
 Write the source hash so future runs can detect whether re-extraction is needed:
 
 ```bash
-bun tools/check-hash.ts --write
+bun tools/check-hash.ts --project-root "$PROJECT_ROOT" --write
 ```
 
 This records the current git HEAD SHA for every repository in `.riviere/config/source-hash.json`. On the next run, Setup will compare these SHAs against current HEAD and report FRESH or STALE.

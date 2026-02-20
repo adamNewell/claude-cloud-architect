@@ -68,10 +68,14 @@ if (args.includes("--help") || args.includes("-h")) {
 const WRITE_MODE = args.includes("--write");
 const DRY_RUN = args.includes("--dry-run");
 
+// --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+const projectRootIdx = args.indexOf("--project-root");
+const PROJECT_ROOT = resolve(projectRootIdx >= 0 && args[projectRootIdx + 1] ? args[projectRootIdx + 1] : ".");
+
 // ─── Paths ────────────────────────────────────────────────────────────────────
 
-const HASH_FILE = resolve(".riviere/config/source-hash.json");
-const WORK_DIR = resolve(".riviere/work");
+const HASH_FILE = resolve(PROJECT_ROOT, ".riviere/config/source-hash.json");
+const WORK_DIR = resolve(PROJECT_ROOT, ".riviere/work");
 
 // ─── Interfaces ───────────────────────────────────────────────────────────────
 

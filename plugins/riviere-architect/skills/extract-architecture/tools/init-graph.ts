@@ -50,12 +50,14 @@ USAGE
 
 OPTIONS
   --dry-run                       Print commands without executing
+  --project-root <dir>            Resolve .riviere/ paths relative to this directory (default: cwd)
   --source-url name=https://...   Map repo name to GitHub URL (repeatable)
   --help, -h                      Show this message
 
 EXAMPLES
   bun init-graph.ts
   bun init-graph.ts --dry-run
+  bun init-graph.ts --project-root /path/to/project
   bun init-graph.ts \\
     --source-url orders-service=https://github.com/org/orders-service \\
     --source-url payments=https://github.com/org/payments-service
@@ -72,6 +74,15 @@ if (args.includes("--help") || args.includes("-h")) {
 
 const DRY_RUN = args.includes("--dry-run");
 if (DRY_RUN) console.log("── dry-run — commands printed but not executed ──\n");
+
+// --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+const projectRootIdx = args.indexOf("--project-root");
+const PROJECT_ROOT = resolve(projectRootIdx >= 0 && args[projectRootIdx + 1] ? args[projectRootIdx + 1] : ".");
+
+/** Resolve a path relative to the project root (where .riviere/ lives). */
+function fromRoot(...segments: string[]): string {
+  return resolve(PROJECT_ROOT, ...segments);
+}
 
 const sourceUrlOverrides = new Map<string, string>();
 for (let i = 0; i < args.length; i++) {
@@ -169,7 +180,7 @@ function parseMarkdownTable(
 
 // ─── Parse domains.md ─────────────────────────────────────────────────────────
 
-const DOMAINS_PATH = resolve(".riviere/config/domains.md");
+const DOMAINS_PATH = fromRoot(".riviere/config/domains.md");
 if (!existsSync(DOMAINS_PATH)) {
   console.error("Error: .riviere/config/domains.md not found");
   console.error(
@@ -224,7 +235,7 @@ function resolveSourceUrl(repoName: string): string | null {
   if (sourceUrlOverrides.has(repoName)) return sourceUrlOverrides.get(repoName)!;
 
   // 2. meta-{repo}.md Root path → git remote
-  const metaPath = resolve(`.riviere/work/meta-${repoName}.md`);
+  const metaPath = fromRoot(`.riviere/work/meta-${repoName}.md`);
   if (existsSync(metaPath)) {
     const content = readFileSync(metaPath, "utf8");
     const match = content.match(/[-*]\s+Root:\s*(.+)/);
@@ -273,7 +284,7 @@ resolvedUrls.forEach((url, repo) =>
 
 // ─── Parse custom types (optional) ───────────────────────────────────────────
 
-const DEFS_PATH = resolve(".riviere/config/component-definitions.md");
+const DEFS_PATH = fromRoot(".riviere/config/component-definitions.md");
 const customTypes: CustomType[] = [];
 
 if (existsSync(DEFS_PATH)) {

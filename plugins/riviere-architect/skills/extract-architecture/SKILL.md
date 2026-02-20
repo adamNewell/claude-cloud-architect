@@ -38,16 +38,16 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 
 | Tool                                 | Purpose                                    | Example Usage                                                     |
 | ------------------------------------ | ------------------------------------------ | ----------------------------------------------------------------- |
-| `tools/init-graph.ts`                | Initialize graph from config files         | `bun tools/init-graph.ts --dry-run`                               |
-| `tools/replay-staged-links.ts`       | Execute staged link commands               | `bun tools/replay-staged-links.ts`                                |
-| `tools/replay-staged-enrichments.ts` | Execute staged enrichment commands         | `bun tools/replay-staged-enrichments.ts`                          |
-| `tools/replay-staged-components.ts`  | Execute staged component commands          | `bun tools/replay-staged-components.ts`                           |
-| `tools/split-checklist.ts`           | Split master checklist into per-repo files | `bun tools/split-checklist.ts --checklist .riviere/work/check.md` |
-| `tools/merge-domains.ts`             | Merge per-repo domain discoveries          | `bun tools/merge-domains.ts --add-to-graph`                       |
+| `tools/init-graph.ts`                | Initialize graph from config files         | `bun tools/init-graph.ts --project-root "$PROJECT_ROOT" --dry-run`                               |
+| `tools/replay-staged-links.ts`       | Execute staged link commands               | `bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"`                                |
+| `tools/replay-staged-enrichments.ts` | Execute staged enrichment commands         | `bun tools/replay-staged-enrichments.ts --project-root "$PROJECT_ROOT"`                          |
+| `tools/replay-staged-components.ts`  | Execute staged component commands          | `bun tools/replay-staged-components.ts --project-root "$PROJECT_ROOT"`                           |
+| `tools/split-checklist.ts`           | Split master checklist into per-repo files | `bun tools/split-checklist.ts --project-root "$PROJECT_ROOT" --checklist .riviere/work/check.md` |
+| `tools/merge-domains.ts`             | Merge per-repo domain discoveries          | `bun tools/merge-domains.ts --project-root "$PROJECT_ROOT" --add-to-graph`                       |
 | `tools/ingest-wiki.ts`               | Index wiki content into qmd                | `bun tools/ingest-wiki.ts ./wiki "Project Wiki"`                  |
-| `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts`                                     |
-| `tools/check-hash.ts`               | Check/write source repo staleness hash     | `bun tools/check-hash.ts` / `bun tools/check-hash.ts --write`     |
-| `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts`                           |
+| `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts --project-root "$PROJECT_ROOT"`                                     |
+| `tools/check-hash.ts`               | Check/write source repo staleness hash     | `bun tools/check-hash.ts --project-root "$PROJECT_ROOT"` / `bun tools/check-hash.ts --project-root "$PROJECT_ROOT" --write`     |
+| `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts --project-root "$PROJECT_ROOT"`                           |
 
 ## Troubleshooting & Recovery
 

@@ -52,6 +52,7 @@ USAGE
 OPTIONS
   --registry <path>        Path to canonical domains.md (default: .riviere/config/domains.md)
   --work-dir <path>        Directory containing domains-*.md files (default: .riviere/work)
+  --project-root <path>    Resolve .riviere/ paths relative to this directory (default: cwd)
   --add-to-graph           Run add-domain CLI for each new domain (use when graph exists)
   --dry-run                Show what would change without writing
   --help, -h               Show this help
@@ -143,8 +144,15 @@ function main(): void {
     return;
   }
 
-  const registryPath = resolve(argValue("--registry") ?? ".riviere/config/domains.md");
-  const workDir = resolve(argValue("--work-dir") ?? ".riviere/work");
+  // --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+  const PROJECT_ROOT = resolve(argValue("--project-root") ?? ".");
+
+  const registryPath = argValue("--registry")
+    ? resolve(argValue("--registry")!)
+    : resolve(PROJECT_ROOT, ".riviere/config/domains.md");
+  const workDir = argValue("--work-dir")
+    ? resolve(argValue("--work-dir")!)
+    : resolve(PROJECT_ROOT, ".riviere/work");
   const addToGraph = hasFlag("--add-to-graph");
   const dryRun = hasFlag("--dry-run");
 

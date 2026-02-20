@@ -65,6 +65,10 @@ if (process.argv.includes("--help") || process.argv.includes("-h")) {
   process.exit(0);
 }
 
+// --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+const prIdx = process.argv.indexOf("--project-root");
+const PROJECT_ROOT = resolve(prIdx >= 0 && process.argv[prIdx + 1] ? process.argv[prIdx + 1] : ".");
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface HookInput {
@@ -171,7 +175,7 @@ const isConsistencyCheck =
 // ─── Locate and parse graph ───────────────────────────────────────────────────
 
 function findGraphFile(): string | null {
-  const dir = resolve(".riviere");
+  const dir = resolve(PROJECT_ROOT, ".riviere");
   if (!existsSync(dir)) return null;
 
   const candidates = readdirSync(dir)

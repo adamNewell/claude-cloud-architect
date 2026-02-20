@@ -13,7 +13,7 @@ Trace operational connections between components to create the flow graph.
 > **Single-repository codebases:** Follow `steps/connect-subagent.md` directly —
 > you are both orchestrator and subagent. Use `.riviere/connect-checklist.md` as the
 > checklist file, stage to `.riviere/work/link-staged-local.jsonl`, then replay staged
-> commands with `bun tools/replay-staged-links.ts`.
+> commands with `bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"`.
 
 ## Generate Checklist
 
@@ -31,7 +31,7 @@ then write staged JSONL commands. Coordinator executes all write commands sequen
 1. Split the master checklist into per-repository sub-checklists:
 
 ```bash
-bun tools/split-checklist.ts --checklist .riviere/connect-checklist.md --prefix checklist
+bun tools/split-checklist.ts --project-root "$PROJECT_ROOT" --checklist "$PROJECT_ROOT/.riviere/connect-checklist.md" --prefix checklist
 ```
 
 The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
@@ -70,7 +70,7 @@ cat .riviere/work/checklist-*.md > .riviere/connect-checklist.md
 Run the replay tool (deterministic parser + sequential executor):
 
 ```bash
-bun tools/replay-staged-links.ts
+bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"
 ```
 
 The tool reads `.riviere/work/link-staged-*.jsonl`, validates each JSON line, and executes
@@ -103,7 +103,7 @@ If source component ID is already known from checklist context, worker may stage
 Coordinator then runs:
 
 ```bash
-bun tools/replay-staged-links.ts
+bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"
 ```
 
 This applies the cross-repo link sequentially, exactly like in-repo links, using canonical

@@ -21,14 +21,14 @@ Run the initialization tool — it reads `domains.md` and `component-definitions
 runs the full CLI sequence automatically:
 
 ```bash
-bun tools/init-graph.ts
+bun tools/init-graph.ts --project-root "$PROJECT_ROOT"
 ```
 
 Source URLs are resolved from `.riviere/work/meta-{repo}.md` Root paths via git remote.
 If resolution fails, supply them explicitly:
 
 ```bash
-bun tools/init-graph.ts \
+bun tools/init-graph.ts --project-root "$PROJECT_ROOT" \
   --source-url orders-service=https://github.com/your-org/orders-service \
   --source-url payments=https://github.com/your-org/payments-service
 ```
@@ -36,7 +36,7 @@ bun tools/init-graph.ts \
 Preview commands before running:
 
 ```bash
-bun tools/init-graph.ts --dry-run
+bun tools/init-graph.ts --project-root "$PROJECT_ROOT" --dry-run
 ```
 
 **Source of record:** `domains.md` is authoritative. If a new domain is discovered
@@ -64,7 +64,7 @@ After all workers complete:
 ### 1. New domain discoveries
 
 ```bash
-bun tools/merge-domains.ts --add-to-graph
+bun tools/merge-domains.ts --project-root "$PROJECT_ROOT" --add-to-graph
 ```
 
 The tool reads all `.riviere/work/domains-{repo}.md` files, merges new domains into
@@ -80,7 +80,7 @@ them to the user for resolution before continuing.
 ### 2. Replay staged components
 
 ```bash
-bun tools/replay-staged-components.ts
+bun tools/replay-staged-components.ts --project-root "$PROJECT_ROOT"
 ```
 
 The tool reads `.riviere/work/extract-*.jsonl`, validates each JSON line against the
@@ -118,7 +118,7 @@ Graph: `.riviere/[project-name]-[commit].json`
 
 ## Error Recovery
 
-- **`bun tools/init-graph.ts` fails:** Run with `--dry-run` first to preview commands. If the tool itself errors, check that `bun` is installed and that you are running from the skill root directory. Verify `tools/init-graph.ts` exists.
+- **`bun tools/init-graph.ts --project-root "$PROJECT_ROOT"` fails:** Run with `--dry-run` first to preview commands. If the tool itself errors, check that `bun` is installed and that you are running from the skill root directory. Verify `tools/init-graph.ts` exists.
 - **`replay-staged-components.ts` reports failures (exit code 2):** Open `.riviere/work/component-replay-report.json` for details. Failed components are logged with stdout/stderr. Fix the staged JSONL and re-run the tool — it skips already-added components.
 - **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.md` and `.riviere/config/component-definitions.md` before scanning.
 - **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.md` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.

@@ -85,6 +85,7 @@ USAGE
 OPTIONS
   --work-dir <path>        Directory containing link-staged-*.jsonl (default: .riviere/work)
   --graph <path>           Override graph path passed to riviere CLI
+  --project-root <path>    Resolve .riviere/ paths relative to this directory (default: cwd)
   --dry-run                Print commands without executing
   --help, -h               Show this help
 `.trim();
@@ -252,7 +253,12 @@ function main(): void {
     return;
   }
 
-  const workDir = resolve(argValue("--work-dir") ?? ".riviere/work");
+  // --project-root: resolve .riviere/ paths relative to this directory (default: cwd)
+  const PROJECT_ROOT = resolve(argValue("--project-root") ?? ".");
+
+  const workDir = argValue("--work-dir")
+    ? resolve(argValue("--work-dir")!)
+    : resolve(PROJECT_ROOT, ".riviere/work");
   const graphPath = argValue("--graph");
   const dryRun = hasFlag("--dry-run");
 
