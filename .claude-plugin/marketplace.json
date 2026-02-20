@@ -14,7 +14,6 @@
       "name": "riviere-architect",
       "source": "./plugins/riviere-architect",
       "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
-      "version": "0.2.0",
       "keywords": [
         "architecture",
         "documentation",
@@ -28,7 +27,6 @@
       "name": "waf-analysis",
       "source": "./plugins/waf-analysis",
       "description": "AWS Well-Architected Framework best practices for architecture reviews",
-      "version": "1.0.0",
       "keywords": [
         "aws",
         "well-architected",
