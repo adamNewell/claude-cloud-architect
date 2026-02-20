@@ -1,6 +1,6 @@
 ---
 model: opus
-description: Full architecture deconstruction using the riviere-architect workflow. Runs all 6 phases — wiki ingestion, domain mapping, rule definition, component extraction, linking, enrichment, and validation — to produce a complete architecture graph. USE WHEN documenting an existing codebase, extracting architecture for a new team member, creating architecture decision records, or understanding a system you didn't build.
+description: Full architecture deconstruction using the riviere-architect workflow. Runs all 8 phases — wiki ingestion, classification, domain mapping, rule definition, component extraction, linking, enrichment, tracing, and validation — to produce a complete architecture graph. USE WHEN documenting an existing codebase, extracting architecture for a new team member, creating architecture decision records, or understanding a system you didn't build.
 argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-enrich] [--quick-validate] [--wiki-path=<path>]
 ---
 
@@ -8,7 +8,7 @@ argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-enrich] [--quick-va
 
 ## Purpose
 
-Run the complete riviere-architect 6-phase workflow against one or more repositories. Spawns orchestrator and subagent instances per phase, following the orchestrator-subagent coordination pattern defined in the phase reference documents. Produces a fully validated architecture graph in `.riviere/{project}-{commit}.json`.
+Run the complete riviere-architect 8-phase workflow against one or more repositories. Each phase runs in a fresh agent that receives only a handoff file and step instructions — no conversation history crosses step boundaries. Produces a fully validated architecture graph in `.riviere/{project}-{commit}.json`.
 
 **This command is the Layer 3 entry point for the riviere-architect skill.** It does not re-implement the workflow — it drives the workflow defined in `skills/riviere-architect/SKILL.md` and its phase reference documents.
 
@@ -30,25 +30,30 @@ RUN_ID:        8-char UUID generated at start.
 .riviere/
 ├── config/                            ← Explore-2 artifacts (domains, rules)
 ├── work/                              ← Subagent staging area (JSONL, per-repo markdown)
+│   ├── handoff-classify.json          ← Handoff context from classify step
+│   ├── handoff-explore.json           ← Handoff context from explore step
+│   ├── handoff-configure.json         ← Handoff context from configure step
+│   ├── handoff-extract.json           ← Handoff context from extract step
+│   ├── handoff-connect.json           ← Handoff context from connect step
+│   ├── handoff-annotate.json          ← Handoff context from annotate step
+│   ├── handoff-trace.json             ← Handoff context from trace step
+│   └── handoff-validate.json          ← Handoff context from validate step
 └── {project}-{commit}.json            ← The final graph
 ```
 
 ## Instructions
 
-- Steps are self-chaining — each step file tells you what to load next. Do not pre-read all documents.
-- Phases are SEQUENTIAL — never start Phase N+1 until Phase N's orchestrator merge is complete
-- Respect concurrency constraints:
-  - Extract: subagents write JSONL only; orchestrator serializes CLI calls
-  - Connect: subagents stage link commands only; orchestrator serializes CLI calls
-  - **Annotate: NO concurrent `enrich` CLI calls; mandatory JSONL staging — concurrent enrich calls corrupt the graph (45–60% data loss)**
-- After each phase, validate artifacts exist before continuing
+- Steps are isolated — each runs in a fresh agent with only handoff context
+- Phases are SEQUENTIAL — never start Phase N+1 until Phase N's handoff file is produced
+- Write gate: subagents produce JSONL only (no Bash). Orchestrators replay via TypeScript tools.
+- After each phase, validate the handoff file exists before spawning the next agent
 - The validate-graph.ts hook fires automatically after every `riviere builder` command — if it exits with code 2, fix errors before the next phase
 
 ## Workflow
 
 ### Step 0: Load Skill Overview
 
-Read `skills/riviere-architect/SKILL.md` for workflow overview, variables, and tool reference. **Do not** pre-read all phase documents — steps are self-chaining. Each step file tells you what to load next, keeping context focused on the current phase.
+Read `skills/riviere-architect/SKILL.md` for workflow overview, variables, and tool reference.
 
 Announce readiness:
 
@@ -57,46 +62,55 @@ arch-deconstruct ready.
 Repos: {list}
 Phases: {list based on flags}
 Run ID: {RUN_ID}
-Starting wiki setup...
+Starting classification...
 ```
 
-### Step 1: Wiki Setup (conditional)
+### Per-Step Dispatch Pattern
 
-**If SKIP_WIKI:** Skip to Step 1.5.
+Each step is executed by a **fresh agent** that receives only:
 
-**If WIKI_PATH provided:** Skip Wiki Build. Follow `steps/wiki-index.md` only with the provided path.
+1. The handoff file from the previous step (`handoff-{previous-step}.json`)
+2. The step's orchestrator instructions (`steps/{step}-orchestrator.md`)
+3. Core variables (PROJECT_ROOT, REPO_PATHS, flags)
 
-**Otherwise:** Follow `steps/wiki-build.md`, then `steps/wiki-index.md`.
+**No conversation history crosses step boundaries.** This keeps each step's context focused
+and prevents context window exhaustion on large codebases.
 
-### Step 2: Explore — Understand Codebase
+#### Dispatch Loop
 
-Follow `steps/explore-orchestrator.md`.
+For each step in the pipeline:
 
-Pass MULTI_REPO flag so the orchestrator knows whether to spawn subagents or act as subagent directly.
+1. **Check handoff**: Read `.riviere/work/handoff-{previous-step}.json` (skip for first step)
+2. **Spawn fresh agent** with instructions:
 
-### Step 3: Configure — Define Extraction Rules
+   ```text
+   AGENT INSTRUCTIONS: Read {step-orchestrator-file} and follow its instructions exactly.
+   PROJECT_ROOT: {PROJECT_ROOT}
+   REPO_PATHS: {space-separated paths}
+   HANDOFF: Read .riviere/work/handoff-{previous-step}.json for context from the previous step.
+   FLAGS: {relevant flags}
+   ```
 
-Follow `steps/configure-orchestrator.md`.
+3. **Wait for agent completion**
+4. **Verify handoff produced**: Check `.riviere/work/handoff-{step}.json` exists
+5. **User confirmation gate**: Present step summary, wait for approval before next step
+6. **Continue to next step** or stop if user requests
 
-### Step 4: Extract — Extract Components
+#### Step Sequence
 
-Follow `steps/extract-orchestrator.md`.
+| Order | Step       | Orchestrator File                         | Condition            |
+| ----- | ---------- | ----------------------------------------- | -------------------- |
+| 0     | Wiki Setup | steps/wiki-build.md + steps/wiki-index.md | Unless --skip-wiki   |
+| 1     | Classify   | steps/classify-orchestrator.md            | Always               |
+| 2     | Explore    | steps/explore-orchestrator.md             | Always               |
+| 3     | Configure  | steps/configure-orchestrator.md           | Always               |
+| 4     | Extract    | steps/extract-orchestrator.md             | Always               |
+| 5     | Connect    | steps/connect-orchestrator.md             | Always               |
+| 6     | Annotate   | steps/annotate-orchestrator.md            | Unless --skip-enrich |
+| 7     | Trace      | steps/trace-orchestrator.md               | Always               |
+| 8     | Validate   | steps/validate-orchestrator.md            | Always               |
 
-### Step 5: Connect — Link Components
-
-Follow `steps/connect-orchestrator.md`.
-
-### Step 6: Annotate — Enrich DomainOps (conditional)
-
-**If SKIP_ENRICH:** Skip to Step 7.
-
-Follow `steps/annotate-orchestrator.md`.
-
-### Step 7: Validate — Validate & Finalize
-
-Follow `steps/validate-orchestrator.md`. If QUICK_VALIDATE, skip the orphan analysis loop — single validation pass only.
-
-### Step 8: Report
+### Step 9: Report
 
 Present the final summary:
 

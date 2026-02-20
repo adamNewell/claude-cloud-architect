@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="banner.svg" alt="Claude Plugin Marketplace" width="100%" />
+  <img src="assets/banner.svg" alt="Claude Plugin Marketplace" width="100%" />
 </p>
 
 # Claude Plugin Marketplace

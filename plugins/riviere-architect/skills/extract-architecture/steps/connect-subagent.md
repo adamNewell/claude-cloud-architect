@@ -1,9 +1,8 @@
 # Step 4 Subagent: Discover and Stage Links
 
-## Critical Constraints
+## Write Path
 
-**NEVER** call `link`, `link-http`, or `link-external` directly. Subagents stage link
-commands only; the coordinator executes all writes sequentially.
+You produce JSONL.
 
 ## Role
 
@@ -14,14 +13,14 @@ link commands.
 
 **Your assigned repository and checklist only.** Read source files only within your
 repository root. You may stage links TO components in other repositories using canonical
-domain names from `domains.md`, but you do not read their source files.
+domain names from `domains.json`, but you do not read their source files.
 
 ## Prerequisites
 
 Read these files before starting:
 
-- `.riviere/config/linking-rules.md` — cross-domain patterns and validation rules
-- `.riviere/config/domains.md` — canonical domain names for cross-repo links
+- `.riviere/config/linking-rules.json`— cross-domain patterns and validation rules
+- `.riviere/config/domains.json` — canonical domain names for cross-repo links
 - Your assigned checklist: `.riviere/work/checklist-{repo}.md`
 
 ## Output
@@ -67,15 +66,26 @@ When tracing a dependency, use this table to choose the correct command:
 6. Mark the checklist item as `- [x]` once its required links are staged
 7. Continue until all checklist items are checked
 
+## Multi-Hop Tracing (Prong 3)
+
+For complex call chains that simple import tracing misses:
+
+1. If a checklist item's source file delegates through 3+ intermediary files before reaching
+   the target component, trace the full chain
+2. For cross-repo links, check if the target component exists in another repository's extract
+   JSONL file -- use canonical domain names from domains.json
+3. For event-driven links, trace publish->subscribe chains through message broker configuration
+
+Tag links discovered through multi-hop tracing with `"discoveryProng":"agentic"` in the
+staged JSONL output.
+
 ## Rules
 
 - **Checklist is the only source of work.** Do not generate your own checklist.
-- **Stage only.** Do not execute `riviere builder` write commands.
+- **Stage only.** Write JSONL.
 - **Multiple targets are expected.** Stage all valid links for each source component.
-- **Apply linking-rules.md.** Use configured patterns and validation rules.
+- **Apply linking-rules.json.** Use configured patterns and validation rules.
 
 ## Completion
 
 Staged file written and all checklist items marked `- [x]`. Report completion to the orchestrator.
-
-**Do not read `annotate-orchestrator.md`.** Do not proceed further.

@@ -12,9 +12,9 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step extract --status
 
 ## Prerequisites
 
-- Read `.riviere/config/metadata.md` for conventions
-- Read `.riviere/config/domains.md` for canonical domain names
-- Read `.riviere/config/component-definitions.md` for extraction rules
+- Read `.riviere/config/metadata.json` for conventions
+- Read `.riviere/config/domains.json` for canonical domain names
+- Read `.riviere/config/component-definitions.json` for extraction rules
 - CLI installed: `npm install @living-architecture/riviere-cli`
 
 > **Single-repository codebases:** Follow `steps/extract-subagent.md` directly —
@@ -23,14 +23,14 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step extract --status
 
 ## Initialize Graph
 
-Run the initialization tool — it reads `domains.md` and `component-definitions.md` and
+Run the initialization tool — it reads `domains.json` and `component-definitions.json` and
 runs the full CLI sequence automatically:
 
 ```bash
 bun tools/init-graph.ts --project-root "$PROJECT_ROOT"
 ```
 
-Source URLs are resolved from `.riviere/work/meta-{repo}.md` Root paths via git remote.
+Source URLs are resolved from `.riviere/work/meta-{repo}.jsonl` Root paths via git remote.
 If resolution fails, supply them explicitly:
 
 ```bash
@@ -45,14 +45,12 @@ Preview commands before running:
 bun tools/init-graph.ts --project-root "$PROJECT_ROOT" --dry-run
 ```
 
-**Source of record:** `domains.md` is authoritative. If a new domain is discovered
-during extraction, add it to `domains.md` first, then call `add-domain` manually.
+**Source of record:** `domains.json` is authoritative. If a new domain is discovered
+during extraction, add it to `domains.json` first, then call `add-domain` manually.
 
 ## Spawn Workers
 
-**⚠️ Concurrency constraint:** Workers must NOT call `add-component` directly —
-concurrent writes corrupt the shared graph JSON. Workers write staged JSONL; the
-coordinator serializes all CLI calls.
+Workers write staged JSONL; the orchestrator replays it via `replay-staged-components.ts`.
 
 Spawn one worker per repository. Each receives `steps/extract-subagent.md` as
 its instruction set:
@@ -63,21 +61,41 @@ REPOSITORY: {repository-name}
 REPOSITORY ROOT: {local path}
 ```
 
+## Lens Agents (Conditional)
+
+Read `.riviere/config/classification.json` for recommended lenses. For each active lens,
+spawn an additional specialized subagent after per-repo workers complete:
+
+### Orchestration Lens
+
+**Activates when:** `classification.json → characteristics.orchestration.detected === true`
+
+Spawn one additional worker to extract workflow/orchestration components:
+
+- Reads entry point hints from classification.json
+- Extracts Step Functions state machine definitions, saga steps, workflow definitions
+- Stages as custom type `Orchestration` in extract JSONL
+
+### Integration Lens
+
+**Activates when:** `classification.json → characteristics.repoCount > 1`
+
+Spawn one additional worker for cross-repo linking preparation:
+
+- Reads all per-repo extract JSONL files
+- Identifies components that reference other repositories
+- Stages cross-repo link hints in a separate JSONL file
+
+Lens agent outputs are merged into the standard extract JSONL before replay.
+
 ## Wait and Merge
 
-After all workers complete:
+After all workers complete (including any lens agents):
 
 ### 1. New domain discoveries
 
 ```bash
 bun tools/merge-domains.ts --project-root "$PROJECT_ROOT" --add-to-graph
-```
-
-The tool reads all `.riviere/work/domains-{repo}.md` files, merges new domains into
-`domains.md`, and runs `add-domain` for each new entry. Report output:
-
-```text
-.riviere/work/domain-merge-report.json
 ```
 
 If the tool exits with code 2, near-duplicate domain names were detected — present
@@ -89,13 +107,7 @@ them to the user for resolution before continuing.
 bun tools/replay-staged-components.ts --project-root "$PROJECT_ROOT"
 ```
 
-The tool reads `.riviere/work/extract-*.jsonl`, validates each JSON line against the
-component schema, and executes `add-component` sequentially with all type-specific
-flags (API, DomainOp, Event, EventHandler, UI, Custom). Report output:
-
-```text
-.riviere/work/component-replay-report.json
-```
+Report: `.riviere/work/component-replay-report.json`
 
 ## Verify Extraction
 
@@ -115,7 +127,7 @@ Offer to run a sub-agent to scan for components that may have been missed.
 
 ## Feedback
 
-If user reports missing components, update `.riviere/config/component-definitions.md`
+If user reports missing components, update `.riviere/config/component-definitions.json`
 with corrected patterns and re-extract.
 
 ## Output
@@ -126,8 +138,8 @@ Graph: `.riviere/[project-name]-[commit].json`
 
 - **`bun tools/init-graph.ts --project-root "$PROJECT_ROOT"` fails:** Run with `--dry-run` first to preview commands. If the tool itself errors, check that `bun` is installed and that you are running from the skill root directory. Verify `tools/init-graph.ts` exists.
 - **`replay-staged-components.ts` reports failures (exit code 2):** Open `.riviere/work/component-replay-report.json` for details. Failed components are logged with stdout/stderr. Fix the staged JSONL and re-run the tool — it skips already-added components.
-- **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.md` and `.riviere/config/component-definitions.md` before scanning.
-- **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.md` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.
+- **Worker returns empty JSONL file:** Re-spawn that worker with explicit instruction to verify it can read `.riviere/config/metadata.json` and `.riviere/config/component-definitions.json` before scanning.
+- **Component count is unexpectedly low (>50% below estimate):** Before re-running, check if `component-definitions.json` patterns are too restrictive. Update patterns first, then re-extract only the affected repository.
 
 ## Record Completion
 
@@ -141,6 +153,7 @@ Present extraction summary showing component counts by domain and type.
 
 **Step 3 complete.** Wait for user feedback before proceeding.
 
-## Next Phase
+## Handoff
 
-Read `steps/connect-orchestrator.md`
+The `detect-phase.ts --status completed` call above automatically emits
+`handoff-extract.json` with step context for the next agent. No further action needed.

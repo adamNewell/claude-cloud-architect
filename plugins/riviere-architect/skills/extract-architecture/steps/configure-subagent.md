@@ -18,8 +18,8 @@ the end of your output file — do not define rules for them.
 
 Read these files before beginning:
 
-- `.riviere/config/metadata.md` — codebase conventions, frameworks, module inference rules
-- `.riviere/config/domains.md` — canonical domain names; use these exactly in all examples
+- `.riviere/config/metadata.json` -- codebase conventions, frameworks, module inference rules
+- `.riviere/config/domains.json` -- canonical domain names; use these exactly in all examples
 
 Scan only within your assigned **REPOSITORY ROOT**. Do not read files outside it.
 
@@ -134,6 +134,20 @@ export class Employee extends Aggregate {
 \`\`\`
 ```
 
+## Semantic Discovery (Prong 2)
+
+If qmd is indexed, supplement your grep-based pattern discovery with semantic queries:
+
+1. Query qmd for descriptions of this component type's patterns in the codebase documentation
+2. Look for naming conventions or architectural patterns described in docs
+3. Cross-reference doc-described patterns with grep findings
+
+Tag any rules discovered through semantic search with `"prong":"semantic"` in the JSONL output.
+
+**Graceful degradation:** If qmd is not available, skip this section entirely.
+
+@../../cookbook/qmd/query.md
+
 ## Custom Type Detection
 
 While scanning for your assigned type, watch for patterns that don't fit any built-in
@@ -171,7 +185,7 @@ variable and its target domain:
 **Common patterns:** `*Client`, `*ApiClient`, `*Api`, `*Gateway`, `*Sdk`,
 `axios.create(`, `new HttpClient(`, `constructor(private *Api:`
 
-Cross-reference the target domain against `domains.md`. If the target is in another
+Cross-reference the target domain against `domains.json`. If the target is in another
 repo, note the cross-repo mapping.
 
 ### Non-HTTP Linking Patterns
@@ -201,7 +215,7 @@ If this component type must always connect to certain other types, define a rule
 
 **NEVER** classify a class that delegates to multiple domain services as a `DomainOp` — if it coordinates other domain services or use cases, it is a `UseCase`.
 
-**NEVER** create a domain per repository — production codebases commonly split a single business domain across 2-3 repos (e.g., `orders-service` and `orders-worker`); a one-to-one assumption produces a structurally incorrect graph that cannot be fixed without restarting from Step 1. If two repositories serve the same business concept, they belong to the same domain. Check `domains.md` first.
+**NEVER** create a domain per repository — production codebases commonly split a single business domain across 2-3 repos (e.g., `orders-service` and `orders-worker`); a one-to-one assumption produces a structurally incorrect graph that cannot be fixed without restarting from Step 1. If two repositories serve the same business concept, they belong to the same domain. Check `domains.json` first.
 
 **NEVER** infer module from utility, infrastructure, or shared library classes — names like `DatabaseHelper`, `HttpClient`, `EventBus` are infrastructure and do not reliably express a business module.
 
@@ -211,19 +225,35 @@ If this component type must always connect to certain other types, define a rule
 
 ## Output
 
-Write one file: `.riviere/work/rules-{repo}-{type}.md`
+Write one file: `.riviere/work/rules-{repo}-{type}.jsonl`
 
 Use `{repo}` = repository name (lowercase, no spaces) and `{type}` = component type
-lowercased (e.g., `rules-orders-service-domainop.md`, `rules-payments-api.md`).
-**For single-repo setups:** Use `local` as the repository name (`rules-local-api.md`).
+lowercased (e.g., `rules-orders-service-domainop.jsonl`, `rules-payments-api.jsonl`).
+**For single-repo setups:** Use `local` as the repository name (`rules-local-api.jsonl`).
 
-The file must contain (in order):
+Each line is a JSON object with a `kind` field. Write one line per rule/pattern discovered:
 
-1. Extraction rule (Identification + Fields + Exclude + Example)
-2. Proposed Custom Types section (always include — empty if none found)
-3. HTTP Clients section (if found)
-4. Non-HTTP linking patterns (if found)
-5. Validation rules (if applicable)
+```jsonl
+{"kind":"extractionRule","componentType":"API","repo":"orders-service","location":"src/","classPattern":"@Controller","select":"methods with @Get/@Post","fields":[{"schemaField":"httpMethod","source":"decorator name"},{"schemaField":"path","source":"decorator argument"}],"exclude":["health checks","metrics endpoints"]}
+{"kind":"example","componentType":"API","repo":"orders-service","matches":true,"snippet":"@Get('/orders/:id') async getOrder(@Param('id') id: string)"}
+{"kind":"example","componentType":"API","repo":"orders-service","matches":false,"snippet":"@Get('/health') async healthCheck()"}
+{"kind":"customTypeProposal","name":"Saga","pattern":"Process managers in src/sagas/","instanceCount":4}
+{"kind":"httpClient","clientPattern":"ordersApi","targetDomain":"orders","internal":true}
+{"kind":"httpClient","clientPattern":"stripeClient","targetDomain":"Stripe","internal":false}
+{"kind":"linkPattern","name":"MQTT event flow","indicator":"@MessagePattern","fromType":"EventHandler","toType":"Event"}
+{"kind":"validationRule","rule":"API must link to UseCase or DomainOp","scope":"orders-service"}
+```
+
+**Kind reference:**
+
+| Kind                 | Required fields                                                         | Description                                      |
+| -------------------- | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| `extractionRule`     | `componentType`, `repo`, `location`, `classPattern`, `select`, `fields` | Main extraction pattern (optional: `exclude`)    |
+| `example`            | `componentType`, `repo`, `matches`, `snippet`                           | Code example showing what matches/doesn't match  |
+| `customTypeProposal` | `name`, `pattern`                                                       | Proposed custom type (optional: `instanceCount`) |
+| `httpClient`         | `clientPattern`, `targetDomain`, `internal`                             | HTTP client to domain mapping                    |
+| `linkPattern`        | `name`, `indicator`, `fromType`, `toType`                               | Non-HTTP linking pattern                         |
+| `validationRule`     | `rule`, `scope`                                                         | Structural validation constraint                 |
 
 ## Completion
 

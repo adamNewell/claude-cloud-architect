@@ -13,13 +13,46 @@ completion to the orchestrator.
 
 ## Critical Constraints
 
-**NEVER** report back to orchestrator before writing both output files (`.riviere/work/meta-{repo}.md` and `.riviere/work/domains-{repo}.md`).
+**NEVER** report back to orchestrator before writing both output files (`.riviere/work/meta-{repo}.jsonl` and `.riviere/work/domains-{repo}.jsonl`).
 
 ## Prerequisites
 
-Read `.riviere/config/domains.md` **before** scanning. You will need canonical domain names
-when reporting what you find. If the file is empty or missing, that is expected — proceed
+Read `.riviere/config/domains.json` **before** scanning. You will need canonical domain names
+when reporting what you find. If both files are empty or missing, that is expected — proceed
 with scanning and stage all discovered domains as new.
+
+## Three-Prong Discovery
+
+For each discovery task, apply up to three prongs in order of reliability:
+
+### Prong 1: Deterministic (always runs)
+
+Grep-based pattern matching, decorator scanning, path conventions, package.json analysis.
+This is the existing scanning approach described in "Where to Look" below.
+
+### Prong 2: Semantic (when qmd indexed)
+
+If qmd was indexed in Wiki Index, query the wiki collection for:
+
+- Domain concepts and business terminology
+- Architecture descriptions and system boundaries
+- Component naming and module organization
+
+Tag findings with `"prong":"semantic"` in output JSONL.
+
+**Graceful degradation:** If qmd is not indexed, skip Prong 2 entirely. Do not error.
+
+### Prong 3: Agentic (when classification warrants)
+
+For complex multi-repo systems (classification.json -> repoCount > 2):
+
+- Cross-repo dependency tracing beyond what IaC scanning finds
+- Multi-file call-chain analysis to discover hidden domain boundaries
+- Pattern inference from naming conventions across repositories
+
+Tag findings with `"prong":"agentic"` in output JSONL.
+
+**Default prong:** If no prong tag is specified, the finding came from Prong 1 (deterministic).
 
 ## Where to Look
 
@@ -74,23 +107,23 @@ Check these locations in your repository in order:
 
 For each domain you identify in this repository:
 
-**a. Check `domains.md`** — if the domain is listed, use the canonical name exactly as
+**a. Check `domains.json`** — if the domain is listed, use the canonical name exactly as
 written. No abbreviations, no variations.
 
-**b. If not listed** — append a new row to `.riviere/work/domains-{repo}.md`:
+**b. If not listed** -- append a new line to `.riviere/work/domains-{repo}.jsonl`:
 
-```
-| {canonical-name} | {type} | {one-line description} | {repository-name} |
-```
-
-**c. If listed but this repo also contains code for it** — note it in
-`.riviere/work/domains-{repo}.md`:
-
-```
-| {canonical-name} | (exists) | (exists) | ADD: {repository-name} |
+```jsonl
+{"action":"new","name":"{canonical-name}","type":"{type}","description":"{one-line description}","repository":"{repository-name}"}
 ```
 
-The orchestrator reads this file after all subagents complete and updates `domains.md`.
+**c. If listed but this repo also contains code for it** -- append to
+`.riviere/work/domains-{repo}.jsonl`:
+
+```jsonl
+{"action":"addRepo","name":"{canonical-name}","repository":"{repository-name}"}
+```
+
+The orchestrator reads this file after all subagents complete and updates the domain registry.
 
 ## Output
 
@@ -98,97 +131,47 @@ Write two files. Use `{repo}` = your repository name (no spaces, lowercase).
 
 ---
 
-**`.riviere/work/meta-{repo}.md`** — your repository's metadata contribution:
+**`.riviere/work/meta-{repo}.jsonl`** -- your repository's metadata contribution.
 
-```markdown
-## Repository: {repo-name}
+Each line is a JSON object with a `facet` field identifying the type. Write one line per
+facet discovered. Each line may include an optional `"prong"` field (`"deterministic"` |
+`"semantic"` | `"agentic"`); if omitted, the finding is assumed from Prong 1 (deterministic).
 
-### Structure
-- Root: {absolute path}
-- Source code: {paths}
-- Tests: {paths}
-
-### Frameworks
-| Category        | Name | Version |
-| --------------- | ---- | ------- |
-| Web framework   |      |         |
-| Event/messaging |      |         |
-| Database        |      |         |
-
-### Conventions
-- File naming: {pattern}
-- Class naming: {pattern}
-- API pattern: {how to recognize}
-- Use case pattern: {how to recognize}
-- Entity pattern: {how to recognize}
-- Event pattern: {how to recognize}
-- MQTT topic pattern: {how topics are named, e.g., `{tenant}/{domain}/{entity}/{action}` — include wildcard characters if used}
-
-### Module Inference
-
-Document the signal priority chain you discovered for this repository. Agents in later
-phases will follow this chain top-to-bottom for every component they extract.
-
-**Priority 1 — Code-level signal (HIGH confidence):**
-Scan 3-5 representative files across component types. Does any language construct
-reliably express the module?
-- Java/Kotlin: `package` declaration (e.g., `com.acme.orders.checkout` → module: `checkout`)
-- C#: `namespace` (e.g., `Acme.Orders.Checkout` → module: `checkout`)
-- NestJS: `@Module('checkout')` decorator
-- Other: {pattern found, or "none — skip to path rule"}
-
-If found, document it:
+```jsonl
+{"facet":"structure","repo":"orders-service","root":"/abs/path","sourceDirs":["src/"],"testDirs":["test/"]}
+{"facet":"framework","repo":"orders-service","category":"web","name":"NestJS","version":"10.3.0"}
+{"facet":"framework","repo":"orders-service","category":"database","name":"TypeORM","version":"0.3.20"}
+{"facet":"convention","repo":"orders-service","kind":"fileNaming","pattern":"{name}.{type}.ts","example":"place-order.use-case.ts"}
+{"facet":"convention","repo":"orders-service","kind":"classNaming","pattern":"PascalCase{Type}","example":"PlaceOrderUseCase"}
+{"facet":"convention","repo":"orders-service","kind":"apiPattern","pattern":"@Controller + route decorators"}
+{"facet":"convention","repo":"orders-service","kind":"useCasePattern","pattern":"classes in src/use-cases/"}
+{"facet":"convention","repo":"orders-service","kind":"entityPattern","pattern":"extends Aggregate in src/domain/"}
+{"facet":"convention","repo":"orders-service","kind":"eventPattern","pattern":"implements DomainEvent in src/events/"}
+{"facet":"convention","repo":"orders-service","kind":"mqttTopicPattern","pattern":"{tenant}/{domain}/{entity}/{action}"}
+{"facet":"moduleInference","repo":"orders-service","priority":1,"signal":"code","construct":"@Module decorator","extraction":"decorator argument","confidence":"HIGH"}
+{"facet":"moduleInference","repo":"orders-service","priority":2,"signal":"path","construct":"2nd segment under src/","extraction":"path split","confidence":"MEDIUM"}
+{"facet":"moduleInference","repo":"orders-service","priority":3,"signal":"name","construct":"class prefix","extraction":"PascalCase first word","confidence":"LOW"}
+{"facet":"entryPoint","repo":"orders-service","type":"apiRoutes","location":"src/api/","pattern":"@Controller + route decorators"}
+{"facet":"entryPoint","repo":"orders-service","type":"eventHandlers","location":"src/handlers/","pattern":"@EventPattern decorators"}
+{"facet":"entryPoint","repo":"orders-service","type":"mqttSubscriptions","location":"src/mqtt/","pattern":"@MessagePattern decorators"}
+{"facet":"internalDep","repo":"orders-service","referencedRepo":"shared-lib","sourceType":"internal_package","evidence":"@org/shared-lib","location":"package.json:15"}
+{"facet":"note","repo":"orders-service","text":"Uses CQRS pattern with separate read/write models"}
 ```
 
-Code-level signal: {construct}
-Extraction: {how to read the module value from it}
-Example: {concrete instance from this repo}
+**Facet reference:**
 
-```
+| Facet             | Required fields                                                | Description                                    |
+| ----------------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| `structure`       | `repo`, `root`, `sourceDirs`, `testDirs`                       | Repository structure                           |
+| `framework`       | `repo`, `category`, `name`, `version`                          | Framework/library                              |
+| `convention`      | `repo`, `kind`, `pattern`                                      | Naming/coding convention (optional: `example`) |
+| `moduleInference` | `repo`, `priority`, `signal`, `construct`, `confidence`        | Module inference rule (optional: `extraction`) |
+| `entryPoint`      | `repo`, `type`, `location`, `pattern`                          | Entry point for extraction                     |
+| `internalDep`     | `repo`, `referencedRepo`, `sourceType`, `evidence`, `location` | Cross-repo dependency                          |
+| `note`            | `repo`, `text`                                                 | Free-form observation                          |
 
-**Priority 2 — Path rule (MEDIUM confidence):**
-Path rules may differ by component type. For each type, identify which path segment
-corresponds to the module boundary.
+**What to look for (internal dependencies):**
 
-| Component Type | Segment rule                 | Verified example                                     |
-| -------------- | ---------------------------- | ---------------------------------------------------- |
-| API            | {e.g., segment 3 under src/} | `src/orders/checkout/OrdersController.ts` → checkout |
-| UseCase        |                              |                                                      |
-| DomainOp       |                              |                                                      |
-| Event          |                              |                                                      |
-| EventHandler   |                              |                                                      |
-
-If all types share one rule, document a single row with type = "All".
-
-**Priority 3 — Name convention (LOW confidence):**
-Does the class or file name embed the module?
-- e.g., `CheckoutOrderUseCase` → class prefix `Checkout` → module `checkout`
-- e.g., `checkout-order.service.ts` → filename prefix → module `checkout`
-- {pattern found, or "none"}
-
-**Fallback:** If no signal matches, use the domain name as the module value and tag
-the component `[?]` for review.
-
-### Entry Points
-| Type               | Location | Pattern |
-| ------------------ | -------- | ------- |
-| API routes         |          |         |
-| Event handlers     |          |         |
-| MQTT subscriptions |          |         |
-| UI pages           |          |         |
-
-### Internal Dependencies
-References to other internal repositories found during scanning. Include IaC references
-(ECR images, Lambda code paths, Terraform module sources) and code-level references
-(org-scoped package imports, cross-repo service calls).
-
-| Referenced Repo | Source Type | Evidence | Location |
-| --------------- | ----------- | -------- | -------- |
-| {repo-name}     | {ecr_image / lambda_path / tf_module / internal_package / service_call} | {the literal reference} | {file:line} |
-
-Leave this table empty if no internal repo references were found.
-
-**What to look for:**
 - ECR image URIs matching the org's AWS account (e.g., `123456.dkr.ecr.*.amazonaws.com/{name}`)
 - Lambda `Code.fromAsset('../path')`, `CodeUri: ../path/`, `filename = "../path"`
 - Terraform `source = "../module"` or `source = "git::https://github.com/{org}/repo"`
@@ -198,23 +181,20 @@ Leave this table empty if no internal repo references were found.
 **Filtering:** Only report references that appear to be internal/organizational. Skip well-known
 open-source packages (aws-sdk, lodash, express, etc.) and public registries.
 
-### Notes
-{Anything unusual about this repository's structure or conventions}
-```
-
 ---
 
-**`.riviere/work/domains-{repo}.md`** — domain discoveries from this repository:
+**`.riviere/work/domains-{repo}.jsonl`** -- domain discoveries from this repository.
 
-```markdown
-| Domain Name | Type     | Description                          | Repositories        |
-| ----------- | -------- | ------------------------------------ | ------------------- |
-| orders      | domain   | Core order placement and fulfillment | orders-service      |
-| inventory   | (exists) | (exists)                             | ADD: orders-service |
+Each line is a JSON object with an `action` field. Include an optional `"prong"` field
+when multi-prong discovery is active.
+
+```jsonl
+{"action":"new","name":"orders","type":"domain","description":"Core order placement and fulfillment","repository":"orders-service"}
+{"action":"addRepo","name":"inventory","repository":"orders-service"}
 ```
 
-Leave this file empty (header only) if no new domains were found and this repo's domains
-are already fully represented in `domains.md`.
+Leave this file empty if no new domains were found and this repo's domains
+are already fully represented in `domains.json`.
 
 ## Completion
 

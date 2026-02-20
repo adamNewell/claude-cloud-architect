@@ -3,7 +3,7 @@
  * split-checklist
  *
  * Splits a master checklist into per-repository sub-checklists by matching
- * file paths against repository roots discovered in meta-*.md files.
+ * file paths against repository roots discovered in meta-*.jsonl files.
  *
  * Exit codes:
  *   0 - all lines assigned to a repository
@@ -37,7 +37,7 @@ OPTIONS
   --output-dir <path>      Output directory for sub-checklists (default: .riviere/work)
   --prefix <string>        Output filename prefix (default: checklist)
                            Produces: {prefix}-{repo-name}.md
-  --meta-dir <path>        Directory containing meta-*.md files (default: .riviere/work)
+  --meta-dir <path>        Directory containing meta-*.jsonl files (default: .riviere/work)
   --project-root <path>    Resolve .riviere/ paths relative to this directory (default: cwd)
   --help, -h               Show this help
 
@@ -59,27 +59,40 @@ function argValue(flag: string): string | undefined {
 }
 
 /**
- * Extract repo roots from meta-*.md files.
- * Looks for lines matching: "- Root: /absolute/path"
+ * Extract repo roots from meta-*.jsonl files.
+ * Looks for {"facet":"structure","root":"..."} lines.
  */
 function discoverRepoRoots(metaDir: string): Map<string, string> {
   const roots = new Map<string, string>();
 
   if (!existsSync(metaDir)) return roots;
 
-  const metaFiles = readdirSync(metaDir).filter((f) => /^meta-.*\.md$/.test(f));
+  const allFiles = readdirSync(metaDir);
+  const jsonlFiles = allFiles.filter((f) => /^meta-.*\.jsonl$/.test(f));
 
-  for (const file of metaFiles) {
-    const content = readFileSync(join(metaDir, file), "utf8");
-    const match = content.match(/^-\s*Root:\s*(.+)$/m);
-    if (match) {
-      const rootPath = match[1].trim();
-      // Extract repo name from the meta filename: meta-{repo}.md
-      const repoMatch = file.match(/^meta-(.+)\.md$/);
-      if (repoMatch) {
-        roots.set(repoMatch[1], rootPath);
+  // Prefer JSONL if any exist
+  if (jsonlFiles.length > 0) {
+    for (const file of jsonlFiles) {
+      const repoMatch = file.match(/^meta-(.+)\.jsonl$/);
+      if (!repoMatch) continue;
+
+      const content = readFileSync(join(metaDir, file), "utf8");
+      const lines = content.split("\n").filter((l) => l.trim());
+
+      for (const line of lines) {
+        try {
+          const obj = JSON.parse(line);
+          if (obj.facet === "structure" && obj.root) {
+            roots.set(repoMatch[1], String(obj.root).trim());
+            break; // Only need the first structure facet per repo
+          }
+        } catch {
+          // Skip malformed lines
+        }
       }
     }
+
+    if (roots.size > 0) return roots;
   }
 
   return roots;
@@ -141,7 +154,7 @@ function main(): void {
 
   const roots = discoverRepoRoots(metaDir);
   if (roots.size === 0) {
-    console.error(`No repository roots found in ${metaDir} (expected meta-*.md files with "- Root: ..." lines)`);
+    console.error(`No repository roots found in ${metaDir} (expected meta-*.jsonl files with structure facets)`);
     process.exit(1);
   }
 

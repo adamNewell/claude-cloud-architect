@@ -31,18 +31,13 @@ npx riviere builder component-checklist --type=DomainOp --output=".riviere/step-
 **Partition strategy:** One worker per repository — each worker reads source files and
 writes staged enrichment data. The coordinator serializes all `enrich` CLI calls.
 
-**⚠️ Concurrent `enrich` calls corrupt the graph.** Testing (20 DomainOps, 3 rounds)
-showed 45–60% data loss per round when calls run simultaneously. Workers must NOT call
-`enrich` directly — they write staged output; the coordinator runs enrich sequentially.
+Workers write staged JSONL; the orchestrator replays it via `replay-staged-enrichments.ts`.
 
 1. Split the DomainOp checklist into per-repository sub-checklists:
 
 ```bash
 bun tools/split-checklist.ts --project-root "$PROJECT_ROOT" --checklist "$PROJECT_ROOT/.riviere/step-5-checklist.md" --prefix enrich
 ```
-
-The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
-and writes per-repo files to `.riviere/work/enrich-{repo}.md`.
 
 2. Spawn one worker per repository. Each receives `steps/annotate-subagent.md` as its
    instruction set:
@@ -70,12 +65,7 @@ cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
 bun tools/replay-staged-enrichments.ts --project-root "$PROJECT_ROOT"
 ```
 
-The tool reads `.riviere/work/annotate-staged-*.jsonl`, validates each JSON line, and executes
-`enrich` sequentially. Report output:
-
-```text
-.riviere/work/enrich-replay-report.json
-```
+Report: `.riviere/work/enrich-replay-report.json`
 
 3. Verify all checklist items are checked.
 
@@ -102,6 +92,7 @@ Present enrichment summary showing how many DomainOps were enriched.
 
 **Step 5 complete.** Wait for user feedback before proceeding.
 
-## Next Phase
+## Handoff
 
-Read `steps/validate-orchestrator.md`
+The `detect-phase.ts --status completed` call above automatically emits
+`handoff-annotate.json` with step context for the next agent. No further action needed.

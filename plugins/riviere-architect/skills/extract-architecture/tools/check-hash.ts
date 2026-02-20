@@ -10,7 +10,7 @@
  *   compares, and reports FRESH / STALE / NEW.
  *
  * Write mode (--write):
- *   Reads .riviere/work/meta-{repo}.md files for repo paths,
+ *   Reads .riviere/work/meta-{repo}.jsonl files for repo paths,
  *   gets current git HEAD SHAs, writes source-hash.json.
  *   Run after successful Step 6 (Validate).
  *
@@ -41,7 +41,7 @@ CHECK MODE (default):
   Reads stored SHAs, computes current git HEAD for each repo, compares.
 
 WRITE MODE (--write):
-  Reads .riviere/work/meta-{repo}.md files, computes current SHAs, writes hash file.
+  Reads .riviere/work/meta-{repo}.jsonl files, computes current SHAs, writes hash file.
   Run after successful Step 6 (Validate).
 
 EXIT CODES
@@ -101,11 +101,19 @@ function getHeadSha(repoPath: string): string | null {
   return null;
 }
 
-// ─── Parse meta-{repo}.md for Root path ──────────────────────────────────────
+// ─── Parse repo root from meta-{repo}.jsonl ─────────────────────────────────
 
 function parseMetaRoot(content: string): string | null {
-  const match = content.match(/[-*]\s+Root:\s*(.+)/);
-  return match ? match[1].trim() : null;
+  for (const line of content.split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const obj = JSON.parse(line);
+      if (obj.facet === "structure" && obj.root) {
+        return String(obj.root).trim();
+      }
+    } catch { /* skip malformed */ }
+  }
+  return null;
 }
 
 // ─── WRITE MODE ───────────────────────────────────────────────────────────────
@@ -118,11 +126,11 @@ if (WRITE_MODE) {
   }
 
   const metaFiles = readdirSync(WORK_DIR).filter(
-    (f) => f.startsWith("meta-") && f.endsWith(".md")
+    (f) => f.startsWith("meta-") && f.endsWith(".jsonl")
   );
 
   if (!metaFiles.length) {
-    console.error("Error: No meta-*.md files found in .riviere/work/");
+    console.error("Error: No meta-*.jsonl files found in .riviere/work/");
     console.error("Run Step 1 (Explore) to generate repository metadata.");
     process.exit(1);
   }
@@ -131,12 +139,12 @@ if (WRITE_MODE) {
   const failed: string[] = [];
 
   for (const file of metaFiles) {
-    const repoName = file.replace(/^meta-/, "").replace(/\.md$/, "");
+    const repoName = file.replace(/^meta-/, "").replace(/\.jsonl$/, "");
     const content = readFileSync(resolve(WORK_DIR, file), "utf8");
     const rootPath = parseMetaRoot(content);
 
     if (!rootPath) {
-      console.warn(`  WARN  ${repoName} — no Root: path found in ${file}, skipping`);
+      console.warn(`  WARN  ${repoName} — no structure facet found in ${file}, skipping`);
       continue;
     }
 

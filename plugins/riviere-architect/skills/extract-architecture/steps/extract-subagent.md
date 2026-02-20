@@ -1,18 +1,18 @@
 # Step 3 Subagent: Extract Components
 
-## Critical Constraints
+## Write Path
 
-**NEVER** call `add-component` directly — write to JSONL only. Concurrent writes corrupt the graph (tested: 45–60% data loss per round when calls run simultaneously). The coordinator serializes all CLI calls.
+You produce JSONL.
 
 ## Role
 
 You are a subagent assigned to extract components from **one repository**. Your output
-feeds into the orchestrator's sequential CLI calls. You do not interact with the user.
+is consumed downstream. You do not interact with the user.
 
 ## Scope
 
 **Your assigned repository only.** Do not read or modify files outside your repository
-root. Do not call `add-component` — write staged JSONL only.
+root. Write staged JSONL only.
 
 When your output files are written, report completion to the orchestrator.
 
@@ -20,9 +20,9 @@ When your output files are written, report completion to the orchestrator.
 
 Read these files before scanning:
 
-- `.riviere/config/metadata.md` — conventions and module inference rules for this repo
-- `.riviere/config/domains.md` — canonical domain names; use these exactly
-- `.riviere/config/component-definitions.md` — extraction rules per component type
+- `.riviere/config/metadata.json` — conventions and module inference rules for this repo
+- `.riviere/config/domains.json` — canonical domain names; use these exactly
+- `.riviere/config/component-definitions.json` — extraction rules per component type
 
 ## Extraction Process
 
@@ -31,10 +31,10 @@ Read these files before scanning:
 ### 1. Find All Instances
 
 For each component type in your repository, grep for its code signature using patterns
-from `component-definitions.md`:
+from `component-definitions.json`:
 
 ```bash
-# Examples — actual patterns come from component-definitions.md
+# Examples — actual patterns come from component-definitions.json
 grep -rn "@Controller" src/
 grep -rn "extends BaseUseCase" src/
 grep -rn "@EventHandler" src/
@@ -48,13 +48,13 @@ This gives file paths and line numbers for ALL occurrences.
 For each grep result:
 
 1. Read the file at that location
-2. Infer the module using the priority chain from `metadata.md → Module Inference`:
+2. Infer the module using the priority chain from `metadata.json → Module Inference`:
    - Try Priority 1 (code-level signal) first — read the package/namespace/decorator
    - If not found, apply the Priority 2 path rule for this component type
    - If path is ambiguous, try Priority 3 (class/file name prefix)
    - If no signal matches, use the domain name as module and tag it `[?]`
 3. Extract remaining component details (name, HTTP method, route, etc.)
-4. Write one JSON object to the staged output file (do NOT call the CLI)
+4. Write one JSON object to the staged output file
 
 ### 3. Complete Each Type
 
@@ -84,7 +84,7 @@ Include only fields that apply to the component type. All required fields:
 | Field            | All types        | Notes                                                               |
 | ---------------- | ---------------- | ------------------------------------------------------------------- |
 | type             | ✓                | API \| UseCase \| DomainOp \| Event \| EventHandler \| UI \| Custom |
-| domain           | ✓                | Canonical name from domains.md                                      |
+| domain           | ✓                | Canonical name from domains.json                                    |
 | module           | ✓                | Inferred via priority chain                                         |
 | name             | ✓                | Kebab-case                                                          |
 | repository       | ✓                | Full GitHub URL                                                     |
@@ -100,9 +100,24 @@ Include only fields that apply to the component type. All required fields:
 | route            | UI               | e.g., /checkout                                                     |
 | customType       | Custom           | Registered custom type name                                         |
 
+## Agentic Discovery (Prong 3)
+
+For edge cases that grep patterns miss, use multi-file call-chain analysis:
+
+1. If a grep pattern produces zero results but the component type is expected (based on
+   classification.json characteristics), trace call chains from known entry points
+2. Follow import chains 2-3 levels deep to find components with non-standard patterns
+3. Check for dynamically registered components (reflection, decorators applied at runtime)
+
+Tag any components discovered through agentic analysis with an additional JSONL field:
+`"discoveryProng":"agentic"` alongside the standard component fields.
+
+**Only use when:** Classification indicates this component type should exist but Prong 1 found
+fewer than expected. Do not use agentic discovery by default.
+
 ## New Domain Discovery
 
-If a component clearly belongs to a domain not listed in `domains.md`:
+If a component clearly belongs to a domain not listed in `domains.json`:
 
 1. Do NOT use a name similar to an existing domain — check carefully
 2. Append a row to `.riviere/work/domains-{repo}.md`:
@@ -124,5 +139,3 @@ Two files:
 ## Completion
 
 Both output files are written. Your work is done — report back to the orchestrator.
-
-**Do not read `connect-orchestrator.md`.** Do not proceed further.

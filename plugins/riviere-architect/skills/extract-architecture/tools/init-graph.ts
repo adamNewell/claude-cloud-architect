@@ -3,8 +3,9 @@
  * init-graph — initialize Rivière graph from Configure artifacts
  *
  * Reads:
- *   .riviere/config/domains.md            — domain registry (source of record)
- *   .riviere/config/component-definitions.md — optional Custom Types table
+ *   .riviere/config/domains.json                — domain registry
+ *   .riviere/config/component-definitions.json  — optional Custom Types
+ *   .riviere/config/metadata.json               — repo roots for source URLs
  *
  * Runs the Extract initialization sequence:
  *   1. riviere builder init               — first source + first domain
@@ -14,7 +15,8 @@
  *
  * Source URLs are resolved from (in order):
  *   1. --source-url repo-name=https://... flags
- *   2. .riviere/work/meta-{repo}.md "Root:" path → git remote get-url origin
+ *   2. .riviere/config/metadata.json repositories[].root → git remote get-url origin
+ *   3. .riviere/work/meta-{repo}.jsonl structure facet → git remote get-url origin
  *
  * Usage:
  *   bun init-graph.ts
@@ -32,8 +34,9 @@ const HELP = `
 init-graph — initialize Rivière graph from Configure artifacts
 
 Reads:
-  .riviere/config/domains.md           — domain registry (source of record)
-  .riviere/config/component-definitions.md — Custom Types table (optional)
+  .riviere/config/domains.json                — domain registry
+  .riviere/config/component-definitions.json  — Custom Types table (optional)
+  .riviere/config/metadata.json               — repo roots for source URLs
 
 Runs:
   riviere builder init              first source + first domain
@@ -43,7 +46,8 @@ Runs:
 
 Source URLs resolved from (in order):
   1. --source-url repo-name=https://...  (explicit flag)
-  2. .riviere/work/meta-{repo}.md Root path → git remote get-url origin
+  2. .riviere/config/metadata.json repositories[].root → git remote get-url origin
+  3. .riviere/work/meta-{repo}.jsonl structure facet → git remote get-url origin
 
 USAGE
   bun init-graph.ts [options]
@@ -119,102 +123,36 @@ interface CustomType {
   optionalProperties: CustomTypeProp[];
 }
 
-// ─── Markdown table parser ────────────────────────────────────────────────────
+// ─── Parse domains ───────────────────────────────────────────────────────────
 
-/**
- * Parse the first markdown table found after an optional heading.
- * Returns an array of row objects keyed by column header.
- */
-function parseMarkdownTable(
-  content: string,
-  afterHeading?: string
-): Record<string, string>[] {
-  const lines = content.split("\n");
-  let searchFrom = 0;
+const DOMAINS_JSON_PATH = fromRoot(".riviere/config/domains.json");
 
-  if (afterHeading) {
-    const hi = lines.findIndex(
-      (l) =>
-        l.match(/^#{1,4}\s+/) &&
-        l.toLowerCase().includes(afterHeading.toLowerCase())
-    );
-    if (hi === -1) return [];
-    searchFrom = hi + 1;
+let domains: Domain[] = [];
+
+if (existsSync(DOMAINS_JSON_PATH)) {
+  const domainsData = JSON.parse(readFileSync(DOMAINS_JSON_PATH, "utf8"));
+  domains = (domainsData.domains ?? [])
+    .map((d: Record<string, unknown>) => ({
+      name: String(d.name ?? "").trim(),
+      systemType: String(d.type ?? "domain").trim().toLowerCase(),
+      description: String(d.description ?? "").trim(),
+      repositories: Array.isArray(d.repositories)
+        ? d.repositories.map(String).filter(Boolean)
+        : [],
+    }))
+    .filter((d: Domain) => d.name);
+
+  if (domains.length) {
+    console.log(`Read ${domains.length} domain(s) from domains.json`);
   }
-
-  // Find the first table line in range
-  const relStart = lines.slice(searchFrom).findIndex((l) => l.trim().startsWith("|"));
-  if (relStart === -1) return [];
-  const tableStart = searchFrom + relStart;
-
-  const tableLines: string[] = [];
-  for (let i = tableStart; i < lines.length; i++) {
-    const t = lines[i].trim();
-    if (t.startsWith("|")) {
-      tableLines.push(t);
-    } else if (t === "") {
-      continue; // allow blank lines between rows (some editors add them)
-    } else {
-      break; // non-pipe, non-blank — table ended
-    }
-  }
-
-  if (tableLines.length < 2) return [];
-
-  const headers = tableLines[0].split("|").map((h) => h.trim()).filter(Boolean);
-  const rows: Record<string, string>[] = [];
-
-  for (let i = 1; i < tableLines.length; i++) {
-    const line = tableLines[i];
-    // Skip separator rows (only dashes, colons, pipes, spaces)
-    if (!line.replace(/[|\-:\s]/g, "").trim()) continue;
-    const cells = line.split("|").map((c) => c.trim()).filter(Boolean);
-    if (!cells.length) continue;
-    const row: Record<string, string> = {};
-    headers.forEach((h, idx) => (row[h] = cells[idx] ?? ""));
-    rows.push(row);
-  }
-
-  return rows;
 }
 
-// ─── Parse domains.md ─────────────────────────────────────────────────────────
-
-const DOMAINS_PATH = fromRoot(".riviere/config/domains.md");
-if (!existsSync(DOMAINS_PATH)) {
-  console.error("Error: .riviere/config/domains.md not found");
+if (!domains.length) {
+  console.error("Error: No domains found. Checked:");
+  console.error(`  ${DOMAINS_JSON_PATH}`);
   console.error(
     "Run Explore to generate the domain registry before initializing the graph."
   );
-  process.exit(1);
-}
-
-const domainsContent = readFileSync(DOMAINS_PATH, "utf8");
-const domainRows = parseMarkdownTable(domainsContent);
-
-if (!domainRows.length) {
-  console.error("Error: No domains found in domains.md");
-  console.error(
-    "The file must contain a table with columns: Domain Name, Type, Description, Repositories"
-  );
-  process.exit(1);
-}
-
-const domains: Domain[] = domainRows
-  .map((row) => ({
-    // tolerate both "Domain Name" and "name" as header spellings
-    name: (row["Domain Name"] ?? row["Name"] ?? row["name"] ?? "").trim(),
-    systemType: (row["Type"] ?? row["type"] ?? "domain").trim().toLowerCase(),
-    description: (row["Description"] ?? row["description"] ?? "").trim(),
-    repositories: (row["Repositories"] ?? row["repositories"] ?? "")
-      .split(",")
-      .map((r) => r.trim())
-      .filter(Boolean),
-  }))
-  .filter((d) => d.name);
-
-if (!domains.length) {
-  console.error("Error: Could not parse valid domains from domains.md");
   process.exit(1);
 }
 
@@ -230,23 +168,58 @@ domains.forEach((d) =>
 
 // ─── Resolve source URLs ──────────────────────────────────────────────────────
 
+// Pre-load metadata.json repo roots if available
+const metadataJsonPath = fromRoot(".riviere/config/metadata.json");
+const metadataRepoRoots = new Map<string, string>();
+
+if (existsSync(metadataJsonPath)) {
+  try {
+    const metadata = JSON.parse(readFileSync(metadataJsonPath, "utf8"));
+    for (const repo of metadata.repositories ?? []) {
+      if (repo.name && repo.root) {
+        metadataRepoRoots.set(String(repo.name), String(repo.root));
+      }
+    }
+  } catch {
+    // metadata.json malformed — fall through to other methods
+  }
+}
+
+function resolveRootPath(repoName: string): string | null {
+  // 1. metadata.json
+  if (metadataRepoRoots.has(repoName)) return metadataRepoRoots.get(repoName)!;
+
+  // 2. meta-{repo}.jsonl — look for structure facet
+  const jsonlPath = fromRoot(`.riviere/work/meta-${repoName}.jsonl`);
+  if (existsSync(jsonlPath)) {
+    const lines = readFileSync(jsonlPath, "utf8").split("\n").filter((l) => l.trim());
+    for (const line of lines) {
+      try {
+        const obj = JSON.parse(line);
+        if (obj.facet === "structure" && obj.root) {
+          return String(obj.root).trim();
+        }
+      } catch {
+        // skip malformed
+      }
+    }
+  }
+
+  return null;
+}
+
 function resolveSourceUrl(repoName: string): string | null {
   // 1. Explicit --source-url flag
   if (sourceUrlOverrides.has(repoName)) return sourceUrlOverrides.get(repoName)!;
 
-  // 2. meta-{repo}.md Root path → git remote
-  const metaPath = fromRoot(`.riviere/work/meta-${repoName}.md`);
-  if (existsSync(metaPath)) {
-    const content = readFileSync(metaPath, "utf8");
-    const match = content.match(/[-*]\s+Root:\s*(.+)/);
-    if (match) {
-      const localPath = match[1].trim();
-      const result = spawnSync("git", ["-C", localPath, "remote", "get-url", "origin"], {
-        encoding: "utf8",
-      });
-      if (result.status === 0 && result.stdout.trim()) {
-        return result.stdout.trim().replace(/\.git$/, "");
-      }
+  // 2. Resolve root path from metadata.json / JSONL, then git remote
+  const localPath = resolveRootPath(repoName);
+  if (localPath) {
+    const result = spawnSync("git", ["-C", localPath, "remote", "get-url", "origin"], {
+      encoding: "utf8",
+    });
+    if (result.status === 0 && result.stdout.trim()) {
+      return result.stdout.trim().replace(/\.git$/, "");
     }
   }
 
@@ -282,46 +255,41 @@ resolvedUrls.forEach((url, repo) =>
   console.log(`  ${repo.padEnd(30)} → ${url}`)
 );
 
-// ─── Parse custom types (optional) ───────────────────────────────────────────
+// ─── Parse custom types ──────────────────────────────────────────────────────
 
-const DEFS_PATH = fromRoot(".riviere/config/component-definitions.md");
+const DEFS_JSON_PATH = fromRoot(".riviere/config/component-definitions.json");
 const customTypes: CustomType[] = [];
 
-if (existsSync(DEFS_PATH)) {
-  const defsContent = readFileSync(DEFS_PATH, "utf8");
-  const customRows = parseMarkdownTable(defsContent, "Custom Types");
+if (existsSync(DEFS_JSON_PATH)) {
+  try {
+    const defsData = JSON.parse(readFileSync(DEFS_JSON_PATH, "utf8"));
+    for (const ct of defsData.customTypes ?? []) {
+      const name = String(ct.name ?? "").trim();
+      if (!name) continue;
 
-  for (const row of customRows) {
-    const name = (row["Name"] ?? row["name"] ?? "").trim();
-    if (!name) continue;
-
-    const parseProps = (cell: string): CustomTypeProp[] =>
-      (cell ?? "")
-        .split(";")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .map((s) => {
-          const parts = s.split(":").map((p) => p.trim());
+      const parseJsonProps = (props: unknown[]): CustomTypeProp[] =>
+        (props ?? []).map((p: unknown) => {
+          const prop = p as Record<string, unknown>;
           return {
-            name: parts[0] ?? "",
-            type: parts[1] ?? "string",
-            description: parts.slice(2).join(":").trim(),
+            name: String(prop.name ?? ""),
+            type: String(prop.type ?? "string"),
+            description: String(prop.description ?? ""),
           };
-        })
-        .filter((p) => p.name);
+        }).filter((p) => p.name);
 
-    customTypes.push({
-      name,
-      description: (row["Description"] ?? row["description"] ?? "").trim(),
-      requiredProperties: parseProps(row["Required Properties"] ?? ""),
-      optionalProperties: parseProps(row["Optional Properties"] ?? ""),
-    });
-  }
+      customTypes.push({
+        name,
+        description: String(ct.description ?? ""),
+        requiredProperties: parseJsonProps(ct.requiredProperties),
+        optionalProperties: parseJsonProps(ct.optionalProperties),
+      });
+    }
 
-  if (customTypes.length) {
-    console.log(
-      `\nCustom types: ${customTypes.map((t) => t.name).join(", ")}`
-    );
+    if (customTypes.length) {
+      console.log(`\nCustom types: ${customTypes.map((t) => t.name).join(", ")}`);
+    }
+  } catch {
+    console.warn("Warning: component-definitions.json exists but could not be parsed");
   }
 }
 

@@ -1,6 +1,6 @@
 ---
 name: riviere-annotate-staging
-description: Enrichment staging worker for riviere-architect Annotate. Reads DomainOp source code and writes riviere enrich calls to JSONL — never executes enrich directly. Use when the arch-deconstruct orchestrator spawns Annotate subagents.
+description: Enrichment staging worker for riviere-architect Annotate. Reads DomainOp source code and writes JSONL. Use when the arch-deconstruct orchestrator spawns Annotate subagents.
 model: sonnet
 tools: Read, Write, Edit, Glob, Grep
 ---
@@ -9,18 +9,14 @@ tools: Read, Write, Edit, Glob, Grep
 
 ## Purpose
 
-You are an enrichment staging worker. You read source code to produce business-language descriptions of DomainOps, then write those enrichment calls to a JSONL staging file. You do NOT call `riviere builder enrich` directly — ever.
-
-## Why concurrent enrich is forbidden
-
-Concurrent `riviere builder enrich` calls cause 45–60% data loss in the graph. This is not a preference — it is a hard constraint. The orchestrator calls enrich sequentially from your JSONL after all staging agents complete.
+You are an enrichment staging worker. You read source code to produce business-language descriptions of DomainOps, then write those enrichment calls to a JSONL staging file.
 
 ## Instructions
 
 Read your complete instructions from the phase reference doc:
 
 ```
-skills/riviere-architect/steps/annotate-subagent.md
+skills/extract-architecture/steps/annotate-subagent.md
 ```
 
 Then execute exactly as that doc specifies for your assigned REPO_PATH.
@@ -29,10 +25,10 @@ Then execute exactly as that doc specifies for your assigned REPO_PATH.
 
 Write staged JSONL to: `.riviere/work/annotate-staged-{repo-name}.jsonl`
 
-Each line is one JSON object representing one `enrich` call. Do not call `riviere builder` — write the file only.
+Each line is one JSON object representing one enrichment.
 
-When done, report:
+When done, output this report to the orchestrator:
 
-```
-ANNOTATE_DONE: {repo-name} | {N} enrichments staged | File: .riviere/work/annotate-staged-{repo-name}.jsonl
+```bash
+bun tools/agent-report.ts --project-root "$PROJECT_ROOT" --step annotate --repo {repo-name}
 ```

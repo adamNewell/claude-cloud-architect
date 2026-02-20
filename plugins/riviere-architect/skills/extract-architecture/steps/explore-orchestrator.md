@@ -17,19 +17,7 @@ Create the staging directory and initialize the domain registry:
 
 ```bash
 mkdir -p .riviere/work/ .riviere/config/
-cat > .riviere/config/domains.md << 'EOF'
-# Domain Registry
-
-Single source of record for all discovered domains across all repositories.
-
-Rules:
-- Check this file before naming any domain. Use the canonical name if it exists.
-- If a domain is not listed, stage a new entry in your per-repo domains file.
-- If a domain exists but your repo also contains code for it, add your repo to its Repositories column.
-
-| Domain Name | Type | Description | Repositories |
-| ----------- | ---- | ----------- | ------------ |
-EOF
+echo '{"domains":[]}' > .riviere/config/domains.json
 ```
 
 ## Domain Boundary Thinking Framework
@@ -65,17 +53,31 @@ After all subagents complete:
 bun tools/merge-domains.ts --project-root "$PROJECT_ROOT"
 ```
 
-The tool reads all `.riviere/work/domains-{repo}.md` files, applies three merge rules
-(new → append, ADD → update Repositories, collision → flag), and writes the updated
-`domains.md`. Near-duplicate names (Levenshtein distance ≤ 2) are flagged as conflicts.
-
 If the tool exits with code 2, conflicts were detected — present them to the user for
 resolution before continuing.
 
+### 1b. Triangulate discoveries (when multi-prong data available)
+
+If subagents produced multi-prong tagged findings, run triangulation:
+
+```bash
+bun tools/triangulate.ts --project-root "$PROJECT_ROOT" \
+  --input-dir "$PROJECT_ROOT/.riviere/work" \
+  --output "$PROJECT_ROOT/.riviere/work/triangulated-explore.jsonl" \
+  --prong-prefix "meta-"
+```
+
+Review the triangulation report:
+
+- **HIGH confidence** items are auto-accepted
+- **MEDIUM confidence** items are auto-accepted with a note
+- **LOW confidence** items are flagged -- present to user alongside domain confirmation
+- **Contradictions** are escalated -- present conflicting findings for user resolution
+
 ### 2. Discover nested dependencies (loop)
 
-Read the `### Internal Dependencies` table from each `.riviere/work/meta-{repo}.md`. Deduplicate
-by repo name — the same dependency referenced from multiple repos produces one entry.
+Read `internalDep` facets from each `.riviere/work/meta-{repo}.jsonl`. Deduplicate by repo name -- the
+same dependency referenced from multiple repos produces one entry.
 
 If `.riviere/config/repo-discovery.yaml` exists, use it to filter: only repos matching the
 configured `github_org`, `ecr_account_id`, or `npm_scope` are considered internal. If the config
@@ -100,7 +102,7 @@ Merge tool output with subagent findings. Deduplicate across both sources.
 
 2. For each confirmed repo that exists locally, spawn a new explore subagent (same instructions as above).
 
-3. After new subagents complete, merge their domain discoveries into `domains.md`.
+3. After new subagents complete, merge their domain discoveries into `domains.json`.
 
 4. **Repeat from the top of this step:** Check the new subagents' Internal Dependencies for further
    undiscovered repos. Continue until no new repos are found or all remaining repos are not locally available.
@@ -112,93 +114,32 @@ Track explored repos in a visited set to prevent cycles. Write the final manifes
 
 ### 3. Confirm domains with user
 
-Present the consolidated domain list from `domains.md` (now including domains from all
+Present the consolidated domain list from `domains.json` (now including domains from all
 repos — both originally provided and discovered during the loop):
 
 > "Here are the domains discovered across all repositories. Do these boundaries look correct?
 > Any name changes or merges needed before we continue?"
 
-Incorporate any corrections into `domains.md` now — this is the last chance before the
+Incorporate any corrections into `domains.json` now — this is the last chance before the
 domain names propagate through the rest of the graph.
 
 ### 4. Merge metadata
 
-Read all `.riviere/work/meta-{repo}.md` files and write `.riviere/config/metadata.md`:
+Run the build-metadata tool to merge per-repo facets into structured JSON:
 
-- **Domains section:** reference `domains.md` (do not duplicate entries here)
-- **Frameworks table:** deduplicate — same framework listed once even if in multiple repos
-- **Conventions:** globally consistent patterns go in the main section; per-repo variations
-  go under `## Repo Overrides`
-- **Module Inference:** if the rule differs by repo, note each separately
-- **Entry points:** merge all per-repo tables into one
+```bash
+bun tools/build-metadata.ts --project-root "$PROJECT_ROOT"
+```
+
+Output: `.riviere/config/metadata.json`
 
 ## Output
 
-Two artifacts produced by this step:
+Two artifacts:
 
-**1. `.riviere/config/domains.md`** — canonical domain registry:
+**`.riviere/config/domains.json`** -- canonical domain registry.
 
-```markdown
-# Domain Registry
-
-| Domain Name | Type   | Description                           | Repositories                     |
-| ----------- | ------ | ------------------------------------- | -------------------------------- |
-| orders      | domain | Core order placement and fulfillment  | orders-service                   |
-| inventory   | domain | Stock levels and warehouse operations | inventory-service, shared-domain |
-```
-
-**2. `.riviere/config/metadata.md`** — codebase analysis:
-
-```markdown
-# Codebase Analysis
-
-## Structure
-- Repositories: [list of repo names and local paths]
-- Source code: [e.g., src/, lib/, app/]
-- Tests: [e.g., tests/, __tests__]
-
-## Domains
-
-@`.riviere/config/domains.md`
-
-## Module Inference
-
-| Priority | Signal                                          | Confidence | Notes |
-| -------- | ----------------------------------------------- | ---------- | ----- |
-| 1        | [Code-level signal discovered in this codebase] | HIGH       |       |
-| 2        | [Path rule per component type]                  | MEDIUM     |       |
-| 3        | [Class/file name prefix or suffix]              | LOW        |       |
-| 4        | Domain name as module                           | LOW        |       |
-
-**Path rules by component type:**
-| Component Type | Path Rule                | Example                                 |
-| -------------- | ------------------------ | --------------------------------------- |
-| [type]         | [nth segment under root] | `src/orders/checkout/Foo.ts` → checkout |
-
-## Frameworks
-| Category        | Name | Version |
-| --------------- | ---- | ------- |
-| Web framework   |      |         |
-| Event/messaging |      |         |
-| Database        |      |         |
-
-## Conventions
-- File naming: [pattern]
-- Class naming: [pattern]
-- API pattern: [how to recognize]
-- Use case pattern: [how to recognize]
-- Entity pattern: [how to recognize]
-- Event pattern: [how to recognize]
-
-## Repo Overrides
-[Conventions that differ per repository — format: "repo-name: override description"]
-
-## Entry Points
-| Type           | Location | Pattern |
-| -------------- | -------- | ------- |
-| API routes     |          |         |
-| Event handlers |          |         |
-```
+**`.riviere/config/metadata.json`** -- codebase analysis.
 
 ## Module Inference Reference
 
@@ -218,7 +159,7 @@ When filling the Module Inference section above, prioritize signals in this orde
 
 - **Subagent returns incomplete output (missing meta or domains file):** Re-spawn that subagent for the affected repository only. Do not re-run all subagents.
 - **Domain name collision between subagents (same concept, different names):** Do NOT pick one automatically — present both names to the user with the discovered evidence and ask them to decide.
-- **`domains.md` merge produces duplicate rows:** Deduplicate by canonical name before presenting to user. If truly duplicate, keep the one with more repositories listed.
+- **`domains.json` merge produces duplicate rows:** Deduplicate by canonical name before presenting to user. If truly duplicate, keep the one with more repositories listed.
 
 ## Record Completion
 
@@ -230,6 +171,7 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step explore --status
 
 **Step 1 complete.** Wait for user feedback before proceeding.
 
-## Next Phase
+## Handoff
 
-Read `steps/configure-orchestrator.md`
+The `detect-phase.ts --status completed` call above automatically emits
+`handoff-explore.json` with step context for the next agent. No further action needed.

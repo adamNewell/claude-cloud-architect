@@ -10,10 +10,12 @@
  *
  *   2. Record (--step + --status)
  *      Update progress.json with a step transition (started / completed).
+ *      When recording a step completion, also emits handoff-{step}.json
+ *      for context isolation between pipeline steps.
  *      Called by step orchestrators at the start and end of each step.
  *
- * Phase order:
- *   setup → explore → configure → extract → connect → annotate → validate → complete
+ * Phase order (v2 — 8-step pipeline):
+ *   setup → classify → explore → configure → extract → connect → annotate → trace → validate → complete
  *
  * Usage:
  *   bun detect-phase.ts                                          # detect and display
@@ -41,10 +43,11 @@ DETECT MODE (default):
 
 RECORD MODE (--step + --status):
   Updates progress.json with a step transition.
+  On step completion, also emits handoff-{step}.json for context isolation.
   Called by step orchestrators at step boundaries.
 
-PHASE ORDER
-  setup → explore → configure → extract → connect → annotate → validate → complete
+PHASE ORDER (v2)
+  setup → classify → explore → configure → extract → connect → annotate → trace → validate → complete
 
 USAGE
   bun detect-phase.ts [options]
@@ -89,11 +92,13 @@ const STEP_STATUS = statusIdx >= 0 ? args[statusIdx + 1] ?? null : null;
 
 const STEPS = [
   "setup",
+  "classify",
   "explore",
   "configure",
   "extract",
   "connect",
   "annotate",
+  "trace",
   "validate",
   "complete",
 ] as const;
@@ -102,22 +107,26 @@ type StepName = (typeof STEPS)[number];
 
 const STEP_FILES: Record<string, string> = {
   setup: "steps/setup.md",
+  classify: "steps/classify-orchestrator.md",
   explore: "steps/explore-orchestrator.md",
   configure: "steps/configure-orchestrator.md",
   extract: "steps/extract-orchestrator.md",
   connect: "steps/connect-orchestrator.md",
   annotate: "steps/annotate-orchestrator.md",
+  trace: "steps/trace-orchestrator.md",
   validate: "steps/validate-orchestrator.md",
 };
 
 const STEP_LABELS: Record<string, string> = {
   setup: "Setup",
+  classify: "Step 0 — Classify",
   explore: "Step 1 — Explore",
   configure: "Step 2 — Configure",
   extract: "Step 3 — Extract",
   connect: "Step 4 — Connect",
   annotate: "Step 5 — Annotate",
-  validate: "Step 6 — Validate",
+  trace: "Step 6 — Trace",
+  validate: "Step 7 — Validate",
   complete: "Complete",
 };
 
@@ -150,6 +159,21 @@ interface Progress {
   nextStepFile: string | null;
 }
 
+interface Handoff {
+  step: string;
+  status: "completed";
+  projectRoot: string;
+  repoRoots: Record<string, string>;
+  domains: string[];
+  componentCount: number;
+  linkCount: number;
+  artifactsProduced: string[];
+  nextStep: string | null;
+  nextStepFile: string | null;
+  warnings: string[];
+  userDecisions: Array<{ question: string; answer: string }>;
+}
+
 // ─── Artifact readers ─────────────────────────────────────────────────────────
 
 function listFiles(dir: string, prefix: string, suffix: string): string[] {
@@ -159,45 +183,40 @@ function listFiles(dir: string, prefix: string, suffix: string): string[] {
   );
 }
 
-/** Extract repo roots from meta-{repo}.md files */
+/** Extract repo roots from meta-{repo}.jsonl */
 function readRepoRoots(): Record<string, string> {
   const roots: Record<string, string> = {};
-  const metaFiles = listFiles(WORK_DIR, "meta-", ".md");
-  for (const file of metaFiles) {
-    const repoName = file.replace(/^meta-/, "").replace(/\.md$/, "");
+
+  const jsonlFiles = listFiles(WORK_DIR, "meta-", ".jsonl");
+  for (const file of jsonlFiles) {
+    const repoName = file.replace(/^meta-/, "").replace(/\.jsonl$/, "");
     const content = readFileSync(resolve(WORK_DIR, file), "utf8");
-    const match = content.match(/[-*]\s+Root:\s*(.+)/);
-    if (match) roots[repoName] = match[1].trim();
+    for (const line of content.split("\n")) {
+      if (!line.trim()) continue;
+      try {
+        const obj = JSON.parse(line);
+        if (obj.facet === "structure" && obj.root) {
+          roots[repoName] = obj.root;
+          break;
+        }
+      } catch { /* skip malformed */ }
+    }
   }
   return roots;
 }
 
-/** Extract domain names from config/domains.md */
+/** Extract domain names from config/domains.json */
 function readDomains(): string[] {
-  const domainsPath = resolve(CONFIG_DIR, "domains.md");
-  if (!existsSync(domainsPath)) return [];
-  const content = readFileSync(domainsPath, "utf8");
-  const lines = content.split("\n");
-
-  // Find the table, extract domain names from first column
-  const domains: string[] = [];
-  let inTable = false;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith("|") && !inTable) {
-      inTable = true;
-      continue; // skip header row
-    }
-    if (inTable && trimmed.startsWith("|")) {
-      // Skip separator row
-      if (!trimmed.replace(/[|\-:\s]/g, "").trim()) continue;
-      const cells = trimmed.split("|").map((c) => c.trim()).filter(Boolean);
-      if (cells[0]) domains.push(cells[0]);
-    } else if (inTable && !trimmed.startsWith("|")) {
-      break;
-    }
+  const jsonPath = resolve(CONFIG_DIR, "domains.json");
+  if (existsSync(jsonPath)) {
+    try {
+      const data = JSON.parse(readFileSync(jsonPath, "utf8"));
+      if (data.domains && Array.isArray(data.domains)) {
+        return data.domains.map((d: { name: string }) => d.name);
+      }
+    } catch { /* skip malformed */ }
   }
-  return domains;
+  return [];
 }
 
 /** Count components across extract JSONL files */
@@ -224,11 +243,15 @@ function countLinkCandidates(): number {
 
 /** Check if graph.json exists */
 function graphExists(): boolean {
-  // Check common locations
   return (
     existsSync(resolve(RIVIERE_DIR, "graph.json")) ||
     existsSync(resolve(PROJECT_ROOT, "graph.json"))
   );
+}
+
+/** Count meta JSONL files */
+function countMetaFiles(): number {
+  return listFiles(WORK_DIR, "meta-", ".jsonl").length;
 }
 
 // ─── Phase detection from artifacts ───────────────────────────────────────────
@@ -242,6 +265,12 @@ function detectPhaseFromArtifacts(): { step: string; status: "started" | "comple
   const hasSourceHash = existsSync(resolve(CONFIG_DIR, "source-hash.json"));
   if (hasSourceHash) {
     return { step: "complete", status: "completed" };
+  }
+
+  // Check for trace-map.jsonl (trace step output)
+  const hasTraceMap = existsSync(resolve(WORK_DIR, "trace-map.jsonl"));
+  if (hasTraceMap) {
+    return { step: "trace", status: "completed" };
   }
 
   // Check for enrichment replay report (annotate step output)
@@ -285,16 +314,22 @@ function detectPhaseFromArtifacts(): { step: string; status: "started" | "comple
     return { step: "extract", status: "started" };
   }
 
-  // Check for domains.md (configure step output)
-  const hasDomains = existsSync(resolve(CONFIG_DIR, "domains.md"));
+  // Check for domains (configure step output)
+  const hasDomains = existsSync(resolve(CONFIG_DIR, "domains.json"));
   if (hasDomains) {
     return { step: "configure", status: "completed" };
   }
 
   // Check for meta files (explore step output)
-  const metaFiles = listFiles(WORK_DIR, "meta-", ".md");
-  if (metaFiles.length > 0) {
+  const metaJsonl = listFiles(WORK_DIR, "meta-", ".jsonl");
+  if (metaJsonl.length > 0) {
     return { step: "explore", status: "completed" };
+  }
+
+  // Check for classification.json (classify step output)
+  const hasClassification = existsSync(resolve(CONFIG_DIR, "classification.json"));
+  if (hasClassification) {
+    return { step: "classify", status: "completed" };
   }
 
   // .riviere/ exists but no work artifacts
@@ -332,12 +367,11 @@ function buildProgress(
 ): Progress {
   const repoRoots = readRepoRoots();
   const domains = readDomains();
-  const metaFiles = listFiles(WORK_DIR, "meta-", ".md");
+  const metaFileCount = countMetaFiles();
   const extractFiles = listFiles(WORK_DIR, "extract-", ".jsonl");
   const components = countComponents();
   const linkCandidates = countLinkCandidates();
 
-  // Build completed steps list
   let completedSteps: string[];
   if (existingCompleted) {
     completedSteps = existingCompleted;
@@ -360,7 +394,7 @@ function buildProgress(
     repoRoots,
     domains,
     stats: {
-      metaFiles: metaFiles.length,
+      metaFiles: metaFileCount,
       extractFiles: extractFiles.length,
       components,
       linkCandidates,
@@ -391,6 +425,89 @@ function readProgress(): Progress | null {
   } catch {
     return null;
   }
+}
+
+// ─── Handoff file emission ───────────────────────────────────────────────────
+
+function listArtifactsForStep(step: string): string[] {
+  const artifacts: string[] = [];
+
+  switch (step) {
+    case "classify":
+      if (existsSync(resolve(CONFIG_DIR, "classification.json"))) {
+        artifacts.push("config/classification.json");
+      }
+      break;
+    case "explore": {
+      const jsonlMeta = listFiles(WORK_DIR, "meta-", ".jsonl");
+      for (const f of jsonlMeta) artifacts.push(`work/${f}`);
+      const jsonlDomains = listFiles(WORK_DIR, "domains-", ".jsonl");
+      for (const f of jsonlDomains) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(CONFIG_DIR, "domains.json"))) artifacts.push("config/domains.json");
+      if (existsSync(resolve(CONFIG_DIR, "metadata.json"))) artifacts.push("config/metadata.json");
+      break;
+    }
+    case "configure": {
+      const ruleJsonl = listFiles(WORK_DIR, "rules-", ".jsonl");
+      for (const f of ruleJsonl) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(CONFIG_DIR, "component-definitions.json"))) artifacts.push("config/component-definitions.json");
+      if (existsSync(resolve(CONFIG_DIR, "linking-rules.json"))) artifacts.push("config/linking-rules.json");
+      break;
+    }
+    case "extract": {
+      const extractFiles = listFiles(WORK_DIR, "extract-", ".jsonl");
+      for (const f of extractFiles) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(WORK_DIR, "component-replay-report.json"))) artifacts.push("work/component-replay-report.json");
+      break;
+    }
+    case "connect": {
+      const linkFiles = listFiles(WORK_DIR, "link-staged-", ".jsonl");
+      for (const f of linkFiles) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(WORK_DIR, "link-replay-report.json"))) artifacts.push("work/link-replay-report.json");
+      break;
+    }
+    case "annotate": {
+      const enrichFiles = listFiles(WORK_DIR, "annotate-staged-", ".jsonl");
+      for (const f of enrichFiles) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(WORK_DIR, "enrichment-replay-report.json"))) artifacts.push("work/enrichment-replay-report.json");
+      break;
+    }
+    case "trace":
+      if (existsSync(resolve(WORK_DIR, "trace-map.jsonl"))) artifacts.push("work/trace-map.jsonl");
+      break;
+    case "validate":
+      if (existsSync(resolve(WORK_DIR, "orphans.json"))) artifacts.push("work/orphans.json");
+      if (existsSync(resolve(CONFIG_DIR, "source-hash.json"))) artifacts.push("config/source-hash.json");
+      const orphanJsonl = listFiles(WORK_DIR, "orphan-analysis-", ".jsonl");
+      for (const f of orphanJsonl) artifacts.push(`work/${f}`);
+      if (existsSync(resolve(WORK_DIR, "doc-verification.json"))) artifacts.push("work/doc-verification.json");
+      break;
+  }
+
+  return artifacts;
+}
+
+function writeHandoff(step: string, progress: Progress): void {
+  const next = getNextStep(step, "completed");
+
+  const handoff: Handoff = {
+    step,
+    status: "completed",
+    projectRoot: progress.projectRoot,
+    repoRoots: progress.repoRoots,
+    domains: progress.domains,
+    componentCount: progress.stats.components,
+    linkCount: progress.stats.linkCandidates,
+    artifactsProduced: listArtifactsForStep(step),
+    nextStep: next.step,
+    nextStepFile: next.file,
+    warnings: [],
+    userDecisions: [],
+  };
+
+  const handoffPath = resolve(WORK_DIR, `handoff-${step}.json`);
+  writeFileSync(handoffPath, JSON.stringify(handoff, null, 2) + "\n", "utf8");
+  console.log(`✓ Handoff written: ${handoffPath}`);
 }
 
 // ─── Human-readable output ───────────────────────────────────────────────────
@@ -467,6 +584,11 @@ if (STEP_NAME && STEP_STATUS) {
     completedSteps
   );
   writeProgress(progress);
+
+  // Emit handoff file on step completion
+  if (STEP_STATUS === "completed") {
+    writeHandoff(STEP_NAME, progress);
+  }
 
   const label = STEP_LABELS[STEP_NAME] ?? STEP_NAME;
   console.log(`✓ Progress recorded: ${label} — ${STEP_STATUS}`);

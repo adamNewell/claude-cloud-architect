@@ -1,14 +1,13 @@
 # Step 5 Subagent: Enrich Components
 
-## Critical Constraints
+## Write Path
 
-**NEVER** call `enrich` directly — write to staged JSONL only. Concurrent enrich calls corrupt the graph. The coordinator serializes all enrich CLI calls.
+You produce JSONL.
 
 ## Role
 
 You are a subagent assigned to enrich DomainOps within **one repository**. You read
-source files and write staged enrichment data. You do NOT call `enrich` directly —
-concurrent enrich calls corrupt the graph (45–60% data loss observed in testing).
+source files and write staged enrichment data.
 
 ## Scope
 
@@ -91,9 +90,6 @@ only the fields you identified:
 {"id":"orders:domain:domainop:order.begin","entity":"Order","stateChanges":["from:[Draft],to:[Placed]"],"businessRules":["Order must have at least one item"],"reads":["this.items"],"validates":["items.length > 0"],"modifies":["this.state ← Placed"],"emits":["OrderPlaced event"]}
 ```
 
-Do NOT call the `enrich` CLI. The coordinator runs all enrich calls sequentially after
-all workers complete.
-
 ### 5. Mark Done
 
 ```markdown
@@ -104,5 +100,3 @@ all workers complete.
 
 Staged output file written and all checklist items marked `- [x]`. Your work is done —
 report back to the orchestrator.
-
-**Do not read `validate-orchestrator.md`.** Do not proceed further.

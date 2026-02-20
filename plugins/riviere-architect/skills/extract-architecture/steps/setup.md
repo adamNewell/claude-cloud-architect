@@ -60,23 +60,9 @@ mkdir -p "$PROJECT_ROOT/.riviere/work" "$PROJECT_ROOT/.riviere/config"
 
 > **Directory note:** `.riviere/` is created inside `PROJECT_ROOT` (the user's project directory). All step files read and write `.riviere/` files there. All `bun tools/*.ts` invocations must include `--project-root "$PROJECT_ROOT"`. When spawning subagents to scan source code, pass `REPO_ROOT` as an absolute path explicitly.
 
-## Concurrency Policy (Mandatory)
+## Write Gate Architecture
 
-Treat all `riviere builder` write commands as concurrency-unsafe.
-
-Do not run concurrent writes for any of:
-
-- `add-source`
-- `add-domain`
-- `define-custom-type`
-- `add-component`
-- `link`
-- `link-http`
-- `link-external`
-- `enrich`
-- `finalize`
-
-Subagents may analyze in parallel, but all write commands must be executed sequentially by the coordinator.
+All graph mutations flow through TypeScript replay tools. Subagents produce JSONL only (they have no Bash access). Orchestrators replay staged output sequentially via `replay-staged-components.ts`, `replay-staged-links.ts`, and `replay-staged-enrichments.ts`.
 
 ## Cookbooks
 

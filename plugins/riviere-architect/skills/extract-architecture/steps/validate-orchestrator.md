@@ -1,4 +1,4 @@
-# Step 6: Validate (Orchestrator)
+# Step 7: Validate (Orchestrator)
 
 ## Objective
 
@@ -12,8 +12,8 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step validate --statu
 
 ## Prerequisites
 
-- Graph with enriched components from Step 5.
-- Read `.riviere/config/domains.md` — cross-domain orphan patterns may indicate a cross-repo link was missed.
+- Graph with enriched components from Step 6.
+- Read `.riviere/config/domains.json` — cross-domain orphan patterns may indicate a cross-repo link was missed.
 
 > **Single-repository codebases:** Follow `steps/validate-subagent.md` for orphan
 > analysis when the orphan count exceeds 20. For smaller counts, run the orphan loop
@@ -37,7 +37,7 @@ npx riviere builder check-consistency --json
 
 - Zero orphans remain, **or**
 - All remaining orphans are diagnosed as intentionally orphaned (external consumers, standalone utilities), **or**
-- 3 rounds completed without convergence — stop looping; remaining orphans likely indicate a structural issue with `linking-rules.md` patterns. Present persistent orphans to the user and recommend updating Step 4 patterns before retrying.
+- 3 rounds completed without convergence — stop looping; remaining orphans likely indicate a structural issue with `linking-rules.json` patterns. Present persistent orphans to the user and recommend updating Step 5 patterns before retrying.
 
 **Common causes:**
 
@@ -48,8 +48,8 @@ npx riviere builder check-consistency --json
 
 Pay special attention to orphan UseCases and DomainOps — these are not entry points or exit points so it's unusual for them to be orphans.
 
-A high orphan count (>20%) usually indicates systematic linking failure in Step 4 — check
-`linking-rules.md` patterns before fixing individual orphans.
+A high orphan count (>20%) usually indicates systematic linking failure in Step 5 — check
+`linking-rules.json` patterns before fixing individual orphans.
 
 ## Spawn Workers
 
@@ -73,18 +73,42 @@ ORPHAN TYPE: {OrphanType}   (e.g., Event, UseCase, DomainOp, EventHandler)
 ## Error Recovery
 
 - **`validate` command reports schema errors:** Fix schema errors completely before running orphan analysis. Do not proceed to orphan analysis with schema violations present.
-- **Orphan fix loop does not converge after 3 rounds:** Stop looping. The remaining orphans likely indicate a structural issue with `linking-rules.md` patterns — present the persistent orphans to the user with a recommendation to update Step 4 patterns and re-run linking for affected domains only.
+- **Orphan fix loop does not converge after 3 rounds:** Stop looping. The remaining orphans likely indicate a structural issue with `linking-rules.json` patterns — present the persistent orphans to the user with a recommendation to update Step 4 patterns and re-run linking for affected domains only.
 - **Worker subagent reports orphan type but provides no actionable fixes:** The orphan type may represent external consumers (events consumed by systems outside this graph). Ask the user to confirm before marking as intentionally orphaned.
+
+## 3. Doc Verification (when wiki indexed or wiki available)
+
+Run documentation cross-referencing:
+
+```bash
+bun tools/verify-docs.ts --project-root "$PROJECT_ROOT"
+```
+
+The tool cross-references the graph against available documentation and produces
+`.riviere/work/doc-verification.json`.
+
+Present findings to the user:
+
+- **Warnings:** Domains or critical flows without documentation
+- **Info:** Components without doc references (common, not always actionable)
+- **Gaps:** Documented features without matching components (may indicate extraction missed something)
+
+Doc verification findings are advisory — they do not block graph completion.
 
 ## Orphan Fix Loop
 
 After workers complete (or after direct analysis for small counts):
 
-1. Read all `.riviere/work/orphan-analysis-{type}.md` files
-2. Tally actionable orphans (exclude accepted intentional ones). If count = 0, exit loop
+1. Tally actionable orphans:
+
+   ```bash
+   jq -s '[.[] | select(.action != "accept")] | length' "$PROJECT_ROOT"/.riviere/work/orphan-analysis-*.jsonl
+   ```
+
+   If count = 0, exit loop
 3. Apply corrections:
-   - **Missing link** → add the link (re-run affected portion of Step 4)
-   - **Missing component** → update `.riviere/config/component-definitions.md`, re-run Step 3 for the affected repository only
+   - **Missing link** → add the link (re-run affected portion of Step 5)
+   - **Missing component** → update `.riviere/config/component-definitions.json`, re-run Step 4 for the affected repository only
    - **Wrong domain / name mismatch** → fix the component name or domain
 4. **Return to step 1 of this loop** — re-run `check-consistency --json` (spawning workers again if count > 20) and repeat until actionable orphan count reaches 0
 
@@ -107,6 +131,11 @@ This records the current git HEAD SHA for every repository in `.riviere/config/s
 ```bash
 bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step validate --status completed
 ```
+
+## Handoff
+
+The `detect-phase.ts --status completed` call above automatically emits
+`handoff-validate.json` with step context for the next agent. No further action needed.
 
 **Graph extraction complete.**
 

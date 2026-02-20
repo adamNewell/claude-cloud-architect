@@ -13,8 +13,8 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step connect --status
 ## Prerequisites
 
 - Graph with extracted components from Step 3.
-- Read `.riviere/config/linking-rules.md` for cross-domain patterns.
-- Read `.riviere/config/domains.md` — use canonical domain names when resolving cross-repo links.
+- Read `.riviere/config/linking-rules.json`for cross-domain patterns.
+- Read `.riviere/config/domains.json` — use canonical domain names when resolving cross-repo links.
 
 > **Single-repository codebases:** Follow `steps/connect-subagent.md` directly —
 > you are both orchestrator and subagent. Use `.riviere/connect-checklist.md` as the
@@ -40,11 +40,8 @@ then write staged JSONL commands. Coordinator executes all write commands sequen
 bun tools/split-checklist.ts --project-root "$PROJECT_ROOT" --checklist "$PROJECT_ROOT/.riviere/connect-checklist.md" --prefix checklist
 ```
 
-The tool reads repo roots from `meta-*.md` files, splits by exact path prefix match,
-validates no empty splits, and writes per-repo files to `.riviere/work/checklist-{repo}.md`.
-
 If the tool exits with code 2, some checklist items could not be matched to a repository —
-check that path formats in the checklist match the repo roots in `meta-*.md`.
+check that path formats in the checklist match the repo roots in `meta-*.jsonl`.
 
 2. Spawn one worker per repository. Each receives `steps/connect-subagent.md` as its
    instruction set:
@@ -56,8 +53,7 @@ REPOSITORY ROOT: {local path}
 CHECKLIST: .riviere/work/checklist-{repo}.md
 ```
 
-> **Mandatory policy:** Treat all `riviere builder` write commands as concurrency-unsafe.
-> Workers must stage commands only; coordinator serializes all writes.
+Workers write staged JSONL; the orchestrator replays it via `replay-staged-links.ts`.
 
 ## Wait and Merge
 
@@ -73,18 +69,11 @@ cat .riviere/work/checklist-*.md > .riviere/connect-checklist.md
 
 3. Replay staged link commands sequentially.
 
-Run the replay tool (deterministic parser + sequential executor):
-
 ```bash
 bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"
 ```
 
-The tool reads `.riviere/work/link-staged-*.jsonl`, validates each JSON line, and executes
-`link` / `link-http` / `link-external` sequentially. Report output:
-
-```text
-.riviere/work/link-replay-report.json
-```
+Report: `.riviere/work/link-replay-report.json`
 
 ### Concrete Cross-Repository Example
 
@@ -112,22 +101,19 @@ Coordinator then runs:
 bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"
 ```
 
-This applies the cross-repo link sequentially, exactly like in-repo links, using canonical
-domain/module/type/name targeting (not repository names).
+This applies the cross-repo link sequentially, exactly like in-repo links, using canonical domain/module/type/name targeting (not repository names).
 
 ## Validate
 
-After linking, check the validation rules in `.riviere/config/linking-rules.md`. List any
-components that violate the rules so the user can review.
+After linking, check the validation rules in `.riviere/config/linking-rules.json`. List any components that violate the rules so the user can review.
 
 ## Feedback
 
-If user reports problems or missing elements, identify the root cause, update the relevant
-config files, and re-run the affected step.
+If user reports problems or missing elements, identify the root cause, update the relevant config files, and re-run the affected step.
 
 ## Error Recovery
 
-- **Worker sub-checklist is empty after split:** The repo root path in `metadata.md` may not match the file paths in the checklist. Check `.riviere/work/checklist-split-report.json` for unmatched lines and verify path formats.
+- **Worker sub-checklist is empty after split:** The repo root path in `metadata.json` may not match the file paths in the checklist. Check `.riviere/work/checklist-split-report.json` for unmatched lines and verify path formats.
 - **Replay tool reports failures (exit code 2):** Open `.riviere/work/link-replay-report.json`, present malformed/failed lines to the user, and retry after fixes.
 - **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
 
@@ -143,6 +129,7 @@ Present link summary showing total links created (sync vs async).
 
 **Step 4 complete.** Wait for user feedback before proceeding.
 
-## Next Phase
+## Handoff
 
-Read `steps/annotate-orchestrator.md`
+The `detect-phase.ts --status completed` call above automatically emits
+`handoff-connect.json` with step context for the next agent. No further action needed.

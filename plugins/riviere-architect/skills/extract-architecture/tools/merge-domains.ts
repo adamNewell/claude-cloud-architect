@@ -2,8 +2,10 @@
 /**
  * merge-domains
  *
- * Merges per-repository domain discovery files (domains-{repo}.md) into the
- * canonical domain registry (.riviere/config/domains.md).
+ * Merges per-repository domain discovery files into the canonical domain
+ * registry (.riviere/config/domains.json).
+ *
+ * Input: domains-{repo}.jsonl — JSONL with {"action":"new"|"addRepo",...} lines
  *
  * Three merge rules:
  *   1. New domain rows → appended to registry
@@ -12,6 +14,9 @@
  *
  * Optionally runs `npx riviere builder add-domain` for each new domain when
  * --add-to-graph is passed (use in Step 3 when graph already exists).
+ *
+ * Output:
+ *   .riviere/config/domains.json
  *
  * Exit codes:
  *   0 - merge completed successfully (conflicts may exist but are reported)
@@ -50,7 +55,7 @@ USAGE
   bun tools/merge-domains.ts [options]
 
 OPTIONS
-  --registry <path>        Path to canonical domains.md (default: .riviere/config/domains.md)
+  --registry <path>        Path to canonical domains.json (default: .riviere/config/domains.json)
   --work-dir <path>        Directory containing domains-*.md files (default: .riviere/work)
   --project-root <path>    Resolve .riviere/ paths relative to this directory (default: cwd)
   --add-to-graph           Run add-domain CLI for each new domain (use when graph exists)
@@ -68,50 +73,41 @@ function argValue(flag: string): string | undefined {
 }
 
 /**
- * Parse a markdown table from domains.md or domains-{repo}.md.
- * Expected columns: | Domain Name | Type | Description | Repositories |
+ * Parse a JSONL domains file (domains-{repo}.jsonl).
+ * Each line is: {"action":"new","name":"...","type":"...","description":"...","repository":"..."}
+ * or: {"action":"addRepo","name":"...","repository":"..."}
  */
-function parseDomainsTable(content: string): DomainEntry[] {
+function parseDomainsJsonl(content: string): DomainEntry[] {
   const entries: DomainEntry[] = [];
-  const lines = content.split("\n");
+  const lines = content.split("\n").filter((l) => l.trim());
 
   for (const line of lines) {
-    // Match table rows — skip header, separator, and non-table lines
-    const trimmed = line.trim();
-    if (!trimmed.startsWith("|")) continue;
-
-    const cells = trimmed
-      .split("|")
-      .map((c) => c.trim())
-      .filter((c) => c.length > 0);
-
-    if (cells.length < 4) continue;
-
-    const [name, type, description, repositories] = cells;
-
-    // Skip header row and separator row
-    if (name === "Domain Name" || name.startsWith("-")) continue;
-    if (/^-+$/.test(name)) continue;
-
-    entries.push({
-      name: name.trim(),
-      type: type.trim(),
-      description: description.trim(),
-      repositories: repositories
-        .split(",")
-        .map((r) => r.trim())
-        .filter((r) => r.length > 0),
-    });
+    try {
+      const obj = JSON.parse(line);
+      if (obj.action === "new") {
+        entries.push({
+          name: String(obj.name ?? "").trim(),
+          type: String(obj.type ?? "domain").trim(),
+          description: String(obj.description ?? "").trim(),
+          repositories: obj.repository
+            ? [String(obj.repository).trim()]
+            : (obj.repositories ?? []).map(String),
+        });
+      } else if (obj.action === "addRepo") {
+        // Encode as an ADD entry for the existing merge logic
+        entries.push({
+          name: String(obj.name ?? "").trim(),
+          type: "(exists)",
+          description: "(exists)",
+          repositories: [`ADD: ${String(obj.repository ?? "").trim()}`],
+        });
+      }
+    } catch {
+      // Skip malformed lines
+    }
   }
 
   return entries;
-}
-
-/**
- * Render domains as markdown table rows.
- */
-function renderTableRow(entry: DomainEntry): string {
-  return `| ${entry.name} | ${entry.type} | ${entry.description} | ${entry.repositories.join(", ")} |`;
 }
 
 /**
@@ -149,7 +145,7 @@ function main(): void {
 
   const registryPath = argValue("--registry")
     ? resolve(argValue("--registry")!)
-    : resolve(PROJECT_ROOT, ".riviere/config/domains.md");
+    : resolve(PROJECT_ROOT, ".riviere/config/domains.json");
   const workDir = argValue("--work-dir")
     ? resolve(argValue("--work-dir")!)
     : resolve(PROJECT_ROOT, ".riviere/work");
@@ -166,20 +162,26 @@ function main(): void {
     process.exit(1);
   }
 
-  // Read existing registry
-  const registryContent = readFileSync(registryPath, "utf8");
-  const registry = parseDomainsTable(registryContent);
+  // Read existing registry (JSON)
+  const registryData = JSON.parse(readFileSync(registryPath, "utf8"));
+  const registry: DomainEntry[] = (registryData.domains ?? []).map((d: Record<string, unknown>) => ({
+    name: String(d.name ?? "").trim(),
+    type: String(d.type ?? "domain").trim(),
+    description: String(d.description ?? "").trim(),
+    repositories: Array.isArray(d.repositories) ? d.repositories.map(String).filter(Boolean) : [],
+  })).filter((d: DomainEntry) => d.name);
   const registryByName = new Map(registry.map((e) => [e.name.toLowerCase(), e]));
 
-  // Find domain discovery files
-  const domainFiles = readdirSync(workDir)
-    .filter((f) => /^domains-.*\.md$/.test(f))
-    .sort();
+  // Find domain discovery JSONL files
+  const allWorkFiles = readdirSync(workDir);
+  const domainFiles = allWorkFiles.filter((f) => /^domains-.*\.jsonl$/.test(f)).sort();
 
   if (domainFiles.length === 0) {
-    console.log(`No domain discovery files found in ${workDir} (pattern: domains-*.md)`);
+    console.log(`No domain discovery files found in ${workDir} (pattern: domains-*.jsonl)`);
     return;
   }
+
+  console.log(`Reading ${domainFiles.length} JSONL domain file(s)...`);
 
   const report: MergeReport = {
     generatedAt: new Date().toISOString(),
@@ -196,7 +198,7 @@ function main(): void {
   for (const fileName of domainFiles) {
     const fullPath = join(workDir, fileName);
     const content = readFileSync(fullPath, "utf8");
-    const entries = parseDomainsTable(content);
+    const entries = parseDomainsJsonl(content);
 
     for (const entry of entries) {
       const key = entry.name.toLowerCase();
@@ -270,17 +272,17 @@ function main(): void {
     return;
   }
 
-  // Rebuild registry file
-  const headerLines = registryContent.split("\n");
-  const headerEnd = headerLines.findIndex((l) => /^\|\s*-/.test(l));
-  const header = headerEnd >= 0
-    ? headerLines.slice(0, headerEnd + 1).join("\n")
-    : `# Domain Registry\n\nSingle source of record for all discovered domains across all repositories.\n\n| Domain Name | Type | Description | Repositories |\n| ----------- | ---- | ----------- | ------------ |`;
-
-  const rows = registry.map(renderTableRow);
-  const newContent = header + "\n" + rows.join("\n") + "\n";
-
-  writeFileSync(registryPath, newContent);
+  // Write updated registry
+  const domainsJson = {
+    version: "1.0",
+    domains: registry.map((d) => ({
+      name: d.name,
+      type: d.type,
+      description: d.description,
+      repositories: d.repositories,
+    })),
+  };
+  writeFileSync(registryPath, JSON.stringify(domainsJson, null, 2));
 
   // Optionally add new domains to graph
   if (addToGraph) {
