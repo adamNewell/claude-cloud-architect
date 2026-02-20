@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="banner.svg" alt="Rivière Architect" width="100%" />
+  <img src="assets/banner.svg" alt="Rivière Architect" width="100%" />
 </p>
 
 # Rivière Architect
@@ -11,7 +11,7 @@ Point it at one or more repositories and it produces a complete component graph 
 ## What It Does
 
 <p align="center">
-  <img src="pipeline.svg" alt="Extraction Pipeline" width="100%" />
+  <img src="assets/pipeline.svg" alt="Extraction Pipeline" width="100%" />
 </p>
 
 The extraction workflow runs in 6 coordinated steps. Each step spawns parallel subagents across repositories while serializing all graph writes to prevent corruption.

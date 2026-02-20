@@ -8,8 +8,8 @@ A curated collection of Claude Code plugins — skills, agents, commands, and ho
 
 ## Plugins
 
-| Plugin | Description | Keywords |
-|--------|-------------|----------|
+| Plugin                                          | Description                                                                              | Keywords                                                  |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | [riviere-architect](plugins/riviere-architect/) | Extract and map existing software architecture as structured, queryable component graphs | `architecture` `system-design` `documentation` `diagrams` |
 
 ## Quick Start
@@ -28,11 +28,11 @@ A curated collection of Claude Code plugins — skills, agents, commands, and ho
 
 **Scopes:**
 
-| Scope | Effect |
-|-------|--------|
-| `user` | Available in all your projects (`~/.claude/settings.json`) |
-| `project` | Shared via version control (`.claude/settings.json`) |
-| `local` | Personal, gitignored (`.claude/settings.local.json`) |
+| Scope     | Effect                                                     |
+| --------- | ---------------------------------------------------------- |
+| `user`    | Available in all your projects (`~/.claude/settings.json`) |
+| `project` | Shared via version control (`.claude/settings.json`)       |
+| `local`   | Personal, gitignored (`.claude/settings.local.json`)       |
 
 ## Repository Structure
 
@@ -51,13 +51,13 @@ claude-skills/
 
 ## Plugin Component Types
 
-| Directory | Type | Description |
-|-----------|------|-------------|
-| `skills/name/SKILL.md` | Skills | Auto-invoked by Claude based on context |
-| `agents/*.md` | Agents | Specialized subagents Claude can spawn |
-| `commands/*.md` | Slash commands | `/command` invocable by users |
-| `hooks/hooks.json` | Hooks | Lifecycle event handlers |
-| `cookbook/` | Reference docs | On-demand CLI and tool documentation |
+| Directory              | Type           | Description                             |
+| ---------------------- | -------------- | --------------------------------------- |
+| `skills/name/SKILL.md` | Skills         | Auto-invoked by Claude based on context |
+| `agents/*.md`          | Agents         | Specialized subagents Claude can spawn  |
+| `commands/*.md`        | Slash commands | `/command` invocable by users           |
+| `hooks/hooks.json`     | Hooks          | Lifecycle event handlers                |
+| `cookbook/`            | Reference docs | On-demand CLI and tool documentation    |
 
 ## Adding a Plugin
 
