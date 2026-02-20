@@ -1,23 +1,24 @@
 <p align="center">
-  <img src="banner.svg" alt="Claude Skills" width="100%" />
+  <img src="banner.svg" alt="Claude Plugin Marketplace" width="100%" />
 </p>
 
-# Claude Skills
+# Claude Plugin Marketplace
 
-A curated collection of Claude Code plugins — skills, agents, commands, and hooks that extend what Claude can do in your codebase.
+Architecture plugins that extend what Claude Code can see, map, and build in your codebase.
 
 ## Plugins
 
 | Plugin                                          | Description                                                                              | Keywords                                                  |
 | ----------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | [riviere-architect](plugins/riviere-architect/) | Extract and map existing software architecture as structured, queryable component graphs | `architecture` `system-design` `documentation` `diagrams` |
+| [waf-analysis](plugins/waf-analysis/)           | AWS Well-Architected Framework best practices for architecture reviews                   | `aws` `well-architected` `security` `reliability`         |
 
 ## Quick Start
 
 ### 1. Add this marketplace
 
 ```bash
-/plugin marketplace add adamNewell/claude-skills
+/plugin marketplace add adamNewell/claude-cloud-architect
 ```
 
 ### 2. Install a plugin
@@ -37,14 +38,19 @@ A curated collection of Claude Code plugins — skills, agents, commands, and ho
 ## Repository Structure
 
 ```
-claude-skills/
+claude-cloud-architect/
 ├── plugins/
-│   └── riviere-architect/          # Architecture extraction plugin
-│       ├── skills/                 # Auto-invoked skills
-│       ├── agents/                 # Specialized subagents
-│       ├── commands/               # Slash commands
-│       ├── cookbook/                # CLI reference docs
-│       └── hooks/                  # Lifecycle hooks
+│   ├── riviere-architect/          # Architecture extraction plugin
+│   │   ├── skills/                 # Auto-invoked skills
+│   │   ├── agents/                 # Specialized subagents
+│   │   ├── commands/               # Slash commands
+│   │   ├── cookbook/                # CLI reference docs
+│   │   └── hooks/                  # Lifecycle hooks
+│   └── waf-analysis/               # Well-Architected Framework plugin
+│       ├── skills/                 # WAF review & audit skills (4)
+│       ├── agents/                 # Pillar reviewers & MCP auditors (11)
+│       ├── data/                   # Practice data (300+ practices, 14 lenses)
+│       └── scripts/                # Data generation & query CLI
 └── scripts/
     └── validate.ts                 # Plugin manifest validator
 ```

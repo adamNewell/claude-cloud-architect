@@ -5,7 +5,7 @@
     "email": "adamdouglasnewell@gmail.com"
   },
   "metadata": {
-    "description": "A curated collection of Claude Code plugins",
+    "description": "Architecture plugins that extend what Claude Code can see, map, and build",
     "version": "1.0.0",
     "pluginRoot": "./plugins"
   },
