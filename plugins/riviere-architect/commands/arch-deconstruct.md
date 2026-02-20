@@ -1,7 +1,7 @@
 ---
 model: opus
 description: Full architecture deconstruction using the riviere-architect workflow. Runs all 6 phases — wiki ingestion, domain mapping, rule definition, component extraction, linking, enrichment, and validation — to produce a complete architecture graph. USE WHEN documenting an existing codebase, extracting architecture for a new team member, creating architecture decision records, or understanding a system you didn't build.
-argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-enrich] [--quick-validate] [--wiki-path=<path>]
+argument-hint: <repo-path-or-paths...> [--skip-wiki] [--skip-discovery] [--skip-enrich] [--quick-validate] [--wiki-path=<path>]
 ---
 
 # Arch Deconstruct
@@ -18,6 +18,7 @@ Run the complete riviere-architect 6-phase workflow against one or more reposito
 REPO_PATHS:    from $ARGUMENTS — space-separated repo paths. Required.
 SKIP_WIKI:     from $ARGUMENTS — if `--skip-wiki` present, skip Phases 0A and 0B. Default: false.
 WIKI_PATH:     from $ARGUMENTS — `--wiki-path=<path>` overrides wiki generation; runs only Wiki Index. Default: none.
+SKIP_DISCOVERY: from $ARGUMENTS — if `--skip-discovery` present, skip linked repo discovery. Default: false (auto-detected from IaC presence).
 SKIP_ENRICH:   from $ARGUMENTS — if `--skip-enrich` present, skip Annotate. Default: false (enrichment is slow).
 QUICK_VALIDATE: from $ARGUMENTS — if `--quick-validate` present, skip orphan loop in Validate; single pass only.
 MULTI_REPO:    true if more than one REPO_PATH provided.
@@ -35,8 +36,7 @@ RUN_ID:        8-char UUID generated at start.
 
 ## Instructions
 
-- Read the skill and all phase reference documents BEFORE spawning any agents
-- Meta-prompt engineering: extract the exact variables, output formats, and constraints from each phase document before writing agent prompts
+- Steps are self-chaining — each step file tells you what to load next. Do not pre-read all documents.
 - Phases are SEQUENTIAL — never start Phase N+1 until Phase N's orchestrator merge is complete
 - Respect concurrency constraints:
   - Extract: subagents write JSONL only; orchestrator serializes CLI calls
@@ -47,27 +47,9 @@ RUN_ID:        8-char UUID generated at start.
 
 ## Workflow
 
-### Step 0: Load Skill and Phase Documents
+### Step 0: Load Skill Overview
 
-Read these files before anything else:
-
-1. `skills/riviere-architect/SKILL.md` — workflow overview and variables
-2. `skills/riviere-architect/steps/wiki-build.md` (if not SKIP_WIKI)
-3. `skills/riviere-architect/steps/wiki-index.md` (if not SKIP_WIKI and not WIKI_PATH)
-4. `skills/riviere-architect/steps/explore-orchestrator.md`
-5. `skills/riviere-architect/steps/configure-orchestrator.md`
-6. `skills/riviere-architect/steps/extract-orchestrator.md`
-7. `skills/riviere-architect/steps/connect-orchestrator.md`
-8. `skills/riviere-architect/steps/annotate-orchestrator.md` (if not SKIP_ENRICH)
-9. `skills/riviere-architect/steps/validate-orchestrator.md`
-
-Extract from each document:
-
-- Required input artifacts
-- Subagent spawn strategy (how many, what scope)
-- Output artifact paths
-- Orchestrator merge steps
-- User checkpoint locations
+Read `skills/riviere-architect/SKILL.md` for workflow overview, variables, and tool reference. **Do not** pre-read all phase documents — steps are self-chaining. Each step file tells you what to load next, keeping context focused on the current phase.
 
 Announce readiness:
 
@@ -79,236 +61,47 @@ Run ID: {RUN_ID}
 Starting wiki setup...
 ```
 
-### Step 1: Wiki Setup — Wiki Setup (conditional)
+### Step 1: Wiki Setup (conditional)
 
-**If SKIP_WIKI:** Skip to Step 2.
+**If SKIP_WIKI:** Skip to Step 1.5.
 
-**If WIKI_PATH provided:**
+**If WIKI_PATH provided:** Skip Wiki Build. Follow `steps/wiki-index.md` only with the provided path.
 
-- Skip Wiki Build
-- Run Wiki Index only: `bun skills/riviere-architect/tools/ingest-wiki.ts {WIKI_PATH}`
-- Confirm qmd embeddings generated
+**Otherwise:** Follow `steps/wiki-build.md`, then `steps/wiki-index.md`.
 
-**Otherwise (full wiki setup):**
+### Step 1.5: Discover Linked Repos (conditional)
 
-- Wiki Build: Follow `wiki-build.md` — guide user through DeepWiki setup for each repo
-- Wiki Index: Run `ingest-wiki.ts` for each generated wiki
+**If SKIP_DISCOVERY:** Skip to Step 2.
 
-**Checkpoint:** Confirm qmd is responding: `qmd query "main application domain" --json`
+Follow `steps/discover-repos.md`. The step auto-detects IaC files and skips if none found.
 
 ### Step 2: Explore — Understand Codebase
 
-Spawn one subagent per repo (parallel if MULTI_REPO). Each subagent follows `explore-subagent.md`.
+Follow `steps/explore-orchestrator.md`.
 
-Agent prompt template (fill in per-repo values):
-
-```
-You are an explore subagent for the riviere-architect workflow.
-
-Read this file for your complete instructions:
-skills/riviere-architect/steps/explore-subagent.md
-
-Your assigned repository: {REPO_PATH}
-Your output files:
-- .riviere/work/meta-{repo-name}.md
-- .riviere/work/domains-{repo-name}.md
-
-Use qmd if available (run `qmd query "..." --json` to query wiki).
-When complete, report: EXPLORE_DONE: {repo-name} | {N} domains discovered | Files written.
-```
-
-Wait for all Explore subagents to complete.
-
-**Orchestrator merge** (follow `explore-orchestrator.md` merge steps):
-
-1. Consolidate domain discoveries → `.riviere/config/domains.md`
-2. Merge metadata → `.riviere/config/metadata.md`
-3. **USER CHECKPOINT:** Present domain list. Get approval before proceeding.
+Pass MULTI_REPO flag so the orchestrator knows whether to spawn subagents or act as subagent directly.
 
 ### Step 3: Configure — Define Extraction Rules
 
-Spawn one subagent per (component type × repo) combination. Types: API, UseCase, DomainOp, Event, EventHandler, UI, plus any custom types.
-
-Each subagent follows `configure-subagent.md`.
-
-Agent prompt template:
-
-```
-You are a configure subagent for the riviere-architect workflow.
-
-Read: skills/riviere-architect/steps/configure-subagent.md
-
-Your assigned scope:
-- Repository: {REPO_PATH}
-- Component type: {TYPE}
-- Output file: .riviere/work/rules-{repo}-{type}.md
-
-Inputs available:
-- .riviere/config/domains.md (canonical domains)
-- .riviere/config/metadata.md (frameworks, conventions)
-
-When complete, report: CONFIGURE_DONE: {repo-name}:{type} | {N} patterns found | File written.
-```
-
-Wait for all Configure subagents to complete.
-
-**Orchestrator merge** (follow `configure-orchestrator.md` merge steps):
-
-1. Consolidate custom type proposals — ask user to accept/reject each
-2. Merge extraction rules → `.riviere/config/component-definitions.md`
-3. Merge linking patterns → `.riviere/config/linking-rules.md`
-4. **USER CHECKPOINT:** Present rules for review.
+Follow `steps/configure-orchestrator.md`.
 
 ### Step 4: Extract — Extract Components
 
-**Initialize graph first:**
-
-```bash
-bun skills/riviere-architect/tools/init-graph.ts
-```
-
-Confirm it exits 0 and `riviere builder component-summary` returns without error.
-
-Spawn one subagent per repo (JSONL staging only — no CLI calls by subagents):
-
-Agent prompt template:
-
-```
-You are an extract subagent for the riviere-architect workflow.
-
-Read: skills/riviere-architect/steps/extract-subagent.md
-
-Your assigned repository: {REPO_PATH}
-Extraction rules: .riviere/config/component-definitions.md
-Domain map: .riviere/config/domains.md
-Metadata: .riviere/config/metadata.md
-Output file: .riviere/work/extract-{repo-name}.jsonl
-
-CRITICAL: Write staged JSONL only. Do NOT call riviere builder add-component directly.
-When complete, report: EXTRACT_DONE: {repo-name} | {N} components staged | File written.
-```
-
-Wait for all Extract subagents to complete.
-
-**Orchestrator serialization** (follow `extract-orchestrator.md`):
-
-1. Read each `extract-{repo}.jsonl`
-2. For each line, call `riviere builder add-component {args}` sequentially
-3. Run `riviere builder component-summary` — validate counts make sense
-4. Check validate-graph.ts output (auto-fires after each CLI call)
+Follow `steps/extract-orchestrator.md`.
 
 ### Step 5: Connect — Link Components
 
-**Pre-populate link candidates first:**
-
-```bash
-bun skills/riviere-architect/tools/generate-link-candidates.ts {REPO_PATHS...}
-```
-
-This reads all `extract-*.jsonl` files from Extract and produces `.riviere/work/link-candidates.jsonl` — high-confidence links derived from:
-
-- `subscribedEvents` fields on EventHandlers (zero source reading needed)
-- Named component imports found in caller source files
-
-**Apply pre-populated candidates:**
-
-Read `.riviere/work/link-candidates.jsonl`. For each entry call:
-
-```bash
-riviere builder link --from {from} --to {to} --link-type {linkType}
-```
-
-sequentially. These are pre-validated HIGH confidence links — apply them without additional source verification.
-
-**Generate checklist for remaining work:**
-
-```bash
-riviere builder component-checklist > .riviere/work/connect-checklist.md
-```
-
-Split the checklist by repo. Spawn one subagent per repo for staged link discovery:
-
-Agent prompt template:
-
-```
-You are a connect subagent for the riviere-architect workflow.
-
-Read: skills/riviere-architect/steps/connect-subagent.md
-
-Your assigned repository: {REPO_PATH}
-Your checklist: {REPO_SECTION of .riviere/work/connect-checklist.md}
-Linking rules: .riviere/config/linking-rules.md
-
-Note: High-confidence links were pre-applied from link-candidates.jsonl before you
-were spawned. Focus on checklist items that remain unchecked — these are the
-ambiguous cases (HTTP cross-service, DI container patterns, external links) that
-require your judgment.
-
-CRITICAL: Stage link commands only to .riviere/work/link-staged-{repo-name}.jsonl.
-Do NOT call riviere builder link/link-http/link-external directly.
-Mark each checklist item [x] when its link commands are staged.
-When complete, report: CONNECT_DONE: {repo-name} | {N} links staged | Checklist updated.
-```
-
-Wait for all Connect subagents to complete.
-
-**Orchestrator serialization** (follow `connect-orchestrator.md`):
-
-1. Verify checklist completion
-2. Ensure staged files exist: `.riviere/work/link-staged-{repo}.jsonl`
-3. Replay staged link commands via deterministic tool:
-
-   ```bash
-   bun skills/riviere-architect/tools/replay-staged-links.ts
-   ```
-
-   If exit code is `2`, inspect `.riviere/work/link-replay-report.json`, fix staged input,
-   and re-run replay.
-4. Run validate-graph.ts explicitly if no CLI calls fired the hook
+Follow `steps/connect-orchestrator.md`.
 
 ### Step 6: Annotate — Enrich DomainOps (conditional)
 
 **If SKIP_ENRICH:** Skip to Step 7.
 
-Generate enrichment checklist. Spawn one subagent per repo for JSONL staging.
-
-Agent prompt template:
-
-```
-You are an annotate subagent for the riviere-architect workflow.
-
-Read: skills/riviere-architect/steps/annotate-subagent.md
-
-Your assigned repository: {REPO_PATH}
-Your output file: .riviere/work/annotate-staged-{repo-name}.jsonl
-
-CRITICAL: Write staged JSONL only. NEVER call riviere builder enrich directly.
-Concurrent enrich calls corrupt the graph (45–60% data loss).
-When complete, report: ANNOTATE_DONE: {repo-name} | {N} enrichments staged | File written.
-```
-
-Wait for all Annotate subagents to complete.
-
-**Orchestrator serialization** (follow `annotate-orchestrator.md`):
-
-1. Read each `annotate-staged-{repo}.jsonl`
-2. Call `riviere builder enrich {args}` **sequentially** for each line (NEVER concurrent)
-3. Validate enrichment quality via validate-graph.ts
+Follow `steps/annotate-orchestrator.md`.
 
 ### Step 7: Validate — Validate & Finalize
 
-Follow `validate-orchestrator.md` exactly:
-
-1. `riviere builder validate` — schema check
-2. `riviere builder check-consistency --json > .riviere/work/orphans.json`
-3. Count actionable orphans. If > 20 and not QUICK_VALIDATE:
-   - Group orphans by type
-   - Spawn one validate-subagent per type (read `validate-subagent.md`)
-   - Wait for all subagents to write their analysis files
-   - Read all `.riviere/work/orphan-analysis-{type}.md` files
-   - Apply fixes from analysis files
-   - Loop: repeat steps 1–3 until actionable orphan count reaches 0 or plateaus
-4. `riviere builder finalize`
+Follow `steps/validate-orchestrator.md`. If QUICK_VALIDATE, skip the orphan analysis loop — single validation pass only.
 
 ### Step 8: Report
 
@@ -346,10 +139,6 @@ riviere query components --type UseCase --domain {domain}
 ```
 
 ```
-
-## Report
-
-See Step 8 above.
 
 ## Examples
 

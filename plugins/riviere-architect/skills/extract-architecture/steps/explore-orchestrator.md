@@ -41,9 +41,17 @@ Before finalizing domain discoveries, ask:
 - **Can you explain this domain's purpose in one sentence to a non-technical person?** If not, the boundary is unclear and needs user confirmation.
 - **Are there components that don't fit any discovered domain?** These are signals of a missing domain or a miscategorized component.
 
+## Include Discovered Repos
+
+If `.riviere/work/discovered-repos.json` exists (written by the Discover step), read it and include any discovered repos with `"status": "available"` alongside user-provided repos. These repos are treated identically — one subagent per repo.
+
+Repos with `"status": "not_cloned"` are skipped with a warning:
+
+> "Skipping {repo-name} — not cloned locally. Clone it and re-run to include."
+
 ## Spawn Subagents
 
-Spawn one subagent per repository. Each subagent receives `steps/explore-subagent.md`
+Spawn one subagent per repository (including discovered repos with local paths). Each subagent receives `steps/explore-subagent.md`
 as its instruction set.
 
 ```text

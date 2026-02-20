@@ -95,4 +95,6 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step setup --status c
 
 ## Completion
 
-All checks PASS and workspace initialized. Proceed to `steps/explore-orchestrator.md`.
+All checks PASS and workspace initialized.
+
+If IaC files are detected in the provided repositories (CDK, Terraform, CloudFormation/SAM, Pulumi), proceed to `steps/discover-repos.md` to scan for cross-repo references before exploring. Otherwise, proceed directly to `steps/explore-orchestrator.md`.

@@ -48,6 +48,7 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 | `tools/validate-graph.ts`            | Validate graph schema                      | `bun tools/validate-graph.ts --project-root "$PROJECT_ROOT"`                                     |
 | `tools/check-hash.ts`               | Check/write source repo staleness hash     | `bun tools/check-hash.ts --project-root "$PROJECT_ROOT"` / `bun tools/check-hash.ts --project-root "$PROJECT_ROOT" --write`     |
 | `tools/generate-link-candidates.ts`  | Suggest candidate links for Step 4         | `bun tools/generate-link-candidates.ts --project-root "$PROJECT_ROOT"`                           |
+| `tools/discover-linked-repos.ts`    | Scan IaC files for internal repo references | `bun tools/discover-linked-repos.ts --project-root "$PROJECT_ROOT" <repo-paths...>`             |
 | `tools/detect-phase.ts`             | Detect/record current extraction phase     | `bun tools/detect-phase.ts --project-root "$PROJECT_ROOT"`                                       |
 
 ## Troubleshooting & Recovery
@@ -63,6 +64,7 @@ Run all tools from the **skill root** (the directory containing SKILL.md), not t
 ## Variables
 
 WIKI_DATA: <path_to_wiki_or_url> (optional — pass as first argument; omit to skip wiki steps. Accepts: directory path, single .md file, multi-repo wikis/ parent directory, or .wiki.git URL)
+REPO_DISCOVERY: true/false (auto-detected based on IaC file presence; set to false to skip discovery even when IaC files exist)
 
 **NEVER** call any `riviere builder` write command from subagents. Concurrency is treated as untenable for graph writes. Subagents stage output only; the coordinator executes all writes sequentially.
 **NEVER** invent domain names — always check `.riviere/config/domains.md` first.
@@ -132,6 +134,10 @@ Do not proceed past catastrophic failure without explicit user direction.
 ### Setup (Required First Run)
 
 **MANDATORY:** Read `steps/setup.md` to verify prerequisites before beginning.
+
+### Discover Linked Repos (Conditional)
+
+If IaC files are detected in any provided repository, read `steps/discover-repos.md` to scan for cross-repo references. This step runs between Setup and Explore. Skip if `REPO_DISCOVERY` is false or no IaC files are found.
 
 ### Entry Point
 
