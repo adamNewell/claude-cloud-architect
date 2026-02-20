@@ -22,7 +22,19 @@
     "sustainability",
     "devops"
   ],
-  "agents": "./agents/",
+  "agents": [
+    "./agents/aws-knowledge-auditor.md",
+    "./agents/cost-practice-reviewer.md",
+    "./agents/security-practice-reviewer.md",
+    "./agents/cost-optimization-auditor.md",
+    "./agents/dynamodb-model-auditor.md",
+    "./agents/ops-practice-reviewer.md",
+    "./agents/iac-best-practices-auditor.md",
+    "./agents/sustainability-practice-reviewer.md",
+    "./agents/performance-practice-reviewer.md",
+    "./agents/devops-practice-reviewer.md",
+    "./agents/reliability-practice-reviewer.md"
+  ],
   "skills": "./skills/",
   "mcpServers": {
     "aws-cost-management": {

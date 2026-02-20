@@ -13,7 +13,10 @@
     "diagrams",
     "adr"
   ],
-  "agents": "./agents/",
+  "agents": [
+    "./agents/annotate-staging-agent.md",
+    "./agents/extract-staging-agent.md"
+  ],
   "commands": "./commands/",
   "hooks": "./hooks/hooks.json",
   "license": "MIT"
