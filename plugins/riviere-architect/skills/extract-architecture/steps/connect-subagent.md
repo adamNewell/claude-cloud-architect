@@ -86,6 +86,40 @@ staged JSONL output.
 - **Multiple targets are expected.** Stage all valid links for each source component.
 - **Apply linking-rules.json.** Use configured patterns and validation rules.
 
+### `targetUrl` for `link-external` commands
+
+`targetUrl` MUST be a fully-qualified HTTP or HTTPS URL (e.g. `https://api.stripe.com`).
+
+**If the real URL is unknown, omit `targetUrl` entirely.** The field is optional. A `link-external` without a URL is valid and will not fail schema validation.
+
+**Never use any of these as `targetUrl`:**
+
+| Prohibited value type | Example                       |
+| --------------------- | ----------------------------- |
+| Internal service name | `"darwin-global-endpoint"`    |
+| Environment variable  | `"process.env.ANALYTICS_URL"` |
+| Non-HTTP protocol     | `"mqtt://CoreChannel"`        |
+| Empty string          | `""`                          |
+| Relative path         | `"/api/v1/payments"`          |
+
+Wrong (will poison the graph):
+
+```json
+{ "command": "link-external", "from": "...", "targetName": "Darwin", "targetUrl": "darwin-global-endpoint" }
+```
+
+Correct — URL known:
+
+```json
+{ "command": "link-external", "from": "...", "targetName": "Darwin", "targetUrl": "https://darwin.internal.example.com" }
+```
+
+Correct — URL unknown (omit the field):
+
+```json
+{ "command": "link-external", "from": "...", "targetName": "Darwin" }
+```
+
 ## Completion
 
 Staged file written and all checklist items marked `- [x]`. Report completion to the orchestrator.

@@ -64,6 +64,13 @@ interface ReplayFailure {
   stderr?: string;
 }
 
+interface UrlWarning {
+  file: string;
+  line: number;
+  originalValue: string;
+  action: "stripped";
+}
+
 interface ReplayReport {
   generatedAt: string;
   workDir: string;
@@ -74,6 +81,7 @@ interface ReplayReport {
   commandsAttempted: number;
   commandsSucceeded: number;
   failures: ReplayFailure[];
+  urlWarnings: UrlWarning[];
 }
 
 const HELP = `
@@ -118,7 +126,24 @@ function normalizeLinkType(value: string | null): LinkType {
   return "sync";
 }
 
-function parseStagedCommand(raw: unknown): { ok: true; value: StagedCommand } | { ok: false; error: string } {
+/**
+ * Returns true only for fully-qualified http/https URLs.
+ * Rejects internal names, env var refs, MQTT, empty strings, etc.
+ */
+function isValidHttpUrl(s: string): boolean {
+  try {
+    const u = new URL(s);
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function parseStagedCommand(
+  raw: unknown,
+  location?: { file: string; line: number },
+  urlWarnings?: UrlWarning[]
+): { ok: true; value: StagedCommand } | { ok: false; error: string } {
   if (!isObject(raw)) return { ok: false, error: "line is not a JSON object" };
 
   const command = asNonEmptyString(raw, "command");
@@ -177,6 +202,15 @@ function parseStagedCommand(raw: unknown): { ok: true; value: StagedCommand } | 
     if (!from || !targetName) {
       return { ok: false, error: "link-external requires from,targetName" };
     }
+    let targetUrl: string | undefined = asOptionalString(raw, "targetUrl") ?? undefined;
+    if (targetUrl !== undefined && !isValidHttpUrl(targetUrl)) {
+      const warning = `Stripped invalid targetUrl "${targetUrl}" (not a valid http/https URL) — field omitted`;
+      console.warn(`[url-warning] ${location ? `${location.file}:${location.line} ` : ""}${warning}`);
+      if (urlWarnings && location) {
+        urlWarnings.push({ file: location.file, line: location.line, originalValue: targetUrl, action: "stripped" });
+      }
+      targetUrl = undefined;
+    }
     return {
       ok: true,
       value: {
@@ -184,7 +218,7 @@ function parseStagedCommand(raw: unknown): { ok: true; value: StagedCommand } | 
         from,
         targetName,
         targetDomain: asOptionalString(raw, "targetDomain") ?? undefined,
-        targetUrl: asOptionalString(raw, "targetUrl") ?? undefined,
+        targetUrl,
         linkType: normalizeLinkType(asOptionalString(raw, "linkType")),
       },
     };
@@ -286,6 +320,7 @@ function main(): void {
     commandsAttempted: 0,
     commandsSucceeded: 0,
     failures: [],
+    urlWarnings: [],
   };
 
   for (const fileName of stagedFiles) {
@@ -313,7 +348,7 @@ function main(): void {
         continue;
       }
 
-      const parsed = parseStagedCommand(raw);
+      const parsed = parseStagedCommand(raw, { file: fullPath, line: lineNo }, report.urlWarnings);
       if (!parsed.ok) {
         report.failures.push({
           file: fullPath,
@@ -338,13 +373,40 @@ function main(): void {
       if ((res.status ?? 1) === 0) {
         report.commandsSucceeded++;
       } else {
+        const stderr = res.stderr ?? "";
+        // Detect graph schema validation cascade: one bad write poisons all future reads.
+        // Abort immediately to avoid hundreds of identical failures.
+        if (stderr.includes("RiviereSchemaValidationError")) {
+          const instancePathMatch = stderr.match(/instancePath[":\s]+"?([^"\\n,]+)/);
+          const instancePath = instancePathMatch ? instancePathMatch[1] : "(see stderr below)";
+          const cascadeMsg =
+            `\n[CASCADE ABORT] RiviereSchemaValidationError detected at graph path: ${instancePath}\n` +
+            `This is a graph poisoning cascade — a previously staged command wrote an invalid value\n` +
+            `to graph.json. Remaining commands are skipped because every riviere CLI call will fail\n` +
+            `until the bad entry is repaired.\n` +
+            `\nTo repair: open graph.json and fix or remove the entry at: ${instancePath}\n` +
+            `Then re-run: bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"\n`;
+          console.error(cascadeMsg);
+          report.failures.push({
+            file: fullPath,
+            line: lineNo,
+            reason: `CASCADE ABORT — RiviereSchemaValidationError at ${instancePath}`,
+            command: raw,
+            stdout: res.stdout ?? "",
+            stderr,
+          });
+          // Write partial report before exiting so caller has context.
+          mkdirSync(workDir, { recursive: true });
+          writeFileSync(join(workDir, "link-replay-report.json"), JSON.stringify(report, null, 2));
+          process.exit(2);
+        }
         report.failures.push({
           file: fullPath,
           line: lineNo,
           reason: `CLI failed (exit ${(res.status ?? -1).toString()})`,
           command: raw,
           stdout: res.stdout ?? "",
-          stderr: res.stderr ?? "",
+          stderr,
         });
       }
     }
@@ -358,6 +420,12 @@ function main(): void {
     `Processed ${report.filesProcessed.length} file(s), ${report.linesTotal} staged line(s), ` +
       `${report.commandsSucceeded}/${report.commandsAttempted} command(s) succeeded.`
   );
+  if (report.urlWarnings.length > 0) {
+    console.warn(
+      `URL warnings: ${report.urlWarnings.length} invalid targetUrl value(s) were stripped ` +
+        `(not valid http/https). Check urlWarnings in the report for details.`
+    );
+  }
   console.log(`Report: ${reportPath}`);
 
   if (report.failures.length > 0) {

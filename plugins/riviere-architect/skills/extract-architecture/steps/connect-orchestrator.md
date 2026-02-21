@@ -116,6 +116,12 @@ If user reports problems or missing elements, identify the root cause, update th
 - **Worker sub-checklist is empty after split:** The repo root path in `metadata.json` may not match the file paths in the checklist. Check `.riviere/work/checklist-split-report.json` for unmatched lines and verify path formats.
 - **Replay tool reports failures (exit code 2):** Open `.riviere/work/link-replay-report.json`, present malformed/failed lines to the user, and retry after fixes.
 - **Checklist items remain unchecked after all workers complete:** Assign remaining items to a cleanup pass — spawn one additional worker with only the unchecked items as its checklist.
+- **`[CASCADE ABORT] RiviereSchemaValidationError` during replay:** A previously staged command wrote an invalid value to `graph.json` (most commonly a non-URI `targetUrl`). The replay tool aborts immediately and prints the corrupt graph path (e.g. `/externalLinks/23/target/url`). To repair:
+  1. Open `graph.json` and locate the `externalLinks` entry at the printed index.
+  2. Remove or correct the `url` field (it must be a valid `https://` URL or absent entirely).
+  3. Re-run: `bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"`
+
+  The replay report's `urlWarnings` array lists any `targetUrl` values that the tool auto-stripped before executing — review these to see which worker staged bad URLs.
 
 ## Record Completion
 
