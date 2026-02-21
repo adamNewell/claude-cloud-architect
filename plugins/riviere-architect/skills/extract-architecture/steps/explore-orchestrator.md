@@ -29,6 +29,39 @@ Before finalizing domain discoveries, ask:
 - **Can you explain this domain's purpose in one sentence to a non-technical person?** If not, the boundary is unclear and needs user confirmation.
 - **Are there components that don't fit any discovered domain?** These are signals of a missing domain or a miscategorized component.
 
+## Scope Rule (No Autonomous Exclusions)
+
+**Explore ALL repositories in REPO_PATHS — every single one.** Do not exclude or skip
+repositories based on perceived role, repo type, or architectural "importance." Shared
+libraries, IaC stacks, frontend component libraries, dev tooling, and debug services are
+all part of the architecture. Excluding any repo produces an incomplete dependency graph.
+
+If REPO_PATHS contains N repositories, exactly N explore subagents must be spawned.
+There is no exception to this rule. If you believe a repo should be excluded, surface
+it to the user explicitly — never make that decision autonomously.
+
+## No Batching Rule
+
+**One subagent per repository. One repository per subagent. Never batch.**
+
+Batching means: assigning two or more repositories to a single subagent invocation.
+Batching is **forbidden** regardless of:
+
+- Repo size ("these are small shared libs")
+- Repo type ("these are all infrastructure")
+- Similarity ("these follow the same pattern")
+- Context pressure ("spawning 36 agents is a lot")
+
+**Why:** A batched subagent produces shallow exploration. It skips internal dependency
+tracing, misses conventions, and produces incomplete metadata — corrupting every
+downstream step that relies on per-repo facets. The graph cannot be trusted if any
+repo was batched.
+
+**Count verification:** Before spawning, count the repos in REPO_PATHS. After all
+subagents complete, count the `meta-{repo}.jsonl` files in `.riviere/work/`. These
+two numbers must match. If they don't, identify the missing repo and re-spawn its
+subagent before proceeding.
+
 ## Spawn Subagents
 
 Spawn one subagent per repository. Each subagent receives `steps/explore-subagent.md`

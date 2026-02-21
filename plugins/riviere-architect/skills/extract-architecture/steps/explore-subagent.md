@@ -7,9 +7,15 @@ feed into the orchestrator's merge step. You do not interact with the user.
 
 ## Scope
 
-**Your assigned repository only.** Do not read or modify files outside your repository root.
-Do not proceed to Configure. When your output files are written, you are done — report
-completion to the orchestrator.
+**Exactly one repository. No batching.**
+
+You are assigned **one** repository. If your instructions list more than one repository,
+stop immediately and report to the orchestrator: "Received multiple repos — batching is
+forbidden. Re-spawn me with one repo at a time."
+
+Do not read or modify files outside your single assigned repository root. Do not proceed
+to Configure. When your output files are written, you are done — report completion to the
+orchestrator.
 
 ## Critical Constraints
 

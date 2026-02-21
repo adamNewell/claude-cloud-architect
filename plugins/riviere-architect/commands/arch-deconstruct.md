@@ -24,6 +24,12 @@ MULTI_REPO:    true if more than one REPO_PATH provided.
 RUN_ID:        8-char UUID generated at start.
 ```
 
+> **Include ALL repositories.** REPO_PATHS must include every locally-cloned repo that is
+> part of this system — application services, shared libraries, IaC stacks (CDK, Terraform),
+> frontend component libraries, and dev tooling. Omitting repos produces an incomplete
+> dependency graph. If a repo is not cloned locally, note it as absent but do not silently
+> exclude repos that ARE present.
+
 ## Codebase Structure
 
 ```
