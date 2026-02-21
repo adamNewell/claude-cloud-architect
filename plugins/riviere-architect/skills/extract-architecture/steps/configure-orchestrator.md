@@ -70,18 +70,27 @@ of the pattern.
 
 ## Wait and Merge
 
-After all subagents complete:
-
-### 1. Consolidate custom type proposals
+After all subagents complete, run the merge tool:
 
 ```bash
-jq -s '[.[] | select(.kind == "customTypeProposal")]' "$PROJECT_ROOT"/.riviere/work/rules-*-*.jsonl
+bun tools/build-component-definitions.ts --project-root "$PROJECT_ROOT"
 ```
 
-Present all proposals as a single consolidated list to the user -- one conversation, not N:
+This deterministically merges all `rules-*.jsonl` staging files and writes two artifacts:
 
-> "Workers found these patterns that may warrant custom component types. Please decide:
-> accept (will be `define-custom-type` in Step 3) or reject (treat as existing type)."
+- **`.riviere/config/component-definitions.json`** — extraction rules (merged across repos
+  with per-repo overrides where patterns differ) + `customTypeProposals` for review +
+  empty `customTypes` array for user-approved types
+- **`.riviere/config/linking-rules.json`** — HTTP clients, link patterns, validation rules
+  (all deduplicated)
+
+### Review custom type proposals
+
+Read the generated `component-definitions.json` and check `customTypeProposals`. Present
+them to the user in one consolidated message:
+
+> "Workers found these patterns that may warrant custom component types. Please decide
+> which to accept — accepted types will be added to the graph schema in Step 3."
 
 ```markdown
 ## Proposed Custom Types
@@ -92,8 +101,8 @@ Present all proposals as a single consolidated list to the user -- one conversat
 | Saga orchestrators             | `Saga`          | 4              |          |
 ```
 
-Record decisions. Accepted types are written to `component-definitions.json` in the
-`customTypes` array (parseable by `tools/init-graph.ts`):
+For each accepted type, append a full schema entry to the `customTypes` array in
+`component-definitions.json` (this is what `tools/init-graph.ts` reads):
 
 ```json
 {
@@ -108,63 +117,7 @@ Record decisions. Accepted types are written to `component-definitions.json` in 
 }
 ```
 
-### 2. Merge extraction rules
-
-```bash
-jq -s '[.[] | select(.kind == "extractionRule" or .kind == "example")] | group_by(.type)' "$PROJECT_ROOT"/.riviere/work/rules-*-*.jsonl
-```
-
-For each component type:
-
-- **Patterns match across repos** -> write one unified rule
-- **Patterns differ across repos** -> write the most common pattern as the main rule,
-  add repo-specific overrides
-
-Merge into `.riviere/config/component-definitions.json` (append to the object that already
-contains `customTypes`). Add an `extractionRules` key:
-
-```json
-{
-  "extractionRules": {
-    "API": {
-      "location": "src/",
-      "classPattern": "@Controller",
-      "select": "methods with @Get/@Post",
-      "fields": [{"schemaField":"httpMethod","source":"decorator name"}],
-      "exclude": ["health checks"],
-      "overrides": {
-        "legacy-service": {"classPattern":"router.get(...)","select":"route handler functions"}
-      }
-    }
-  },
-  "customTypes": []
-}
-```
-
-### 3. Merge linking patterns
-
-```bash
-jq -s '[.[] | select(.kind == "httpClient" or .kind == "linkPattern" or .kind == "validationRule")] | unique_by(.name // .clientPattern // .rule)' "$PROJECT_ROOT"/.riviere/work/rules-*-*.jsonl
-```
-
-Deduplicate -- same client pattern listed once even if found in multiple repos.
-
-Write to `.riviere/config/linking-rules.json`:
-
-```json
-{
-  "version": "1.0",
-  "httpClients": [
-    {"clientPattern":"ordersApi","targetDomain":"orders","internal":true}
-  ],
-  "linkPatterns": [
-    {"name":"MQTT event flow","indicator":"@MessagePattern","fromType":"EventHandler","toType":"Event"}
-  ],
-  "validationRules": [
-    {"rule":"API must link to UseCase or DomainOp","scope":"orders-service"}
-  ]
-}
-```
+If no custom type proposals exist, skip this step.
 
 ## Output
 
