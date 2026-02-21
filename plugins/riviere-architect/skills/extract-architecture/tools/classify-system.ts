@@ -82,10 +82,29 @@ interface Orchestration {
   engines: Array<{ type: string; evidence: string; count: number }>;
 }
 
+/**
+ * A deployment signal is a concrete file-based indicator that a specific
+ * compute model is in use. Each signal records its kind and the exact
+ * file/pattern that triggered it — enabling the deployment model decision
+ * to be auditable and deterministic.
+ *
+ * Kinds:
+ *   container          — Dockerfile or docker-compose present
+ *   ecs-fargate        — ECS TaskDefinition or FargateService in CDK/CFN
+ *   lambda             — Lambda Function in CDK, CFN/SAM, or handler export
+ *   serverless-framework — serverless.yml/yaml present (Serverless Framework)
+ */
+interface DeploymentSignal {
+  kind: "container" | "ecs-fargate" | "lambda" | "serverless-framework";
+  evidence: string;
+}
+
 interface Characteristics {
   architecture: string;
+  architectureEvidence: string[];
   communicationPattern: string;
   deploymentModel: string;
+  deploymentEvidence: string[];
   orchestration: Orchestration;
   dataPattern: string;
   apiStyle: string;
@@ -275,6 +294,128 @@ function detectLanguages(repoPaths: string[]): string[] {
   return [...langs];
 }
 
+// ─── Deployment Signal Detection ──────────────────────────────────────────────
+//
+// Deployment signals are CONCRETE file-based evidence for a specific compute model.
+// Each signal records what it found and where, making the deployment classification
+// fully auditable. The decision tree below uses these signals exclusively.
+//
+// Signal kinds:
+//   container           Dockerfile or docker-compose (explicit containerization)
+//   ecs-fargate         ECS TaskDefinition/FargateService in CDK or CloudFormation
+//   lambda              Lambda Function in CDK, CloudFormation/SAM, or handler export
+//   serverless-framework serverless.yml/yaml (Serverless Framework project)
+//
+// Decision rules (applied after signal collection):
+//   RULE 1: containers present  AND  lambda present  →  "hybrid"
+//   RULE 2: containers present  AND  no lambda       →  "containerized"
+//   RULE 3: lambda present      AND  no containers   →  "serverless"
+//   RULE 4: no containers, no lambda, IaC present    →  "cloud-managed"
+//   RULE 5: no containers, no lambda, no IaC         →  "traditional"
+//
+// "containers present" = any signal with kind "container" or "ecs-fargate"
+// "lambda present"     = any signal with kind "lambda" or "serverless-framework"
+
+function detectDeploymentSignals(repoPaths: string[]): DeploymentSignal[] {
+  const signals: DeploymentSignal[] = [];
+
+  for (const repoRoot of repoPaths) {
+    const repoName = basename(repoRoot);
+
+    // ── Container signals ────────────────────────────────────────────────────
+    // Dockerfile at any name variant
+    for (const df of ["Dockerfile", "dockerfile", "Dockerfile.prod", "Dockerfile.dev", "Dockerfile.staging"]) {
+      if (existsSync(resolve(repoRoot, df))) {
+        signals.push({ kind: "container", evidence: `${repoName}/${df}` });
+      }
+    }
+    // docker-compose
+    if (fileExists(repoRoot, "docker-compose.yml", "docker-compose.yaml")) {
+      signals.push({ kind: "container", evidence: `${repoName}/docker-compose.yml` });
+    }
+    // Dockerfile nested in subdirectories (services with own Dockerfiles)
+    const nestedDockerfiles = collectFiles(repoRoot, ["Dockerfile"], 3);
+    for (const df of nestedDockerfiles) {
+      if (!df.includes("node_modules")) {
+        signals.push({ kind: "container", evidence: df.replace(PROJECT_ROOT + "/", "") });
+      }
+    }
+
+    // ── ECS/Fargate signals (CDK) ────────────────────────────────────────────
+    const ecsCdkPattern = /new\s+(?:ecs\.|aws_ecs\.)(?:TaskDefinition|FargateTaskDefinition|Ec2TaskDefinition|FargateService|Ec2Service)|ContainerImage\.(?:fromAsset|fromRegistry|fromEcrRepository)|FargateTaskDefinition|EcsPattern/g;
+    const ecsCdkLocs = grepLocations(repoRoot, ecsCdkPattern, [".ts", ".js"]);
+    if (ecsCdkLocs.length > 0) {
+      signals.push({ kind: "ecs-fargate", evidence: `${ecsCdkLocs[0].file}:${ecsCdkLocs[0].line} (${ecsCdkLocs.length} reference${ecsCdkLocs.length > 1 ? "s" : ""})` });
+    }
+    // ECS/Fargate in CloudFormation
+    const ecsCfnLocs = grepLocations(repoRoot, /AWS::ECS::TaskDefinition|AWS::ECS::Service|AWS::ECS::Cluster/g, [".yaml", ".yml", ".json"]);
+    if (ecsCfnLocs.length > 0) {
+      signals.push({ kind: "ecs-fargate", evidence: `${ecsCfnLocs[0].file}:${ecsCfnLocs[0].line} (CFN)` });
+    }
+
+    // ── Lambda signals (CDK) ─────────────────────────────────────────────────
+    const lambdaCdkPattern = /new\s+(?:lambda\.|aws_lambda\.|NodejsFunction|PythonFunction|GoFunction|RustFunction|DockerImageFunction)(?:Function|Code)?[\s\(]|new\s+NodejsFunction\b|new\s+PythonFunction\b|lambda\.Function\b|aws_lambda\.Function\b/g;
+    const lambdaCdkLocs = grepLocations(repoRoot, lambdaCdkPattern, [".ts", ".js"]);
+    if (lambdaCdkLocs.length > 0) {
+      signals.push({ kind: "lambda", evidence: `${lambdaCdkLocs[0].file}:${lambdaCdkLocs[0].line} (${lambdaCdkLocs.length} Lambda construct${lambdaCdkLocs.length > 1 ? "s" : ""})` });
+    }
+
+    // ── Lambda signals (CloudFormation/SAM) ──────────────────────────────────
+    const lambdaCfnLocs = grepLocations(repoRoot, /AWS::Lambda::Function|AWS::Serverless::Function/g, [".yaml", ".yml", ".json"]);
+    if (lambdaCfnLocs.length > 0) {
+      signals.push({ kind: "lambda", evidence: `${lambdaCfnLocs[0].file}:${lambdaCfnLocs[0].line} (${lambdaCfnLocs.length} CFN resource${lambdaCfnLocs.length > 1 ? "s" : ""})` });
+    }
+
+    // ── Lambda signals (handler exports in source files) ─────────────────────
+    // Files exporting `handler` are Lambda entry points
+    const handlerExportPattern = /exports\.handler\s*=|module\.exports\.handler\s*=|export\s+(?:const|async function)\s+handler\s*[=\(]/g;
+    const handlerLocs = grepLocations(repoRoot, handlerExportPattern, [".ts", ".js"]);
+    if (handlerLocs.length > 0) {
+      signals.push({ kind: "lambda", evidence: `${handlerLocs[0].file}:${handlerLocs[0].line} (${handlerLocs.length} handler export${handlerLocs.length > 1 ? "s" : ""})` });
+    }
+
+    // ── Serverless Framework ─────────────────────────────────────────────────
+    if (fileExists(repoRoot, "serverless.yml", "serverless.yaml")) {
+      signals.push({ kind: "serverless-framework", evidence: `${repoName}/serverless.yml` });
+    }
+  }
+
+  return signals;
+}
+
+// ─── Deployment Model Classification ─────────────────────────────────────────
+//
+// Applies the 5-rule decision tree against detected signals.
+// Returns a human-readable model name and the evidence list.
+
+function classifyDeploymentModel(
+  signals: DeploymentSignal[],
+  iacDetected: boolean,
+): { deploymentModel: string; deploymentEvidence: string[] } {
+  const containerSignals = signals.filter((s) => s.kind === "container" || s.kind === "ecs-fargate");
+  const lambdaSignals = signals.filter((s) => s.kind === "lambda" || s.kind === "serverless-framework");
+  const evidence = signals.map((s) => `[${s.kind}] ${s.evidence}`);
+
+  // RULE 1: both containers and lambda present → hybrid
+  if (containerSignals.length > 0 && lambdaSignals.length > 0) {
+    return { deploymentModel: "hybrid", deploymentEvidence: evidence };
+  }
+  // RULE 2: only containers (no lambda)
+  if (containerSignals.length > 0) {
+    return { deploymentModel: "containerized", deploymentEvidence: evidence };
+  }
+  // RULE 3: only lambda (no containers)
+  if (lambdaSignals.length > 0) {
+    return { deploymentModel: "serverless", deploymentEvidence: evidence };
+  }
+  // RULE 4: IaC present but no specific compute detected
+  if (iacDetected) {
+    return { deploymentModel: "cloud-managed", deploymentEvidence: ["IaC detected but no container or Lambda signals found"] };
+  }
+  // RULE 5: no IaC, no containers, no lambda
+  return { deploymentModel: "traditional", deploymentEvidence: ["no IaC, container, or Lambda signals found"] };
+}
+
 // ─── Orchestration Detection ──────────────────────────────────────────────────
 
 function detectOrchestration(repoPaths: string[]): Orchestration {
@@ -316,35 +457,108 @@ function detectOrchestration(repoPaths: string[]): Orchestration {
 }
 
 // ─── Architecture Classification ──────────────────────────────────────────────
+//
+// Architecture is determined by independently-deployable unit count, not just
+// repo count. A monorepo with 5 packages all in one container is still a
+// modular-monolith. Each separately-deployable unit (distinct Dockerfile or
+// Lambda handler set in a different path) is counted as one service boundary.
+//
+// Rules:
+//   deployableUnits >= 3  →  microservices
+//   deployableUnits === 2  →  modular-monolith
+//   deployableUnits === 1  →  monolith
+//
+// If deployable units cannot be determined from signals, falls back to repo count.
+
+function countDeployableUnits(repoPaths: string[], deploymentSignals: DeploymentSignal[]): {
+  count: number;
+  evidence: string[];
+} {
+  const units = new Set<string>();
+  const evidence: string[] = [];
+
+  // Each distinct Dockerfile path = one deployable unit
+  const dockerfileSignals = deploymentSignals.filter((s) => s.kind === "container" && s.evidence.includes("Dockerfile"));
+  for (const s of dockerfileSignals) {
+    // Group by directory to avoid counting Dockerfile + Dockerfile.prod as two units
+    const dir = s.evidence.split("/").slice(0, -1).join("/") || s.evidence;
+    if (!units.has(dir)) {
+      units.add(dir);
+      evidence.push(`container at ${s.evidence}`);
+    }
+  }
+
+  // Each repo with ECS signals = one deployable unit
+  const ecsSignals = deploymentSignals.filter((s) => s.kind === "ecs-fargate");
+  if (ecsSignals.length > 0 && units.size === 0) {
+    for (const repoRoot of repoPaths) {
+      const key = `ecs:${basename(repoRoot)}`;
+      if (!units.has(key)) {
+        units.add(key);
+        evidence.push(`ECS service in ${basename(repoRoot)}`);
+      }
+    }
+  }
+
+  // Each distinct handler-export cluster (by top-level directory) = one Lambda unit
+  const lambdaHandlerSignals = deploymentSignals.filter((s) => s.kind === "lambda" && s.evidence.includes("handler export"));
+  if (lambdaHandlerSignals.length > 0) {
+    // Count as one lambda unit per repo that has handlers
+    for (const repoRoot of repoPaths) {
+      const key = `lambda:${basename(repoRoot)}`;
+      if (!units.has(key)) {
+        units.add(key);
+        evidence.push(`Lambda handlers in ${basename(repoRoot)}`);
+      }
+    }
+  }
+
+  // If no unit evidence found, fall back to repo count
+  if (units.size === 0) {
+    for (const repoRoot of repoPaths) {
+      const key = `repo:${basename(repoRoot)}`;
+      units.add(key);
+      evidence.push(`repo ${basename(repoRoot)} (fallback)`);
+    }
+  }
+
+  return { count: units.size, evidence };
+}
 
 function classifyArchitecture(
-  repoCount: number,
+  repoPaths: string[],
+  deploymentSignals: DeploymentSignal[],
   frameworks: ReturnType<typeof detectFrameworks>,
   orchestration: Orchestration,
-): { architecture: string; communicationPattern: string; deploymentModel: string; dataPattern: string; apiStyle: string } {
-  // Architecture
-  let architecture = "monolith";
-  if (repoCount > 2) architecture = "microservices";
-  else if (repoCount === 2) architecture = "modular-monolith";
+): {
+  architecture: string;
+  architectureEvidence: string[];
+  communicationPattern: string;
+  dataPattern: string;
+  apiStyle: string;
+} {
+  // ── Architecture ────────────────────────────────────────────────────────────
+  // Count independently-deployable units, not just repos
+  const { count: deployableUnits, evidence: archEvidence } = countDeployableUnits(repoPaths, deploymentSignals);
 
-  // Communication pattern
+  let architecture: string;
+  if (deployableUnits >= 3) {
+    architecture = "microservices";
+  } else if (deployableUnits === 2) {
+    architecture = "modular-monolith";
+  } else {
+    architecture = "monolith";
+  }
+  const architectureEvidence = [`${deployableUnits} independently-deployable unit(s)`, ...archEvidence];
+
+  // ── Communication pattern ───────────────────────────────────────────────────
   let communicationPattern = "synchronous";
   if (frameworks.messaging.length > 0) {
     communicationPattern = "event-driven";
   }
 
-  // Deployment model
-  let deploymentModel = "traditional";
-  if (frameworks.iac.includes("cdk") || frameworks.iac.includes("cloudformation") || frameworks.iac.includes("pulumi")) {
-    deploymentModel = "containerized";
-  }
-  if (frameworks.iac.includes("serverless")) {
-    deploymentModel = "serverless";
-  }
-
-  // Data pattern
+  // ── Data pattern ─────────────────────────────────────────────────────────────
   let dataPattern = "crud";
-  // Check for CQRS indicators
   const hasCqrs = repoPaths.some((r) => {
     const content = collectFiles(r, [".ts", ".js"], 3)
       .slice(0, 50)
@@ -354,7 +568,7 @@ function classifyArchitecture(
   });
   if (hasCqrs) dataPattern = "cqrs";
 
-  // API style
+  // ── API style ─────────────────────────────────────────────────────────────
   let apiStyle = "rest";
   const hasGraphql = repoPaths.some((r) => {
     const pkg = readPackageJson(r);
@@ -367,7 +581,7 @@ function classifyArchitecture(
   });
   if (hasGrpc) apiStyle = "grpc";
 
-  return { architecture, communicationPattern, deploymentModel, dataPattern, apiStyle };
+  return { architecture, architectureEvidence, communicationPattern, dataPattern, apiStyle };
 }
 
 // ─── Monorepo Detection ───────────────────────────────────────────────────────
@@ -375,7 +589,6 @@ function classifyArchitecture(
 function isMonorepo(repoPaths: string[]): boolean {
   if (repoPaths.length !== 1) return false;
   const root = repoPaths[0];
-  // Check for common monorepo markers
   return fileExists(root, "lerna.json", "nx.json", "turbo.json", "pnpm-workspace.yaml")
     || (existsSync(resolve(root, "package.json")) && existsSync(resolve(root, "packages")));
 }
@@ -410,7 +623,6 @@ function estimateComplexity(
     minDomains = 10; maxDomains = 50;
   }
 
-  // Adjust for async complexity
   if (characteristics.communicationPattern === "event-driven") {
     minComponents = Math.round(minComponents * 1.5);
     maxComponents = Math.round(maxComponents * 1.5);
@@ -419,7 +631,7 @@ function estimateComplexity(
   const agentBase = Math.max(1, repoCount);
   const recommendedAgentCount: Record<string, number> = {
     explore: agentBase,
-    configure: agentBase * 6, // 6 component types per repo
+    configure: agentBase * 6,
     extract: agentBase,
     connect: agentBase,
     annotate: agentBase,
@@ -446,12 +658,10 @@ function estimateComplexity(
 function recommendLenses(characteristics: Characteristics): string[] {
   const lenses: string[] = [];
 
-  // Always active
   lenses.push("api-surface");
   lenses.push("data-access");
   lenses.push("domain-logic");
 
-  // Conditional
   if (characteristics.communicationPattern === "event-driven" || characteristics.messagingProtocol.length > 0) {
     lenses.push("event-flow");
   }
@@ -472,7 +682,6 @@ function recommendLenses(characteristics: Characteristics): string[] {
 function detectEntryPoints(repoPaths: string[], orchestration: Orchestration): EntryPointHint[] {
   const hints: EntryPointHint[] = [];
 
-  // Orchestration entry points
   for (const engine of orchestration.engines) {
     hints.push({
       type: "orchestration",
@@ -482,9 +691,7 @@ function detectEntryPoints(repoPaths: string[], orchestration: Orchestration): E
     });
   }
 
-  // API gateway / router entry points
   for (const repoRoot of repoPaths) {
-    // Look for API gateway in IaC
     const apiGwLocs = grepLocations(repoRoot, /RestApi|HttpApi|ApiGateway|api-gateway/g, [".ts", ".js", ".yaml", ".yml"]);
     if (apiGwLocs.length > 0) {
       hints.push({
@@ -494,7 +701,6 @@ function detectEntryPoints(repoPaths: string[], orchestration: Orchestration): E
       });
     }
 
-    // Main entry points
     const mainLocs = grepLocations(repoRoot, /NestFactory\.create|app\.listen|createServer/g, [".ts", ".js"]);
     if (mainLocs.length > 0) {
       hints.push({
@@ -511,13 +717,16 @@ function detectEntryPoints(repoPaths: string[], orchestration: Orchestration): E
 // ─── System Type Inference ────────────────────────────────────────────────────
 
 function inferSystemType(characteristics: Characteristics): { type: string; confidence: "HIGH" | "MEDIUM" | "LOW" } {
-  const { architecture, communicationPattern, orchestration } = characteristics;
+  const { architecture, communicationPattern, orchestration, deploymentModel } = characteristics;
 
   if (architecture === "microservices" && communicationPattern === "event-driven") {
     return { type: "event-driven-microservices", confidence: "HIGH" };
   }
   if (architecture === "microservices" && communicationPattern === "synchronous") {
     return { type: "synchronous-microservices", confidence: "HIGH" };
+  }
+  if (deploymentModel === "hybrid") {
+    return { type: "hybrid-cloud-system", confidence: "HIGH" };
   }
   if (architecture === "monolith" && communicationPattern === "event-driven") {
     return { type: "modular-monolith-with-events", confidence: "MEDIUM" };
@@ -559,13 +768,35 @@ if (orchestration.detected) {
   }
 }
 
+// ── Deployment signal detection ──────────────────────────────────────────────
+const deploymentSignals = detectDeploymentSignals(repoPaths);
+const iacDetected = frameworks.iac.length > 0;
+const { deploymentModel, deploymentEvidence } = classifyDeploymentModel(deploymentSignals, iacDetected);
+
+console.log(`\nDeployment signals (${deploymentSignals.length} found):`);
+if (deploymentSignals.length === 0) {
+  console.log(`  none`);
+} else {
+  for (const s of deploymentSignals) {
+    console.log(`  [${s.kind}] ${s.evidence}`);
+  }
+}
+console.log(`  → deployment model: ${deploymentModel}`);
+
+// ── Architecture + remaining characteristics ──────────────────────────────────
 const languages = detectLanguages(repoPaths);
 const monorepo = isMonorepo(repoPaths);
-const archClassification = classifyArchitecture(repoPaths.length, frameworks, orchestration);
+const archResult = classifyArchitecture(repoPaths, deploymentSignals, frameworks, orchestration);
 
 const characteristics: Characteristics = {
-  ...archClassification,
+  architecture: archResult.architecture,
+  architectureEvidence: archResult.architectureEvidence,
+  communicationPattern: archResult.communicationPattern,
+  deploymentModel,
+  deploymentEvidence,
   orchestration,
+  dataPattern: archResult.dataPattern,
+  apiStyle: archResult.apiStyle,
   messagingProtocol: frameworks.messaging,
   languages,
   monorepo,
@@ -578,7 +809,7 @@ const complexityEstimate = estimateComplexity(repoPaths.length, characteristics)
 const entryPointHints = detectEntryPoints(repoPaths, orchestration);
 
 const classification: Classification = {
-  version: "1.0",
+  version: "1.1",
   systemType,
   systemTypeConfidence,
   characteristics,
@@ -597,18 +828,28 @@ const outputPath = resolve(CONFIG_DIR, "classification.json");
 writeFileSync(outputPath, JSON.stringify(classification, null, 2) + "\n", "utf8");
 
 // Summary
-console.log(`\n${"═".repeat(50)}`);
+console.log(`\n${"═".repeat(60)}`);
 console.log(`  SYSTEM CLASSIFICATION`);
-console.log(`${"═".repeat(50)}`);
+console.log(`${"═".repeat(60)}`);
 console.log(`  Type:         ${systemType} (${systemTypeConfidence})`);
 console.log(`  Architecture: ${characteristics.architecture}`);
+console.log(`                ${characteristics.architectureEvidence[0]}`);
 console.log(`  Comms:        ${characteristics.communicationPattern}`);
 console.log(`  Deployment:   ${characteristics.deploymentModel}`);
+if (deploymentEvidence.length > 0) {
+  console.log(`                Evidence (${deploymentEvidence.length} signal${deploymentEvidence.length > 1 ? "s" : ""}):`);
+  for (const ev of deploymentEvidence.slice(0, 4)) {
+    console.log(`                  ${ev}`);
+  }
+  if (deploymentEvidence.length > 4) {
+    console.log(`                  ... and ${deploymentEvidence.length - 4} more`);
+  }
+}
 console.log(`  Data:         ${characteristics.dataPattern}`);
 console.log(`  API:          ${characteristics.apiStyle}`);
 console.log(`  Lenses:       ${recommendedLenses.join(", ")}`);
 console.log(`  Scale:        ${complexityEstimate.scale}`);
 console.log(`  Components:   ${complexityEstimate.estimatedComponents.min}-${complexityEstimate.estimatedComponents.max}`);
 console.log(`  Duration:     ${complexityEstimate.estimatedDuration}`);
-console.log(`${"═".repeat(50)}`);
+console.log(`${"═".repeat(60)}`);
 console.log(`\nOutput: ${outputPath}`);
