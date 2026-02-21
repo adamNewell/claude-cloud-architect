@@ -22,6 +22,59 @@ import { spawnSync } from "child_process";
 
 type ComponentType = "API" | "UseCase" | "DomainOp" | "Event" | "EventHandler" | "UI" | "Custom";
 
+// Fields allowed at the top level of any component per the Riviere schema.
+// Any other field the CLI writes must be migrated into metadata.
+const SCHEMA_ALLOWED_TOP_LEVEL = new Set([
+  "id", "type", "name", "domain", "module", "description", "sourceLocation", "metadata",
+  "apiType", "httpMethod", "path", "route", "operationName", "entity",
+  "eventName", "eventSchema", "subscribedEvents", "signature",
+  "behavior", "stateChanges", "businessRules",
+]);
+
+/**
+ * Moves any top-level fields not in the Riviere schema's allowed list into
+ * the component's `metadata` object. This compensates for CLI commands that
+ * write custom properties (e.g., --custom-type, --custom-property) at top
+ * level instead of inside metadata.
+ *
+ * NOTE: Custom components are intentionally skipped — the CLI schema defines
+ * Custom with `additionalProperties: true`, so extra top-level fields like
+ * `customTypeName`, `noun`, `verbs`, etc. are valid and must NOT be moved.
+ *
+ * Returns the number of fields migrated.
+ */
+function migrateExtraFieldsToMetadata(graphPath: string): number {
+  let graph: { components?: Array<Record<string, unknown>> };
+  try {
+    graph = JSON.parse(readFileSync(graphPath, "utf8"));
+  } catch {
+    return 0;
+  }
+
+  let migrated = 0;
+  for (const comp of graph.components ?? []) {
+    // Custom components have additionalProperties: true — extra fields are valid at top level.
+    if (comp["type"] === "Custom") continue;
+
+    const extra = Object.keys(comp).filter((k) => !SCHEMA_ALLOWED_TOP_LEVEL.has(k));
+    if (extra.length === 0) continue;
+
+    const metadata = (comp["metadata"] as Record<string, unknown> | undefined) ?? {};
+    for (const field of extra) {
+      metadata[field] = comp[field];
+      delete comp[field];
+      migrated++;
+    }
+    comp["metadata"] = metadata;
+  }
+
+  if (migrated > 0) {
+    writeFileSync(graphPath, JSON.stringify(graph, null, 2) + "\n", "utf8");
+  }
+
+  return migrated;
+}
+
 interface StagedComponent {
   type: ComponentType;
   domain: string;
@@ -240,7 +293,7 @@ function main(): void {
   const workDir = argValue("--work-dir")
     ? resolve(argValue("--work-dir")!)
     : resolve(PROJECT_ROOT, ".riviere/work");
-  const graphPath = argValue("--graph");
+  const graphPath = argValue("--graph") ?? resolve(PROJECT_ROOT, ".riviere/graph.json");
   const dryRun = hasFlag("--dry-run");
 
   if (!existsSync(workDir)) {
@@ -331,6 +384,35 @@ function main(): void {
           stderr: res.stderr ?? "",
         });
       }
+    }
+  }
+
+  // ── Schema compliance ────────────────────────────────────────────────────────
+  // The CLI may write custom properties as top-level fields. Migrate any
+  // non-schema fields into metadata, then validate the final graph.
+  if (!dryRun && existsSync(graphPath)) {
+    const migrated = migrateExtraFieldsToMetadata(graphPath);
+    if (migrated > 0) {
+      console.log(
+        `\nSchema cleanup: migrated ${migrated} extra top-level field(s) into metadata.`
+      );
+    }
+
+    const validateRes = spawnSync(
+      "npx",
+      ["riviere", "builder", "validate", "--graph", graphPath],
+      { encoding: "utf8" }
+    );
+    if ((validateRes.status ?? 1) !== 0) {
+      report.failures.push({
+        file: graphPath,
+        line: -1,
+        reason: `Schema validation failed after component replay (exit ${validateRes.status ?? -1})`,
+        stdout: validateRes.stdout ?? "",
+        stderr: validateRes.stderr ?? "",
+      });
+      console.error("\nSchema validation FAILED — graph has remaining violations:");
+      console.error(validateRes.stderr || validateRes.stdout || "(no output)");
     }
   }
 

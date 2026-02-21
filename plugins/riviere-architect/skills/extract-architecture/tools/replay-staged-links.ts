@@ -293,7 +293,7 @@ function main(): void {
   const workDir = argValue("--work-dir")
     ? resolve(argValue("--work-dir")!)
     : resolve(PROJECT_ROOT, ".riviere/work");
-  const graphPath = argValue("--graph");
+  const graphPath = argValue("--graph") ?? resolve(PROJECT_ROOT, ".riviere/graph.json");
   const dryRun = hasFlag("--dry-run");
 
   if (!existsSync(workDir)) {
@@ -409,6 +409,27 @@ function main(): void {
           stderr,
         });
       }
+    }
+  }
+
+  // ── Schema compliance ────────────────────────────────────────────────────────
+  // Validate the final graph to ensure link additions didn't corrupt it.
+  if (!dryRun && existsSync(graphPath)) {
+    const validateRes = spawnSync(
+      "npx",
+      ["riviere", "builder", "validate", "--graph", graphPath],
+      { encoding: "utf8" }
+    );
+    if ((validateRes.status ?? 1) !== 0) {
+      report.failures.push({
+        file: graphPath,
+        line: -1,
+        reason: `Schema validation failed after link replay (exit ${validateRes.status ?? -1})`,
+        stdout: validateRes.stdout ?? "",
+        stderr: validateRes.stderr ?? "",
+      });
+      console.error("\nSchema validation FAILED — graph has remaining violations:");
+      console.error(validateRes.stderr || validateRes.stdout || "(no output)");
     }
   }
 

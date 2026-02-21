@@ -241,12 +241,9 @@ function countLinkCandidates(): number {
     .filter((l) => l.trim()).length;
 }
 
-/** Check if graph.json exists */
+/** Check if graph.json exists at the canonical location */
 function graphExists(): boolean {
-  return (
-    existsSync(resolve(RIVIERE_DIR, "graph.json")) ||
-    existsSync(resolve(PROJECT_ROOT, "graph.json"))
-  );
+  return existsSync(resolve(RIVIERE_DIR, "graph.json"));
 }
 
 /** Count meta JSONL files */

@@ -28,8 +28,8 @@
  *   2 — errors found (Claude must fix before continuing)
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from "fs";
-import { join, resolve } from "path";
+import { existsSync, readFileSync } from "fs";
+import { resolve } from "path";
 import { spawnSync } from "child_process";
 
 // ─── Help ─────────────────────────────────────────────────────────────────────
@@ -112,15 +112,15 @@ interface Component {
   subscribedEvents?: string[];
   // UI
   route?: string;
-  // DomainOp enrichment
-  stateChanges?: Array<{ from: string[]; to: string[] }>;
+  // DomainOp enrichment — stateTransition items are {from: string, to: string, trigger?: string}
+  stateChanges?: Array<{ from: string; to: string; trigger?: string }>;
   businessRules?: string[];
-  behavior?: Array<{
+  behavior?: {
     reads?: string[];
     validates?: string[];
     modifies?: string[];
     emits?: string[];
-  }>;
+  };
   // Custom
   customType?: string;
 }
@@ -174,32 +174,9 @@ const isConsistencyCheck =
 
 // ─── Locate and parse graph ───────────────────────────────────────────────────
 
-function findGraphFile(): string | null {
-  const dir = resolve(PROJECT_ROOT, ".riviere");
-  if (!existsSync(dir)) return null;
-
-  const candidates = readdirSync(dir)
-    .filter((f) => f.endsWith(".json") && !f.startsWith("step-"))
-    .map((f) => join(dir, f))
-    .filter((p) => {
-      try {
-        const parsed = JSON.parse(readFileSync(p, "utf8"));
-        return "components" in parsed;
-      } catch {
-        return false;
-      }
-    });
-
-  if (candidates.length === 0) return null;
-
-  // Most recently modified wins
-  return candidates.sort(
-    (a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs
-  )[0];
-}
-
-const graphPath = findGraphFile();
-if (!graphPath) process.exit(0); // Graph not yet created — nothing to validate
+// Graph is always at the canonical location: {PROJECT_ROOT}/.riviere/graph.json
+const graphPath = resolve(PROJECT_ROOT, ".riviere/graph.json");
+if (!existsSync(graphPath)) process.exit(0); // Graph not yet created — nothing to validate
 
 let graph: Graph;
 try {
@@ -222,7 +199,11 @@ function detectPhase(graph: Graph): 3 | 4 | 5 | 6 {
       c.type === "DomainOp" &&
       ((c.stateChanges && c.stateChanges.length > 0) ||
         (c.businessRules && c.businessRules.length > 0) ||
-        (c.behavior && c.behavior.length > 0))
+        (c.behavior &&
+          ((c.behavior.reads?.length ?? 0) > 0 ||
+            (c.behavior.validates?.length ?? 0) > 0 ||
+            (c.behavior.modifies?.length ?? 0) > 0 ||
+            (c.behavior.emits?.length ?? 0) > 0)))
   );
   if (hasEnrichedDomainOp) return 5;
 
@@ -408,6 +389,17 @@ function validatePhase3(graph: Graph): void {
         if (!comp.operationName) {
           error(loc, "DomainOp missing required field: operationName");
         }
+        // These fields belong inside `behavior`, not at top level.
+        // The schema's additionalProperties:false causes all oneOf variants to
+        // fail when they appear at top level.
+        for (const field of ["reads", "validates", "modifies", "emits"]) {
+          if (Object.prototype.hasOwnProperty.call(comp, field)) {
+            error(
+              loc,
+              `DomainOp has invalid top-level field '${field}' — must be nested inside behavior`
+            );
+          }
+        }
         break;
       }
       case "Event": {
@@ -488,20 +480,11 @@ function validatePhase5(graph: Graph): void {
         const sc = op.stateChanges[i];
         const scLoc = `${loc}.stateChanges[${i}]`;
 
-        if (!sc.from || sc.from.length === 0) {
+        if (!sc.from || sc.from.trim() === "") {
           error(scLoc, "stateChange missing or empty field: from");
-        } else {
-          for (const s of sc.from) {
-            if (!s || s.trim() === "") error(scLoc, "stateChange.from contains empty string");
-          }
         }
-
-        if (!sc.to || sc.to.length === 0) {
+        if (!sc.to || sc.to.trim() === "") {
           error(scLoc, "stateChange missing or empty field: to");
-        } else {
-          for (const s of sc.to) {
-            if (!s || s.trim() === "") error(scLoc, "stateChange.to contains empty string");
-          }
         }
       }
     }
@@ -516,16 +499,12 @@ function validatePhase5(graph: Graph): void {
     }
 
     if (op.behavior) {
-      for (let i = 0; i < op.behavior.length; i++) {
-        const entry = op.behavior[i];
-        const bLoc = `${loc}.behavior[${i}]`;
-        for (const field of ["reads", "validates", "modifies", "emits"] as const) {
-          const arr = entry[field];
-          if (arr) {
-            for (const val of arr) {
-              if (!val || val.trim() === "") {
-                error(`${bLoc}.${field}`, `behavior.${field} contains empty string`);
-              }
+      for (const field of ["reads", "validates", "modifies", "emits"] as const) {
+        const arr = op.behavior[field];
+        if (arr) {
+          for (const val of arr) {
+            if (!val || val.trim() === "") {
+              error(`${loc}.behavior.${field}`, `behavior.${field} contains empty string`);
             }
           }
         }

@@ -1,7 +1,7 @@
 ---
 model: opus
 description: Jump to any extraction step by number or name. USE WHEN resuming the pipeline after context reset, skipping to a specific step, or re-running a step. Works cold-start — recovers PROJECT_ROOT and REPO_PATHS from .riviere/ on disk. Examples: "/arch-step 2", "/arch-step explore", "/arch-step extract", "/arch-step validate".
-argument-hint: <step-number-or-name> [--project-root <path>]
+argument-hint: <step-number-or-name> --project-root <path>
 ---
 
 # Arch Step (Pipeline Short Circuit)
@@ -17,7 +17,7 @@ To start a new pipeline, use `/arch-deconstruct` instead.
 
 ```
 STEP_ARG:      from $ARGUMENTS — step number (1-8) or step name. Required.
-PROJECT_ROOT:  from --project-root if provided, otherwise current directory.
+PROJECT_ROOT:  from --project-root in $ARGUMENTS. Required — see instructions.
 ```
 
 ## Step Map
@@ -45,43 +45,41 @@ Parse STEP_ARG:
 
 ### 2. Recover Pipeline State
 
-```bash
-bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --json
-```
+Parse `--project-root <path>` from ARGUMENTS. If not provided, stop and report:
 
-If `--project-root` was not provided, use `.` (current directory).
+> "`--project-root` is required. Example: `/arch-step 4 --project-root /path/to/project`"
 
-From the JSON output extract:
+Use the Read tool to read `{PROJECT_ROOT}/.riviere/work/progress.json`.
 
-| Field            | Use                                                      |
-| ---------------- | -------------------------------------------------------- |
-| `projectRoot`    | The PROJECT_ROOT for all subsequent commands             |
+If the file does not exist, stop and report:
+
+> "No `.riviere/` state found at `{PROJECT_ROOT}`. Run `/arch-deconstruct <repo-paths>` to start a new pipeline, or verify `--project-root` points to the correct directory."
+
+From the JSON contents, extract:
+
+| Field            | Use                                                       |
+| ---------------- | --------------------------------------------------------- |
+| `projectRoot`    | The PROJECT_ROOT for all subsequent commands              |
 | `repoRoots`      | Map of `{repoName: repoPath}` — values become REPO_PATHS |
-| `completedSteps` | Steps already finished                                   |
-| `nextStep`       | Where the pipeline currently expects to continue         |
+| `completedSteps` | Steps already finished                                    |
+| `nextStep`       | Where the pipeline currently expects to continue          |
 
-If `.riviere/` is not found at the given path, report:
-
-> "No `.riviere/` state found at {path}. Run `/arch-deconstruct <repo-paths>` to start a new pipeline, or provide `--project-root <path>` if the project is in a different directory."
-
-And stop.
-
-If `repoRoots` is empty (possible if the requested step is classify and explore hasn't run yet), the REPO_PATHS will need to be recovered from the previous handoff file (see step 3).
+If `repoRoots` is empty (possible if the requested step is classify and explore hasn't run yet), REPO_PATHS will be recovered from the preceding handoff file (see step 3).
 
 ### 3. Load Handoff Context
 
-Read the handoff file from the step immediately preceding the requested step:
+Use the Read tool to load the handoff file from the step immediately preceding the requested step:
 
-| Requested Step | Handoff to Read                           |
-| -------------- | ----------------------------------------- |
-| classify (1)   | None — use state from detect-phase output |
-| explore (2)    | `.riviere/work/handoff-classify.json`     |
-| configure (3)  | `.riviere/work/handoff-explore.json`      |
-| extract (4)    | `.riviere/work/handoff-configure.json`    |
-| connect (5)    | `.riviere/work/handoff-extract.json`      |
-| annotate (6)   | `.riviere/work/handoff-connect.json`      |
-| trace (7)      | `.riviere/work/handoff-annotate.json`     |
-| validate (8)   | `.riviere/work/handoff-trace.json`        |
+| Requested Step | Handoff to Read                                           |
+| -------------- | --------------------------------------------------------- |
+| classify (1)   | None — use state from progress.json only                  |
+| explore (2)    | `{PROJECT_ROOT}/.riviere/work/handoff-classify.json`      |
+| configure (3)  | `{PROJECT_ROOT}/.riviere/work/handoff-explore.json`       |
+| extract (4)    | `{PROJECT_ROOT}/.riviere/work/handoff-configure.json`     |
+| connect (5)    | `{PROJECT_ROOT}/.riviere/work/handoff-extract.json`       |
+| annotate (6)   | `{PROJECT_ROOT}/.riviere/work/handoff-connect.json`       |
+| trace (7)      | `{PROJECT_ROOT}/.riviere/work/handoff-annotate.json`      |
+| validate (8)   | `{PROJECT_ROOT}/.riviere/work/handoff-trace.json`         |
 
 If the handoff file exists: merge its `repoRoots` into your state (prefer handoff values —
 they were written at step completion and are authoritative). Use the handoff's `domains`,
@@ -127,29 +125,23 @@ this command after the orchestrator completes.
 ### Resume after context reset (step by name)
 
 ```
-/arch-step explore
+/arch-step explore --project-root /projects/my-api
 ```
 
 ### Jump to extract step by number
 
 ```
-/arch-step 4
+/arch-step 4 --project-root /projects/my-api
 ```
 
 ### Re-run validate
 
 ```
-/arch-step validate
-```
-
-### Explicit project root (if not running from project directory)
-
-```
-/arch-step 3 --project-root /projects/my-api
+/arch-step validate --project-root /projects/my-api
 ```
 
 ### Skip ahead to connect after manual extract
 
 ```
-/arch-step connect
+/arch-step connect --project-root /projects/my-api
 ```

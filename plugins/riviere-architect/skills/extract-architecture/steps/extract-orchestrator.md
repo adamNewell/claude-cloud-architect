@@ -132,7 +132,7 @@ with corrected patterns and re-extract.
 
 ## Output
 
-Graph: `.riviere/[project-name]-[commit].json`
+Graph: `.riviere/graph.json`
 
 ## Error Recovery
 

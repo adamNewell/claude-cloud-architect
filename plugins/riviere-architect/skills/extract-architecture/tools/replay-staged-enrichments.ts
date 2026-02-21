@@ -31,6 +31,47 @@ interface StagedEnrichment {
   emits?: string[];
 }
 
+// Fields the Riviere CLI's `enrich` command erroneously writes as top-level
+// properties on DomainOp components. The schema places them inside `behavior`.
+const INVALID_DOMAINOP_TOP_LEVEL = ["reads", "validates", "modifies", "emits"] as const;
+
+/**
+ * Strips invalid top-level fields from DomainOp components in graph.json.
+ *
+ * The `riviere builder enrich` CLI double-writes these fields: correctly into
+ * `behavior.{field}` and incorrectly as top-level duplicates. The schema's
+ * `additionalProperties: false` causes those top-level duplicates to fail
+ * oneOf validation. This function removes the top-level copies, leaving the
+ * data intact in `behavior`.
+ *
+ * Returns the number of invalid fields removed.
+ */
+function stripInvalidDomainOpTopLevelFields(graphPath: string): number {
+  let graph: { components?: Array<Record<string, unknown>> };
+  try {
+    graph = JSON.parse(readFileSync(graphPath, "utf8"));
+  } catch {
+    return 0;
+  }
+
+  let stripped = 0;
+  for (const comp of graph.components ?? []) {
+    if (comp["type"] !== "DomainOp") continue;
+    for (const field of INVALID_DOMAINOP_TOP_LEVEL) {
+      if (field in comp) {
+        delete comp[field];
+        stripped++;
+      }
+    }
+  }
+
+  if (stripped > 0) {
+    writeFileSync(graphPath, JSON.stringify(graph, null, 2) + "\n", "utf8");
+  }
+
+  return stripped;
+}
+
 interface ReplayFailure {
   file: string;
   line: number;
@@ -160,7 +201,7 @@ function main(): void {
   const workDir = argValue("--work-dir")
     ? resolve(argValue("--work-dir")!)
     : resolve(PROJECT_ROOT, ".riviere/work");
-  const graphPath = argValue("--graph");
+  const graphPath = argValue("--graph") ?? resolve(PROJECT_ROOT, ".riviere/graph.json");
   const dryRun = hasFlag("--dry-run");
 
   if (!existsSync(workDir)) {
@@ -248,6 +289,36 @@ function main(): void {
           stderr: res.stderr ?? "",
         });
       }
+    }
+  }
+
+  // ── Schema compliance ────────────────────────────────────────────────────────
+  // The `riviere builder enrich` CLI double-writes behavior sub-fields as
+  // top-level component properties, violating `additionalProperties: false`.
+  // Strip them and then validate to ensure we never leave the graph invalid.
+  if (!dryRun && existsSync(graphPath)) {
+    const stripped = stripInvalidDomainOpTopLevelFields(graphPath);
+    if (stripped > 0) {
+      console.log(
+        `\nSchema cleanup: stripped ${stripped} invalid top-level field(s) from DomainOp components.`
+      );
+    }
+
+    const validateRes = spawnSync(
+      "npx",
+      ["riviere", "builder", "validate", "--graph", graphPath],
+      { encoding: "utf8" }
+    );
+    if ((validateRes.status ?? 1) !== 0) {
+      report.failures.push({
+        file: graphPath,
+        line: -1,
+        reason: `Schema validation failed after enrichment (exit ${validateRes.status ?? -1})`,
+        stdout: validateRes.stdout ?? "",
+        stderr: validateRes.stderr ?? "",
+      });
+      console.error("\nSchema validation FAILED — graph has remaining violations:");
+      console.error(validateRes.stderr || validateRes.stdout || "(no output)");
     }
   }
 

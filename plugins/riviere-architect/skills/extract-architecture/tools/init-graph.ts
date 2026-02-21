@@ -88,6 +88,9 @@ function fromRoot(...segments: string[]): string {
   return resolve(PROJECT_ROOT, ...segments);
 }
 
+/** Canonical graph file location — always {PROJECT_ROOT}/.riviere/graph.json */
+const GRAPH_PATH = fromRoot(".riviere/graph.json");
+
 const sourceUrlOverrides = new Map<string, string>();
 for (let i = 0; i < args.length; i++) {
   if (args[i] === "--source-url" && args[i + 1]) {
@@ -311,6 +314,7 @@ console.log("\n── initializing graph ─────────────
 // 1. init — first source + first domain
 run(
   `npx riviere builder init` +
+    ` --graph "${GRAPH_PATH}"` +
     ` --source "${firstUrl}"` +
     ` --domain '${JSON.stringify({
       name: firstDomain.name,
@@ -321,13 +325,14 @@ run(
 
 // 2. add-source — remaining repositories
 for (const [, url] of repoEntries.slice(1)) {
-  run(`npx riviere builder add-source --repository "${url}"`);
+  run(`npx riviere builder add-source --graph "${GRAPH_PATH}" --repository "${url}"`);
 }
 
 // 3. add-domain — remaining domains
 for (const domain of domains.slice(1)) {
   run(
     `npx riviere builder add-domain` +
+      ` --graph "${GRAPH_PATH}"` +
       ` --name "${domain.name}"` +
       ` --system-type "${domain.systemType}"` +
       ` --description "${domain.description}"`
@@ -338,6 +343,7 @@ for (const domain of domains.slice(1)) {
 for (const ct of customTypes) {
   let cmd =
     `npx riviere builder define-custom-type` +
+    ` --graph "${GRAPH_PATH}"` +
     ` --name "${ct.name}"` +
     ` --description "${ct.description}"`;
   for (const p of ct.requiredProperties) {
@@ -356,5 +362,6 @@ console.log(`  Sources:      ${repoEntries.length}`);
 console.log(`  Domains:      ${domains.length}`);
 console.log(`  Custom types: ${customTypes.length}`);
 if (!DRY_RUN) {
+  console.log(`  Graph path:   ${GRAPH_PATH}`);
   console.log(`\n  Proceed to Extract: extract components with riviere builder add-component`);
 }
