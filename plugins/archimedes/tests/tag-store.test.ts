@@ -1,6 +1,6 @@
 import { test, expect, beforeEach, afterEach } from "bun:test";
 import { Database } from "bun:sqlite";
-import { mkdtempSync, rmSync } from "fs";
+import { mkdtempSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 
@@ -201,4 +201,82 @@ test("export: json format returns all non-rejected tags", () => {
   expect(Array.isArray(tags)).toBe(true);
   expect(tags[0]).toHaveProperty("id");
   expect(tags[0]).toHaveProperty("kind");
+});
+
+test("write-from-ast-grep: ingests ast-grep JSON output and creates tags", () => {
+  initDb(dbPath, sessionId);
+
+  const ruleFile = join(tmpDir, "lambda-handler.yaml");
+  writeFileSync(ruleFile, `
+id: aws-lambda-handler-cjs
+language: JavaScript
+archimedes:
+  kind: PATTERN
+  subkind: lambda-handler
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+rule:
+  pattern: exports.handler = async ($EVENT, $CTX) => { $$$BODY }
+`);
+
+  const astGrepOutput = JSON.stringify([{
+    text: "exports.handler = async (event, context) => {}",
+    range: { start: { line: 10, column: 0, byteOffset: 234 }, end: { line: 12, column: 1, byteOffset: 280 } },
+    file: "/repos/my-service/src/handler.js",
+    ruleId: "aws-lambda-handler-cjs",
+    language: "JavaScript",
+    message: null,
+  }]);
+
+  const result = Bun.spawnSync(
+    ["bun", "tools/tag-store.ts", "write-from-ast-grep",
+      "--session", sessionId, "--db", dbPath,
+      "--rule", ruleFile, "--source-tool", "ast-grep", "--target-repo", "/repos/my-service"],
+    {
+      cwd: new URL("../", import.meta.url).pathname,
+      stdin: new TextEncoder().encode(astGrepOutput),
+    }
+  );
+
+  expect(result.exitCode).toBe(0);
+  const output = JSON.parse(result.stdout.toString());
+  expect(output.written).toBe(1);
+
+  const db = new Database(dbPath);
+  const tags = db.query("SELECT * FROM tags WHERE kind='PATTERN'").all() as any[];
+  expect(tags).toHaveLength(1);
+  expect(tags[0].weight_class).toBe("HUMAN");
+  expect(tags[0].status).toBe("VALIDATED");
+  expect(tags[0].confidence).toBeCloseTo(0.95);
+  db.close();
+});
+
+test("write-from-ast-grep: empty input writes 0 tags without error", () => {
+  initDb(dbPath, sessionId);
+  const ruleFile = join(tmpDir, "rule.yaml");
+  writeFileSync(ruleFile, `
+id: test-rule
+language: TypeScript
+archimedes:
+  kind: PATTERN
+  confidence: 0.9
+  weight_class: HUMAN
+  target_type: FILE
+rule:
+  pattern: "const $X = 1"
+`);
+
+  const result = Bun.spawnSync(
+    ["bun", "tools/tag-store.ts", "write-from-ast-grep",
+      "--session", sessionId, "--db", dbPath,
+      "--rule", ruleFile, "--source-tool", "ast-grep", "--target-repo", "/repos/x"],
+    {
+      cwd: new URL("../", import.meta.url).pathname,
+      stdin: new TextEncoder().encode("[]"),
+    }
+  );
+
+  expect(result.exitCode).toBe(0);
+  expect(JSON.parse(result.stdout.toString()).written).toBe(0);
 });
