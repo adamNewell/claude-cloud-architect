@@ -85,7 +85,7 @@ The scan tells you what patterns exist; it does not interpret them.
 
 ## Guardrails
 
-- **Never call `ast-grep` directly in agent code** — always use `run-structure-scan.sh`. Direct calls bypass session tracking, weight assignment, and deduplication.
+- **Never invoke `ast-grep` as a scanning tool** — always use `run-structure-scan.sh`. Running ast-grep as a scanner bypasses session tracking, weight assignment, and deduplication. Read-only diagnostic commands (`ast-grep --version`, `ast-grep --lang` for language detection) are not restricted by this rule — they do not write tags or touch the session.
 - **Never write tags manually for patterns that packs already cover** — scan-written tags include source_evidence and line numbers; manual tags lack this and create duplicates with weaker metadata.
 - **Never treat zero DEBT tags as "clean code"** — it means the packs have no rules for those debt patterns. Absence of a debt tag is not evidence of absence of debt.
 - **Never assume packs are exhaustive** — packs cover curated patterns for known frameworks. A service using an uncommon ORM or proprietary SDK will have no pattern coverage. Document the gap.
@@ -100,17 +100,17 @@ Run before beginning any post-scan analysis:
 
 ```bash
 # 1. Check which packs were registered for this session
-cat /path/to/repo/.archimedes/sessions/<session_id>/meta.json | jq '.pattern_packs'
+cat $REPO/.archimedes/sessions/$SESSION/meta.json | jq '.pattern_packs'
 
-# 2. Check total tag count
+# 2. Check total tag count (session-scoped)
 bun tools/tag-store.ts query --session $SESSION --db $DB_PATH \
-  --sql "SELECT COUNT(*) as total FROM tags"
+  --sql "SELECT COUNT(*) as total FROM tags WHERE session_id='$SESSION'"
 ```
 
 If total is 0 on a non-trivial repo, diagnose in this order:
 1. `ast-grep --version` — if not found, install with `npm i -g @ast-grep/cli`
 2. Confirm `repo_path` was absolute and pointed to the **service root** (not a subdirectory)
-3. Test language match: `ast-grep --lang typescript <one-file>` — no output means wrong language
+3. Test language match: `ast-grep --lang typescript <one-file>` — no output means wrong language. (Read-only diagnostic — no tags written, no session state affected.)
 4. Confirm pack names against `patterns/_registry.yaml` — misspelled packs are silently skipped
 
 Zero tags from a pack that doesn't match the repo's language is expected and not an error.

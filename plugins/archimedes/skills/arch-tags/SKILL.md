@@ -20,19 +20,24 @@ The tag store is shared memory between all Archimedes skills. Every skill reads 
 > **MANDATORY: READ ENTIRE FILE `references/tag-review-workflow.md` BEFORE querying** when conducting a full review session. Do NOT load it for single targeted queries (e.g., `SELECT COUNT(*) FROM tags`).
 
 **Decision: promote vs reject vs ignore**
-- `promote` — you verified the `source_evidence` matches what's actually in the source file
-- `reject` — the pattern matched but the finding is a false positive; this excludes it permanently
-- Leave it — if you genuinely cannot tell from the evidence, do not promote uncertain findings
+- `promote` — you verified the `source_evidence` matches what's actually in the source file at that line
+- `reject` — the pattern matched syntax but the context is wrong (test mock, factory helper, refactored code); permanently excludes the tag
+- Leave it — if you cannot verify without ambiguity, leave as CANDIDATE; an unreviewed tag is safer than a wrongly-promoted one
 
-## Pre-flight: Resolve $SESSION and $DB_PATH
+**Expert signals to reject** (non-obvious from confidence score alone):
+- `source_evidence` is in a test fixture, mock, or factory — not production call paths
+- `source_evidence` describes code that no longer exists (refactored away) — stale, not valid
+- Multiple tags from the same `source_tool` are consistently wrong for this repo's patterns → batch-reject the tool's output for this repo
 
-All commands require `$SESSION` (session ID) and `$DB_PATH` (database path). Always resolve `$DB_PATH` from `meta.json` — do not construct it manually:
+## Pre-flight: Resolve $SESSION, $REPO, and $DB_PATH
+
+All commands require three variables: `$SESSION` (session ID), `$REPO` (absolute service root path), and `$DB_PATH` (database path). Always resolve `$DB_PATH` from `meta.json` — do not construct it manually:
 
 ```bash
-DB_PATH=$(cat /path/to/repo/.archimedes/sessions/$SESSION/meta.json | jq -r .db_path)
+DB_PATH=$(cat $REPO/.archimedes/sessions/$SESSION/meta.json | jq -r .db_path)
 ```
 
-If `meta.json` does not exist, the session was not initialized — run `bun tools/session-init.ts --session $SESSION --repo /path/to/repo` before any tag operations. Do not guess or construct the path manually.
+If `meta.json` does not exist, the session was not initialized — run `bun tools/session-init.ts --session $SESSION --repo $REPO` before any tag operations. Do not guess or construct the path manually.
 
 ## Commands
 
@@ -42,8 +47,10 @@ If `meta.json` does not exist, the session was not initialized — run `bun tool
 bun tools/tag-store.ts query \
   --session $SESSION \
   --db $DB_PATH \
-  --sql "SELECT kind, COUNT(*) FROM tags WHERE session_id='$SESSION' AND status NOT IN ('REJECTED') GROUP BY kind"
+  --sql "SELECT kind, COUNT(*) FROM tags WHERE session_id='$SESSION' AND target_repo='$REPO' AND status NOT IN ('REJECTED') GROUP BY kind"
 ```
+
+**Safe query template** — every SELECT must include all three scope filters: `session_id='$SESSION' AND target_repo='$REPO' AND status NOT IN ('REJECTED')`. Omitting any one produces cross-session, cross-service, or false-positive-contaminated results. This is a hard constraint, not a suggestion.
 
 **MANDATORY before writing custom SQL: read `cookbook/tag-store/queries.md`** (22 ready-to-use templates). Do NOT load `cookbook/tag-store/schema.md` unless troubleshooting a column type or unexpected null value.
 
@@ -114,6 +121,7 @@ Prints JSON to stdout. CANDIDATE tags are included in the export — they repres
 - **NEVER interpret zero CANDIDATE tags as "nothing needs review."** It means no MACHINE-weight tools have run yet (only ast-grep patterns ran). Tier 2 and Tier 3 skills generate CANDIDATE tags.
 - **NEVER reuse a session ID for a different repository.** Session IDs are bound to the repos registered at init time. Reusing a session ID across repos contaminates findings: tags from repo A appear when querying repo B, producing fabricated dependency and pattern data.
 - **NEVER deliver an export as final findings without completing the CANDIDATE review first.** Exports include CANDIDATE tags by default — unreviewed findings that have not been verified against source code. Complete the review workflow in `references/tag-review-workflow.md` before exporting for clients.
+- **NEVER omit `target_repo='$REPO'` from SELECT queries when working with a multi-service database.** A single database may hold findings from multiple services scanned in the same session. Session-scoping alone does not isolate findings to one service — you must also scope by repo. Required WHERE clause: `session_id='$SESSION' AND target_repo='$REPO' AND status NOT IN ('REJECTED')`.
 
 ## Tag Lifecycle
 
