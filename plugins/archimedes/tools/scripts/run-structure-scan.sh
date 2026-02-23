@@ -8,7 +8,8 @@ REPO=$1; SESSION=$2; DB_PATH=$3
 PACKS=${4:-"core"}  # comma-separated: "core,aws-serverless,iot-core"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+TOOLS_DIR="$(dirname "$SCRIPT_DIR")"
+PLUGIN_ROOT="$(dirname "$TOOLS_DIR")"
 
 echo "{\"scan_start\":true,\"repo\":\"$REPO\",\"packs\":\"$PACKS\"}" >&2
 

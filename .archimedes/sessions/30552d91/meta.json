@@ -1,0 +1,15 @@
+{
+  "session_id": "30552d91",
+  "repos": [
+    "/Users/adamnewell/code/work/Delos-tech/cloud/infrastructure"
+  ],
+  "pattern_packs": [
+    "core",
+    "aws-serverless",
+    "iot-core"
+  ],
+  "exclude_packs": [],
+  "time_limit_minutes": 60,
+  "started_at": "2026-02-23T15:32:33.496Z",
+  "db_path": "/Users/adamnewell/code/personal/github/adamNewell/claude-cloud-architect/.archimedes/sessions/30552d91/tags.db"
+}

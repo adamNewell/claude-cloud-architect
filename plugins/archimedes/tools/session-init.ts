@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 import { mkdirSync, writeFileSync, existsSync } from "fs";
-import { join } from "path";
+import { join, resolve } from "path";
 
 function parseArgs(argv: string[]): Record<string, string> {
   const result: Record<string, string> = {};
@@ -31,7 +31,9 @@ for (const repo of repos) {
 const sessionDir = join(root, "sessions", sessionId);
 mkdirSync(sessionDir, { recursive: true });
 
-const dbPath = join(sessionDir, "tags.db");
+// Resolve dbPath to an absolute path so that the tag-store subprocess can find it
+// regardless of what cwd it is invoked with.
+const dbPath = resolve(join(sessionDir, "tags.db"));
 const pluginRoot = new URL("../", import.meta.url).pathname;
 
 // Initialize the tag store
