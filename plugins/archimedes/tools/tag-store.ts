@@ -140,6 +140,73 @@ switch (command) {
     break;
   }
 
+  case "query": {
+    if (!args.sql) {
+      console.error(JSON.stringify({ error: "--sql is required" }));
+      process.exit(1);
+    }
+    const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
+    try {
+      const rows = db.query(args.sql).all();
+      console.log(JSON.stringify(rows));
+    } catch (e: any) {
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    } finally { db.close(); }
+    break;
+  }
+
+  case "promote": {
+    if (!args["tag-id"]) {
+      console.error(JSON.stringify({ error: "--tag-id is required" }));
+      process.exit(1);
+    }
+    const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
+    try {
+      const now = new Date().toISOString();
+      db.run(
+        "UPDATE tags SET status='PROMOTED', weight_class='PROMOTED', updated_at=? WHERE id=?",
+        [now, args["tag-id"]]
+      );
+      console.log(JSON.stringify({ ok: true, id: args["tag-id"], status: "PROMOTED" }));
+    } catch (e: any) {
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    } finally { db.close(); }
+    break;
+  }
+
+  case "reject": {
+    if (!args["tag-id"]) {
+      console.error(JSON.stringify({ error: "--tag-id is required" }));
+      process.exit(1);
+    }
+    const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
+    try {
+      const now = new Date().toISOString();
+      db.run("UPDATE tags SET status='REJECTED', updated_at=? WHERE id=?", [now, args["tag-id"]]);
+      console.log(JSON.stringify({ ok: true, id: args["tag-id"], status: "REJECTED" }));
+    } catch (e: any) {
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    } finally { db.close(); }
+    break;
+  }
+
+  case "export": {
+    const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
+    try {
+      const tags = db.query(
+        "SELECT * FROM tags WHERE session_id=? AND status!='REJECTED' ORDER BY created_at"
+      ).all(args.session);
+      console.log(JSON.stringify(tags, null, 2));
+    } catch (e: any) {
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    } finally { db.close(); }
+    break;
+  }
+
   default:
     console.error(JSON.stringify({ error: `Unknown command: ${command}` }));
     process.exit(1);

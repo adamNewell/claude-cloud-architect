@@ -127,3 +127,78 @@ test("write: MACHINE weight tags get CANDIDATE status", () => {
   expect(tag.status).toBe("CANDIDATE");
   db.close();
 });
+
+test("query: returns matching rows as JSON array", () => {
+  initDb(dbPath, sessionId);
+  writeTag(dbPath, sessionId, ["--kind", "PATTERN", "--target-ref", "/src/a.ts"]);
+  writeTag(dbPath, sessionId, ["--kind", "DEPENDENCY", "--target-ref", "/src/b.ts",
+    "--source-query", "dep-query"]);
+
+  const result = runTagStore([
+    "query", "--session", sessionId, "--db", dbPath,
+    "--sql", "SELECT kind, target_ref FROM tags WHERE kind = 'PATTERN'",
+  ]);
+  expect(result.exitCode).toBe(0);
+  const rows = JSON.parse(result.stdout.toString());
+  expect(rows).toHaveLength(1);
+  expect(rows[0].kind).toBe("PATTERN");
+});
+
+test("query: empty result returns [] not error", () => {
+  initDb(dbPath, sessionId);
+  const result = runTagStore([
+    "query", "--session", sessionId, "--db", dbPath,
+    "--sql", "SELECT * FROM tags WHERE kind = 'NONEXISTENT'",
+  ]);
+  expect(result.exitCode).toBe(0);
+  expect(JSON.parse(result.stdout.toString())).toEqual([]);
+});
+
+test("query: invalid SQL exits 1 with error JSON on stderr", () => {
+  initDb(dbPath, sessionId);
+  const result = runTagStore([
+    "query", "--session", sessionId, "--db", dbPath,
+    "--sql", "SELECT * FROM no_such_table",
+  ]);
+  expect(result.exitCode).toBe(1);
+  const err = JSON.parse(result.stderr.toString());
+  expect(err.error).toBeDefined();
+});
+
+test("promote: changes CANDIDATE to PROMOTED weight and status", () => {
+  initDb(dbPath, sessionId);
+  const written = JSON.parse(writeTag(dbPath, sessionId, ["--weight", "MACHINE"]).stdout.toString());
+
+  runTagStore(["promote", "--session", sessionId, "--db", dbPath, "--tag-id", written.id]);
+
+  const db = new Database(dbPath);
+  const tag = db.query("SELECT status, weight_class FROM tags WHERE id = ?").get(written.id) as any;
+  expect(tag.status).toBe("PROMOTED");
+  expect(tag.weight_class).toBe("PROMOTED");
+  db.close();
+});
+
+test("reject: changes status to REJECTED", () => {
+  initDb(dbPath, sessionId);
+  const written = JSON.parse(writeTag(dbPath, sessionId, ["--weight", "MACHINE"]).stdout.toString());
+
+  runTagStore(["reject", "--session", sessionId, "--db", dbPath, "--tag-id", written.id]);
+
+  const db = new Database(dbPath);
+  const tag = db.query("SELECT status FROM tags WHERE id = ?").get(written.id) as any;
+  expect(tag.status).toBe("REJECTED");
+  db.close();
+});
+
+test("export: json format returns all non-rejected tags", () => {
+  initDb(dbPath, sessionId);
+  writeTag(dbPath, sessionId);
+  const result = runTagStore([
+    "export", "--session", sessionId, "--db", dbPath, "--format", "json",
+  ]);
+  expect(result.exitCode).toBe(0);
+  const tags = JSON.parse(result.stdout.toString());
+  expect(Array.isArray(tags)).toBe(true);
+  expect(tags[0]).toHaveProperty("id");
+  expect(tags[0]).toHaveProperty("kind");
+});
