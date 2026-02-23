@@ -1,0 +1,20 @@
+# Query pack registry — parallel to patterns/_registry.yaml
+# Each entry enables a semantic search pack.
+# Packs are loaded by run-semantic-scan.sh; unknown pack names are silently skipped.
+
+packs:
+  - id: core
+    description: "General TypeScript/Node.js: Sequelize models, LIVR validation, chista services, Poller background tasks, Express routes, Repository/Service classes"
+    path: queries/core
+
+  - id: aws-serverless
+    description: "AWS Lambda patterns: MongoDB multi-db clients (events-db, historical-db, snapshots-meta), Athena CTE builders, Redshift COPY loaders, Kinesis Firehose transforms, score calculators, multi-tier storage routers, Secrets Manager injection"
+    path: queries/aws-serverless
+
+  - id: delos-platform
+    description: "Delos NVA ecosystem: executeNVA commands, CoreChannel/PluginChannel clients, Darwin Capability definitions, DevicesNVARepo device management, Watcher reactive triggers, NVA parse+match pipeline"
+    path: queries/delos-platform
+
+  - id: iot-core
+    description: "IoT and embedded: LwM2M event decoders, OpenThread border router, Greengrass component patterns, device snapshot pipelines, cellular connection management, MQTT device shadows"
+    path: queries/iot-core
