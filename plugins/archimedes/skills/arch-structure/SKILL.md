@@ -57,14 +57,14 @@ What to look for: DEBT > 20% of PATTERN count = systemic debt, not isolated issu
 **Step 2 — Technology stack:**
 ```bash
 bun tools/tag-store.ts query --session $SESSION --db $DB_PATH \
-  --sql "SELECT json_extract(value,'$.subkind') as subkind, COUNT(*) as count FROM tags WHERE kind='PATTERN' AND status NOT IN ('REJECTED') GROUP BY subkind ORDER BY count DESC"
+  --sql "SELECT json_extract(value,'$.subkind') as subkind, COUNT(*) as count FROM tags WHERE target_repo='$REPO' AND session_id='$SESSION' AND kind='PATTERN' AND status NOT IN ('REJECTED') GROUP BY subkind ORDER BY count DESC"
 ```
 What to look for: Unexpected patterns (a web service showing `mqtt-subscribe`) indicate undocumented integration points.
 
 **Step 3 — Debt by file:**
 ```bash
 bun tools/tag-store.ts query --session $SESSION --db $DB_PATH \
-  --sql "SELECT target_ref, json_extract(value,'$.subkind') as issue, json_extract(value,'$.note') as note, confidence FROM tags WHERE kind='DEBT' AND status NOT IN ('REJECTED') ORDER BY confidence DESC"
+  --sql "SELECT target_ref, json_extract(value,'$.subkind') as issue, json_extract(value,'$.note') as note, confidence FROM tags WHERE target_repo='$REPO' AND session_id='$SESSION' AND kind='DEBT' AND status NOT IN ('REJECTED') ORDER BY confidence DESC"
 ```
 What to look for: Files with both high PATTERN density and DEBT findings are highest-risk refactoring candidates.
 

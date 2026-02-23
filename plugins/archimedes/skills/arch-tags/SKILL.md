@@ -78,8 +78,8 @@ Returns: `{"ok": true, "id": "<uuid>"}` — returns same id on duplicate (dedupl
 ### promote / reject
 
 ```bash
-bun tools/tag-store.ts promote --db <db_path> --id <tag_id>
-bun tools/tag-store.ts reject --db <db_path> --id <tag_id>
+bun tools/tag-store.ts promote --db <db_path> --tag-id <tag_id>
+bun tools/tag-store.ts reject --db <db_path> --tag-id <tag_id>
 ```
 
 Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wrongly-promoted finding. When five or more tags from the same `source_tool` are all wrong on similar files, batch-reject them.
@@ -88,9 +88,11 @@ Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wr
 
 ```bash
 bun tools/tag-store.ts export --session <session_id> --db <db_path>
+# Output goes to stdout — redirect to a file if needed:
+bun tools/tag-store.ts export --session <session_id> --db <db_path> > export.json
 ```
 
-Writes JSON to `.archimedes/sessions/<session_id>/export.json`. CANDIDATE tags are included in the export — they represent **unreviewed findings**. When delivering to clients or downstream consumers, filter to `WHERE status IN ('VALIDATED','PROMOTED')` unless the consumer explicitly wants unreviewed candidates.
+Prints JSON to stdout. CANDIDATE tags are included in the export — they represent **unreviewed findings**. When delivering to clients or downstream consumers, filter to `WHERE status IN ('VALIDATED','PROMOTED')` unless the consumer explicitly wants unreviewed candidates.
 
 ## NEVER
 
