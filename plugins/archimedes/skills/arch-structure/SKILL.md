@@ -45,7 +45,7 @@ When uncertain: start with `core` only. Add packs after reviewing what `core` fo
 
 After scanning, your role shifts from data collection to interpretation. Run these queries in order — each builds on the previous.
 
-**MANDATORY before writing custom SQL: read `cookbook/tag-store/queries.md`** (22 ready-to-use templates). Do NOT load `cookbook/ast-grep/patterns.md` unless you are adding new pattern rules, not running a scan.
+**MANDATORY before writing any SQL beyond the three scope-check queries below: READ ENTIRE FILE `cookbook/tag-store/queries.md`** (22 ready-to-use templates). The queries below are scope checks only — do not repurpose them for other analysis. Do NOT load `cookbook/ast-grep/patterns.md` unless you are adding new pattern rules, not running a scan.
 
 **Step 1 — Scope check:**
 ```bash
@@ -71,7 +71,7 @@ What to look for: Files with both high PATTERN density and DEBT findings are hig
 ## Post-Scan Mindset
 
 The scan tells you what patterns exist; it does not interpret them.
-- **Coverage gaps**: Directories with zero tags mean the packs don't cover that language — not that the code has no patterns. Document these gaps explicitly (see references/pack-selection-guide.md).
+- **Coverage gaps**: Directories with zero tags mean the packs don't cover that language — not that the code has no patterns. Document these gaps explicitly (see references/pack-selection-guide.md). When a service produces 0 DEPENDENCY or PATTERN tags despite clearly having external dependencies, document the gap and invoke arch-search for semantic coverage of the uncovered layer.
 - **Debt vs pattern ratio**: One DEBT per 10 PATTERN is expected. Five DEBT per 10 PATTERN signals a problem area. Reference baselines in `references/pack-selection-guide.md`.
 - **Unexpected cross-domain dependencies**: A service tagged with both `dynamodb-client` and `mqtt-publish` warrants a note — that's unusual coupling between database and IoT messaging layers.
 

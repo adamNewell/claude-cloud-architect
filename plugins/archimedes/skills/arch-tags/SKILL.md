@@ -40,13 +40,26 @@ bun tools/tag-store.ts query \
 ### write — Write a tag
 
 ```bash
+# PATTERN tag (use $.pattern_name + $.subkind)
 bun tools/tag-store.ts write \
   --session <session_id> \
   --db <db_path> \
   --kind PATTERN \
   --target-ref /path/to/file.ts \
   --target-repo /path/to/repo \
-  --value '{"pattern_name":"custom-finding","subkind":"manual"}' \
+  --value '{"pattern_name":"custom-finding","subkind":"manual","line":42}' \
+  --confidence 0.70 \
+  --weight MACHINE \
+  --source-tool manual
+
+# DEPENDENCY tag (use $.subkind + $.line)
+bun tools/tag-store.ts write \
+  --session <session_id> \
+  --db <db_path> \
+  --kind DEPENDENCY \
+  --target-ref /path/to/file.ts \
+  --target-repo /path/to/repo \
+  --value '{"subkind":"dynamodb-client","line":12}' \
   --confidence 0.70 \
   --weight MACHINE \
   --source-tool manual
@@ -119,6 +132,7 @@ The critical distinction: HUMAN-weight tags (ast-grep) start as VALIDATED and ne
 | `session not found` | `--session` ID not initialized | Run `bun tools/session-init.ts --session <id> --repo /path` first |
 | Empty result from query | REJECTED filter excluded all matches, or wrong session | Add session filter; verify with `SELECT COUNT(*) FROM tags` |
 | `source_evidence` doesn't match file | Code was refactored after scan | Reject the tag; re-scan to get current state |
+| Export consumer sees unexpected CANDIDATE tags | Unfiltered export delivered | Re-export with `WHERE status IN ('VALIDATED','PROMOTED')` and re-deliver; note filtering in delivery message |
 
 ## DB Path Convention
 
