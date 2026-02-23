@@ -286,6 +286,91 @@ await (async () => {
       break;
     }
 
+    case "write-from-chunkhound": {
+      if (!args.rule) {
+        console.error(JSON.stringify({ error: "--rule is required" }));
+        process.exit(1);
+      }
+      if (!args.session) {
+        console.error(JSON.stringify({ error: "--session is required" }));
+        process.exit(1);
+      }
+
+      const dbPath = args.db ?? `.archimedes/sessions/${args.session}/tags.db`;
+
+      // Read archimedes metadata from rule YAML
+      const ruleContent = yaml.load(readFileSync(args.rule, "utf-8")) as any;
+      const meta = ruleContent.archimedes ?? {};
+      const kind = meta.kind ?? "CAPABILITY";
+      const confidence = meta.confidence ?? 0.50;
+      const targetType = meta.target_type ?? "FILE";
+      // Semantic search always writes MACHINE/CANDIDATE (hardcoded, not from YAML)
+      const weightClass = "MACHINE";
+      const status = "CANDIDATE";
+
+      // Read chunkhound-search.py JSON from stdin
+      const input = await Bun.stdin.text();
+      let matches: any[];
+      try {
+        matches = JSON.parse(input || "[]");
+      } catch (e: any) {
+        console.error(JSON.stringify({ error: `Invalid JSON on stdin: ${e.message}` }));
+        process.exit(1);
+      }
+
+      const db = openDb(dbPath);
+      const stmt = db.prepare(`
+        INSERT INTO tags
+          (id, target_type, target_ref, target_repo, kind, value, confidence,
+           weight_class, source_tool, source_query, source_evidence,
+           status, session_id, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(target_ref, kind, source_tool, session_id, source_query)
+        DO UPDATE SET updated_at = excluded.updated_at,
+                      confidence = MAX(confidence, excluded.confidence)
+        RETURNING id
+      `);
+
+      const now = new Date().toISOString();
+      const ids: string[] = [];
+
+      try {
+        for (const match of matches) {
+          // chunkhound-search.py output fields: file_path (abs path), content (snippet), similarity
+          const targetRepo = args["target-repo"] ?? "";
+          const absFile: string = match.file_path ?? match.file ?? "";
+          // Strip repo prefix to get relative target_ref
+          const targetRef = targetRepo && absFile.startsWith(targetRepo)
+            ? absFile.slice(targetRepo.length).replace(/^\//, "")
+            : absFile;
+          const snippet: string = (match.content ?? "").slice(0, 500);
+          const simScore: number = match.similarity ?? match.score ?? 0;
+
+          const value = JSON.stringify({
+            subkind: meta.subkind,
+            rule_id: ruleContent.id,
+            score: simScore,
+          });
+
+          const row = stmt.get(
+            crypto.randomUUID(), targetType, targetRef,
+            targetRepo, kind, value, confidence,
+            weightClass, "chunkhound",
+            ruleContent.id, snippet,
+            status, args.session, now, now
+          ) as any;
+          ids.push(row.id);
+        }
+        db.close();
+        console.log(JSON.stringify({ ok: true, written: ids.length, ids }));
+      } catch (e: any) {
+        db.close();
+        console.error(JSON.stringify({ error: e.message }));
+        process.exit(1);
+      }
+      break;
+    }
+
     default:
       console.error(JSON.stringify({ error: `Unknown command: ${command}` }));
       process.exit(1);
