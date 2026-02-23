@@ -1,0 +1,14 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: http-client
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: core-requests-call
+language: Python
+rule:
+  any:
+    - pattern: requests.get($$$ARGS)
+    - pattern: requests.post($$$ARGS)
+    - pattern: httpx.get($$$ARGS)
+    - pattern: httpx.post($$$ARGS)

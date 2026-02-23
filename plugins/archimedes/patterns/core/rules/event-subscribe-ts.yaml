@@ -1,0 +1,13 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: event-subscriber
+  confidence: 0.85
+  weight_class: HUMAN
+  target_type: FILE
+id: core-event-subscribe
+language: TypeScript
+rule:
+  any:
+    - pattern: $EMITTER.on($EVENT, $HANDLER)
+    - pattern: $EMITTER.subscribe($EVENT, $HANDLER)
+    - pattern: $EMITTER.listen($EVENT, $HANDLER)

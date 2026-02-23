@@ -1,0 +1,14 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: http-client
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: core-axios-call
+language: TypeScript
+rule:
+  any:
+    - pattern: axios.get($$$ARGS)
+    - pattern: axios.post($$$ARGS)
+    - pattern: axios.put($$$ARGS)
+    - pattern: fetch($$$ARGS)

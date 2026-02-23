@@ -1,0 +1,12 @@
+archimedes:
+  kind: PATTERN
+  subkind: service-class
+  confidence: 0.80
+  weight_class: HUMAN
+  target_type: FILE
+id: core-service-class
+language: TypeScript
+rule:
+  any:
+    - pattern: "class $NAMEService { $$$BODY }"
+    - pattern: "class $NAMEManager { $$$BODY }"

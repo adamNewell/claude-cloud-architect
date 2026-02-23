@@ -1,0 +1,13 @@
+archimedes:
+  kind: PATTERN
+  subkind: repository-class
+  confidence: 0.85
+  weight_class: HUMAN
+  target_type: FILE
+id: core-repository-class
+language: TypeScript
+rule:
+  any:
+    - pattern: "class $NAMERepository { $$$BODY }"
+    - pattern: "class $NAMERepo { $$$BODY }"
+    - pattern: "class $NAMEStore { $$$BODY }"

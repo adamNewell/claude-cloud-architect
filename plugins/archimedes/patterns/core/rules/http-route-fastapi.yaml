@@ -1,0 +1,14 @@
+archimedes:
+  kind: PATTERN
+  subkind: http-route-handler
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: core-http-route-fastapi
+language: Python
+rule:
+  any:
+    - pattern: "@app.get($PATH)\ndef $FUNC($$$ARGS): $$$BODY"
+    - pattern: "@app.post($PATH)\ndef $FUNC($$$ARGS): $$$BODY"
+    - pattern: "@router.get($PATH)\ndef $FUNC($$$ARGS): $$$BODY"
+    - pattern: "@router.post($PATH)\ndef $FUNC($$$ARGS): $$$BODY"

@@ -1,0 +1,10 @@
+archimedes:
+  kind: PATTERN
+  subkind: env-var-access
+  confidence: 0.80
+  weight_class: HUMAN
+  target_type: FILE
+id: core-env-var-access
+language: TypeScript
+rule:
+  pattern: process.env.$VAR

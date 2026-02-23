@@ -1,0 +1,13 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: event-emitter
+  confidence: 0.85
+  weight_class: HUMAN
+  target_type: FILE
+id: core-event-emit
+language: TypeScript
+rule:
+  any:
+    - pattern: $EMITTER.emit($EVENT, $$$ARGS)
+    - pattern: $EMITTER.publish($EVENT, $$$ARGS)
+    - pattern: $EMITTER.dispatch($EVENT, $$$ARGS)
