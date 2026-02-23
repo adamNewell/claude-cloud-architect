@@ -1,0 +1,14 @@
+archimedes:
+  kind: PATTERN
+  subkind: device-shadow
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: iot-device-shadow-ts
+language: TypeScript
+rule:
+  any:
+    - pattern: $CLIENT.publishGetNamedShadow($$$ARGS)
+    - pattern: $CLIENT.publishUpdateNamedShadow($$$ARGS)
+    - pattern: $CLIENT.publishGetShadow($$$ARGS)
+    - pattern: $CLIENT.publishUpdateShadow($$$ARGS)

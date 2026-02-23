@@ -1,0 +1,12 @@
+archimedes:
+  kind: PATTERN
+  subkind: mqtt-subscriber
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: iot-mqtt-subscribe
+language: TypeScript
+rule:
+  any:
+    - pattern: $CLIENT.subscribe($TOPIC)
+    - pattern: $CLIENT.subscribe($TOPIC, $$$ARGS)

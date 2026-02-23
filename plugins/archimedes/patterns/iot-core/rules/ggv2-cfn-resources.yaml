@@ -1,0 +1,12 @@
+archimedes:
+  kind: PATTERN
+  subkind: greengrass-v2-deployment
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: ggv2-cfn-resources
+language: Yaml
+rule:
+  any:
+    - pattern: "Type: AWS::GreengrassV2::ComponentVersion"
+    - pattern: "Type: AWS::GreengrassV2::Deployment"

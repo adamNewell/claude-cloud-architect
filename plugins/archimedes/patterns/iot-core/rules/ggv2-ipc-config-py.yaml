@@ -1,0 +1,13 @@
+archimedes:
+  kind: PATTERN
+  subkind: greengrass-v2-config
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: ggv2-ipc-config-python
+language: Python
+rule:
+  any:
+    - pattern: $CLIENT.get_configuration($$$ARGS)
+    - pattern: $CLIENT.subscribe_to_configuration_update($$$ARGS)
+    - pattern: $CLIENT.update_configuration($$$ARGS)

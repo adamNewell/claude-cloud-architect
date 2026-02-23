@@ -1,0 +1,20 @@
+Resources:
+  TelemetryRule:
+    Type: AWS::IoT::TopicRule
+    Properties:
+      TopicRulePayload:
+        Sql: "SELECT * FROM 'device/+/telemetry'"
+        Actions:
+          - Lambda:
+              FunctionArn: !GetAtt ProcessorFunction.Arn
+
+  DeviceComponentVersion:
+    Type: AWS::GreengrassV2::ComponentVersion
+    Properties:
+      InlineRecipe:
+        ComponentName: com.example.TelemetryProcessor
+
+  GreengrassDeployment:
+    Type: AWS::GreengrassV2::Deployment
+    Properties:
+      TargetArn: !Sub "arn:aws:iot:${AWS::Region}:${AWS::AccountId}:thinggroup/devices"

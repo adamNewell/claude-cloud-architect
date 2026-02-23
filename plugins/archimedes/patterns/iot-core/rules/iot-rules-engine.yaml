@@ -1,0 +1,10 @@
+archimedes:
+  kind: PATTERN
+  subkind: iot-rules-engine
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: iot-cfn-topic-rule
+language: Yaml
+rule:
+  pattern: "Type: AWS::IoT::TopicRule"

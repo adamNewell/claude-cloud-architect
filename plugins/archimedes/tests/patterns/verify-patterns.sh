@@ -49,6 +49,34 @@ check "$PLUGIN_ROOT/patterns/aws-serverless/rules/eventbridge-put.yaml" \
 check "$PLUGIN_ROOT/patterns/aws-serverless/rules/step-functions-invoke.yaml" \
   "$FIXTURES/sample-aws-services.ts" 1 "AWS: SFN StartExecution"
 
+
+echo ""
+echo "=== IoT Core Pack ==="
+check "$PLUGIN_ROOT/patterns/iot-core/rules/mqtt-connect.yaml" \
+  "$FIXTURES/sample-mqtt.ts" 1 "IoT: MQTT connect"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/mqtt-subscribe.yaml" \
+  "$FIXTURES/sample-mqtt.ts" 1 "IoT: MQTT subscribe"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/mqtt-wildcard-antipattern.yaml" \
+  "$FIXTURES/sample-mqtt.ts" 1 "IoT: MQTT wildcard anti-pattern"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/device-shadow-ts.yaml" \
+  "$FIXTURES/sample-mqtt.ts" 1 "IoT: Device Shadow operations"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-ipc-client-py.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 IPC client"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-ipc-pubsub-py.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 IPC pub/sub"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-ipc-iotcore-py.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 IPC → IoT Core bridge"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-ipc-config-py.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 IPC config access"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-ipc-shadow-py.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 IPC shadow operations"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-cfn-resources.yaml" \
+  "$FIXTURES/sample-iot-cfn.yaml" 1 "IoT: GGv2 CloudFormation resources"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/ggv2-v1-sdk-antipattern.yaml" \
+  "$FIXTURES/sample-ggv2.py" 1 "IoT: GGv2 v1 SDK import (DEBT)"
+check "$PLUGIN_ROOT/patterns/iot-core/rules/iot-rules-engine.yaml" \
+  "$FIXTURES/sample-iot-cfn.yaml" 1 "IoT: Rules Engine (CFn)"
+
 echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ] || exit 1

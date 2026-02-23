@@ -1,0 +1,12 @@
+archimedes:
+  kind: PATTERN
+  subkind: greengrass-v2-pubsub
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: ggv2-ipc-pubsub-python
+language: Python
+rule:
+  any:
+    - pattern: $CLIENT.subscribe_to_topic($$$ARGS)
+    - pattern: $CLIENT.publish_to_topic($$$ARGS)

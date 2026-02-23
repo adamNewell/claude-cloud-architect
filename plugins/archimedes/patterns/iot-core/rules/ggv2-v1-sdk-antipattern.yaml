@@ -1,0 +1,11 @@
+archimedes:
+  kind: DEBT
+  subkind: greengrass-v1-sdk-in-v2-project
+  confidence: 0.85
+  weight_class: HUMAN
+  target_type: FILE
+id: ggv2-v1-sdk-import
+language: Python
+note: "aws_greengrass_core_sdk is the v1 SDK — migrate to awsiot.greengrasscoreipc for Greengrass v2"
+rule:
+  pattern: "import aws_greengrass_core_sdk"

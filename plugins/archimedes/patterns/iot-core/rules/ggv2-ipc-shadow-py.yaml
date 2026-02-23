@@ -1,0 +1,13 @@
+archimedes:
+  kind: PATTERN
+  subkind: greengrass-v2-shadow
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: ggv2-ipc-shadow-python
+language: Python
+rule:
+  any:
+    - pattern: $CLIENT.get_thing_shadow($$$ARGS)
+    - pattern: $CLIENT.update_thing_shadow($$$ARGS)
+    - pattern: $CLIENT.delete_thing_shadow($$$ARGS)

@@ -1,0 +1,13 @@
+archimedes:
+  kind: DEBT
+  subkind: mqtt-wildcard-subscription
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: iot-mqtt-wildcard
+language: TypeScript
+note: "Subscribing to '#' receives ALL messages — security and performance anti-pattern"
+rule:
+  any:
+    - pattern: "$CLIENT.subscribe(\"#\")"
+    - pattern: "$CLIENT.subscribe(\"#\", $$$ARGS)"

@@ -1,0 +1,10 @@
+archimedes:
+  kind: PATTERN
+  subkind: mqtt-publisher
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: iot-mqtt-publish
+language: TypeScript
+rule:
+  pattern: $CLIENT.publish($TOPIC, $PAYLOAD, $$$ARGS)
