@@ -10,19 +10,29 @@ The tag store is shared memory between all Archimedes skills. Every skill reads 
 
 | You want to… | Command |
 |---|---|
-| See what a scan found / start a review session | `query` — **MANDATORY: READ ENTIRE FILE `references/tag-review-workflow.md` first** |
+| See what a scan found / start a review session | `query` |
 | A CANDIDATE tag is correct | `promote` |
 | A CANDIDATE tag is wrong | `reject` |
 | Deliver findings to a client | `export` |
 | Add a finding no pattern covers | `write` with `--weight MACHINE` |
 | Start a new analysis session | `session-init` (not arch-tags directly) |
 
-**Do NOT load `references/tag-review-workflow.md`** when running a single targeted query (e.g., `SELECT COUNT(*) FROM tags`) — only load it when conducting a full review session.
+> **MANDATORY: READ ENTIRE FILE `references/tag-review-workflow.md` BEFORE querying** when conducting a full review session. Do NOT load it for single targeted queries (e.g., `SELECT COUNT(*) FROM tags`).
 
 **Decision: promote vs reject vs ignore**
 - `promote` — you verified the `source_evidence` matches what's actually in the source file
 - `reject` — the pattern matched but the finding is a false positive; this excludes it permanently
 - Leave it — if you genuinely cannot tell from the evidence, do not promote uncertain findings
+
+## Pre-flight: Resolve $SESSION and $DB_PATH
+
+All commands require `$SESSION` (session ID) and `$DB_PATH` (database path). Always resolve `$DB_PATH` from `meta.json` — do not construct it manually:
+
+```bash
+DB_PATH=$(cat /path/to/repo/.archimedes/sessions/$SESSION/meta.json | jq -r .db_path)
+```
+
+Default if `meta.json` is absent: `.archimedes/sessions/$SESSION/tags.db` inside the analyzed repo root.
 
 ## Commands
 
@@ -30,8 +40,8 @@ The tag store is shared memory between all Archimedes skills. Every skill reads 
 
 ```bash
 bun tools/tag-store.ts query \
-  --session <session_id> \
-  --db <db_path> \
+  --session $SESSION \
+  --db $DB_PATH \
   --sql "SELECT kind, COUNT(*) FROM tags GROUP BY kind"
 ```
 
@@ -42,8 +52,8 @@ bun tools/tag-store.ts query \
 ```bash
 # PATTERN tag (use $.pattern_name + $.subkind)
 bun tools/tag-store.ts write \
-  --session <session_id> \
-  --db <db_path> \
+  --session $SESSION \
+  --db $DB_PATH \
   --kind PATTERN \
   --target-ref /path/to/file.ts \
   --target-repo /path/to/repo \
@@ -54,8 +64,8 @@ bun tools/tag-store.ts write \
 
 # DEPENDENCY tag (use $.subkind + $.line)
 bun tools/tag-store.ts write \
-  --session <session_id> \
-  --db <db_path> \
+  --session $SESSION \
+  --db $DB_PATH \
   --kind DEPENDENCY \
   --target-ref /path/to/file.ts \
   --target-repo /path/to/repo \
@@ -78,8 +88,8 @@ Returns: `{"ok": true, "id": "<uuid>"}` — returns same id on duplicate (dedupl
 ### promote / reject
 
 ```bash
-bun tools/tag-store.ts promote --db <db_path> --tag-id <tag_id>
-bun tools/tag-store.ts reject --db <db_path> --tag-id <tag_id>
+bun tools/tag-store.ts promote --db $DB_PATH --tag-id <tag_id>
+bun tools/tag-store.ts reject --db $DB_PATH --tag-id <tag_id>
 ```
 
 Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wrongly-promoted finding. When five or more tags from the same `source_tool` are all wrong on similar files, batch-reject them.
@@ -87,9 +97,9 @@ Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wr
 ### export — Export all non-rejected tags as JSON
 
 ```bash
-bun tools/tag-store.ts export --session <session_id> --db <db_path>
+bun tools/tag-store.ts export --session $SESSION --db $DB_PATH
 # Output goes to stdout — redirect to a file if needed:
-bun tools/tag-store.ts export --session <session_id> --db <db_path> > export.json
+bun tools/tag-store.ts export --session $SESSION --db $DB_PATH > export.json
 ```
 
 Prints JSON to stdout. CANDIDATE tags are included in the export — they represent **unreviewed findings**. When delivering to clients or downstream consumers, filter to `WHERE status IN ('VALIDATED','PROMOTED')` unless the consumer explicitly wants unreviewed candidates.
@@ -103,6 +113,7 @@ Prints JSON to stdout. CANDIDATE tags are included in the export — they repres
 - **NEVER write tags manually when a pattern pack covers the same pattern.** Pattern packs are reproducible and deduplication-aware; manual write tags are one-off and may conflict with scan tags on the same target_ref.
 - **NEVER interpret zero CANDIDATE tags as "nothing needs review."** It means no MACHINE-weight tools have run yet (only ast-grep patterns ran). Tier 2 and Tier 3 skills generate CANDIDATE tags.
 - **NEVER reuse a session ID for a different repository.** Session IDs are bound to the repos registered at init time. Reusing a session ID across repos contaminates findings: tags from repo A appear when querying repo B, producing fabricated dependency and pattern data.
+- **NEVER deliver an export as final findings without completing the CANDIDATE review first.** Exports include CANDIDATE tags by default — unreviewed findings that have not been verified against source code. Complete the review workflow in `references/tag-review-workflow.md` before exporting for clients.
 
 ## Tag Lifecycle
 
@@ -136,11 +147,3 @@ The critical distinction: HUMAN-weight tags (ast-grep) start as VALIDATED and ne
 | `source_evidence` doesn't match file | Code was refactored after scan | Reject the tag; re-scan to get current state |
 | Export consumer sees unexpected CANDIDATE tags | Unfiltered export delivered | Re-export with `WHERE status IN ('VALIDATED','PROMOTED')` and re-deliver; note filtering in delivery message |
 
-## DB Path Convention
-
-Default: `.archimedes/sessions/<session_id>/tags.db` inside the analyzed repo root.
-
-Always resolve the authoritative path from meta.json, not by constructing it manually:
-```bash
-cat /path/to/repo/.archimedes/sessions/<session_id>/meta.json | jq .db_path
-```

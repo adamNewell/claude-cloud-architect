@@ -72,7 +72,7 @@ What to look for: Files with both high PATTERN density and DEBT findings are hig
 
 The scan tells you what patterns exist; it does not interpret them.
 - **Coverage gaps**: Directories with zero tags mean the packs don't cover that language — not that the code has no patterns. Document these gaps explicitly (see references/pack-selection-guide.md). When a service produces 0 DEPENDENCY or PATTERN tags despite clearly having external dependencies, document the gap and invoke arch-search for semantic coverage of the uncovered layer.
-- **Debt vs pattern ratio**: One DEBT per 10 PATTERN is expected. Five DEBT per 10 PATTERN signals a problem area. Reference baselines in `references/pack-selection-guide.md`.
+- **Debt vs pattern ratio**: One DEBT per 10 PATTERN is expected. Five DEBT per 10 PATTERN signals a problem area.
 - **Unexpected cross-domain dependencies**: A service tagged with both `dynamodb-client` and `mqtt-publish` warrants a note — that's unusual coupling between database and IoT messaging layers.
 
 ## Guardrails
@@ -84,19 +84,28 @@ The scan tells you what patterns exist; it does not interpret them.
 - **Never scan the repo root of a monorepo** — patterns match at file level; scanning root floods the tag store with mixed-service findings that are impossible to separate post-hoc.
 - **Never scan a subdirectory below the service root** — `target_ref` paths are recorded relative to the scan root. Tags from `services/user/src/handlers` will have truncated paths that break cross-references with tags from a full-service scan.
 - **Never reuse a session ID for a different repository** — session IDs are bound to repos at init time. Scanning a second repo into an existing session contaminates findings from both repos.
+- **Never begin post-scan analysis when Step 1 shows zero PATTERN tags without first confirming scan completeness** — a failed or partial run produces the same zero-tag result as a successful scan on a non-matching language. Run the Confirming Scan Completeness checks before concluding "nothing was found."
 
 ## Confirming Scan Completeness
 
+Run before beginning any post-scan analysis:
+
 ```bash
-# Check which packs were registered for this session
+# 1. Check which packs were registered for this session
 cat /path/to/repo/.archimedes/sessions/<session_id>/meta.json | jq '.pattern_packs'
 
-# Check total tag count — if 0, something failed
+# 2. Check total tag count
 bun tools/tag-store.ts query --session $SESSION --db $DB_PATH \
   --sql "SELECT COUNT(*) as total FROM tags"
 ```
 
-If total is 0 on a non-trivial repo: verify `ast-grep` is installed (`ast-grep --version`), verify the repo path is absolute and points to the service root, and confirm pack names against `patterns/_registry.yaml`. Zero tags from a pack that doesn't match the repo's language is expected and not an error.
+If total is 0 on a non-trivial repo, diagnose in this order:
+1. `ast-grep --version` — if not found, install with `npm i -g @ast-grep/cli`
+2. Confirm `repo_path` was absolute and pointed to the **service root** (not a subdirectory)
+3. Test language match: `ast-grep --lang typescript <one-file>` — no output means wrong language
+4. Confirm pack names against `patterns/_registry.yaml` — misspelled packs are silently skipped
+
+Zero tags from a pack that doesn't match the repo's language is expected and not an error.
 
 ## Pattern Packs
 
@@ -114,6 +123,6 @@ If total is 0 on a non-trivial repo: verify `ast-grep` is installed (`ast-grep -
 |---|---|---|
 | `ast-grep: command not found` | CLI not installed | `npm i -g @ast-grep/cli` |
 | Pack name produces no tags | Misspelled pack name | Check `patterns/_registry.yaml`; orchestrator skips unknown packs silently |
-| 0 tags for a known-matching repo | Wrong repo path or packs don't cover the language | Verify path is absolute service root; test with `ast-grep --lang typescript` on one file |
+| 0 tags for a known-matching repo | Wrong path, wrong language, or misspelled pack | Follow the ordered checklist in Confirming Scan Completeness above |
 | 500+ tags on a single generated file | False-positive flood from auto-generated code | Add file to `.archimedes-ignore` at repo root; re-scan |
 | DEBT tags but no matching PATTERN tags | Debt rules are independent of pattern rules | Normal — report both separately |
