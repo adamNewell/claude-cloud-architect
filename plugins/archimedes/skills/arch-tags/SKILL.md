@@ -10,17 +10,19 @@ The tag store is shared memory between all Archimedes skills. Every skill reads 
 
 | You want to… | Command |
 |---|---|
-| See what a scan found | `query` — start with the 3-query review sequence below |
+| See what a scan found / start a review session | `query` — **MANDATORY: READ ENTIRE FILE `references/tag-review-workflow.md` first** |
 | A CANDIDATE tag is correct | `promote` |
 | A CANDIDATE tag is wrong | `reject` |
 | Deliver findings to a client | `export` |
 | Add a finding no pattern covers | `write` with `--weight MACHINE` |
 | Start a new analysis session | `session-init` (not arch-tags directly) |
 
+**Do NOT load `references/tag-review-workflow.md`** when running a single targeted query (e.g., `SELECT COUNT(*) FROM tags`) — only load it when conducting a full review session.
+
 **Decision: promote vs reject vs ignore**
 - `promote` — you verified the `source_evidence` matches what's actually in the source file
 - `reject` — the pattern matched but the finding is a false positive; this excludes it permanently
-- Leave it — if you genuinely cannot tell from the evidence, do nothing; don't promote uncertain findings
+- Leave it — if you genuinely cannot tell from the evidence, do not promote uncertain findings
 
 ## Commands
 
@@ -33,12 +35,7 @@ bun tools/tag-store.ts query \
   --sql "SELECT kind, COUNT(*) FROM tags GROUP BY kind"
 ```
 
-**MANDATORY before writing custom SQL: read `cookbook/tag-store/queries.md`** (22 ready-to-use templates). Do NOT load `cookbook/tag-store/schema.md` unless troubleshooting column types or values.
-
-**Ordered review sequence — run these three first, every time:**
-1. `SELECT kind, COUNT(*) as count, ROUND(AVG(confidence),2) as avg_conf FROM tags WHERE status NOT IN ('REJECTED') GROUP BY kind` — scope check
-2. `SELECT json_extract(value,'$.pattern_name') as p, COUNT(*) FROM tags WHERE kind='PATTERN' AND status NOT IN ('REJECTED') GROUP BY 1 ORDER BY 2 DESC` — technology stack
-3. `SELECT id, target_ref, kind, json_extract(value,'$.subkind') as subkind, confidence FROM tags WHERE status='CANDIDATE' ORDER BY confidence DESC` — what needs review
+**MANDATORY before writing custom SQL: read `cookbook/tag-store/queries.md`** (22 ready-to-use templates). Do NOT load `cookbook/tag-store/schema.md` unless troubleshooting a column type or unexpected null value.
 
 ### write — Write a tag
 
@@ -59,9 +56,11 @@ Returns: `{"ok": true, "id": "<uuid>"}` — returns same id on duplicate (dedupl
 
 **Confidence guidelines — these thresholds have real meaning:**
 - 0.95 — deterministic detection (ast-grep exact match on a known pattern)
-- 0.70 — confident code inspection finding you can point to specific lines
+- 0.70 — confident code inspection you can point to specific lines
 - 0.50 — semantic inference (ColGREP, osgrep) where you matched intent, not syntax
 - Never 1.0 for MACHINE-weight tags: 1.0 is reserved for system-verified ground truth; MACHINE implies probabilistic detection
+
+**`--weight HUMAN` vs `--weight MACHINE`**: Use `--weight HUMAN` only when you personally verified the finding exists in the current source file and want to record it as ground truth (starting status: VALIDATED, no review needed). Use `--weight MACHINE` for all inferred or automated findings (starting status: CANDIDATE, requires review). When in doubt, use MACHINE.
 
 ### promote / reject
 
@@ -70,7 +69,7 @@ bun tools/tag-store.ts promote --db <db_path> --id <tag_id>
 bun tools/tag-store.ts reject --db <db_path> --id <tag_id>
 ```
 
-If five tags from the same `source_tool` are all wrong on similar files, batch-reject by running `query` to find their ids then rejecting each. Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wrongly-promoted finding.
+Don't promote under time pressure — an unreviewed CANDIDATE is safer than a wrongly-promoted finding. When five or more tags from the same `source_tool` are all wrong on similar files, batch-reject them.
 
 ### export — Export all non-rejected tags as JSON
 
@@ -78,14 +77,14 @@ If five tags from the same `source_tool` are all wrong on similar files, batch-r
 bun tools/tag-store.ts export --session <session_id> --db <db_path>
 ```
 
-Writes JSON to `.archimedes/sessions/<session_id>/export.json`. Only CANDIDATE, VALIDATED, and PROMOTED tags are included — REJECTED are automatically excluded.
+Writes JSON to `.archimedes/sessions/<session_id>/export.json`. CANDIDATE tags are included in the export — they represent **unreviewed findings**. When delivering to clients or downstream consumers, filter to `WHERE status IN ('VALIDATED','PROMOTED')` unless the consumer explicitly wants unreviewed candidates.
 
 ## NEVER
 
 - **NEVER run INSERT, UPDATE, or DELETE through the `query` command.** Use `write`, `promote`, and `reject` instead. The query command has no write safeguards; a stray UPDATE can corrupt the entire session's findings silently.
 - **NEVER omit `status NOT IN ('REJECTED')` in WHERE clauses.** REJECTED tags are permanently excluded from analysis. Including them inflates counts, poisons technology stack summaries, and produces wrong prioritization rankings.
 - **NEVER write confidence=1.0 for MACHINE-weight tags.** 1.0 signals ground truth (system-verified). MACHINE tags are probabilistic by definition — they matched a pattern, not a verified fact. Use 0.50–0.90 for MACHINE.
-- **NEVER promote without reading `source_evidence`.** The evidence field contains the actual matched code. If source_evidence doesn't exist in the current source file (code was refactored), the tag is stale, not valid.
+- **NEVER promote without reading `source_evidence`.** The evidence field contains the actual matched code. If source_evidence doesn't exist in the current source file (code was refactored), the tag is stale, not a valid promotion candidate.
 - **NEVER write tags manually when a pattern pack covers the same pattern.** Pattern packs are reproducible and deduplication-aware; manual write tags are one-off and may conflict with scan tags on the same target_ref.
 - **NEVER interpret zero CANDIDATE tags as "nothing needs review."** It means no MACHINE-weight tools have run yet (only ast-grep patterns ran). Tier 2 and Tier 3 skills generate CANDIDATE tags.
 - **NEVER reuse a session ID for a different repository.** Session IDs are bound to the repos registered at init time. Reusing a session ID across repos contaminates findings: tags from repo A appear when querying repo B, producing fabricated dependency and pattern data.
@@ -107,8 +106,8 @@ The critical distinction: HUMAN-weight tags (ast-grep) start as VALIDATED and ne
 
 | Weight Class | Source | Starting Status | Requires Review? |
 |---|---|---|---|
-| HUMAN | Deterministic tools (ast-grep pattern packs) | VALIDATED | No |
-| MACHINE | Probabilistic tools (ColGREP, osgrep, qmd) | CANDIDATE | Yes |
+| HUMAN | Deterministic tools (ast-grep pattern packs) or manually verified findings | VALIDATED | No |
+| MACHINE | Probabilistic tools (ColGREP, osgrep, qmd) or unverified manual tags | CANDIDATE | Yes |
 | PROMOTED | Human-reviewed MACHINE tag | PROMOTED | Already reviewed |
 
 ## Error Handling
@@ -118,7 +117,7 @@ The critical distinction: HUMAN-weight tags (ast-grep) start as VALIDATED and ne
 | `no such table: tags` | Wrong `--db` path or wrong working directory | Read `meta.json`: `cat .archimedes/sessions/<id>/meta.json \| jq .db_path` |
 | `{"ok":true,"id":"<same-id>"}` on write | Deduplication fired — not an error | Treat as success; the existing tag was updated |
 | `session not found` | `--session` ID not initialized | Run `bun tools/session-init.ts --session <id> --repo /path` first |
-| Empty result from query | REJECTED filter excluded all matches, or wrong session | Add session filter; verify with COUNT(*) query |
+| Empty result from query | REJECTED filter excluded all matches, or wrong session | Add session filter; verify with `SELECT COUNT(*) FROM tags` |
 | `source_evidence` doesn't match file | Code was refactored after scan | Reject the tag; re-scan to get current state |
 
 ## DB Path Convention
