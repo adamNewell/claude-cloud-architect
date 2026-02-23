@@ -51,3 +51,18 @@ test("init: idempotent — running twice does not error", () => {
   const result = runTagStore(["init", "--session", sessionId, "--db", dbPath]);
   expect(result.exitCode).toBe(0);
 });
+
+test("init: fails with error JSON when neither --session nor --db provided", () => {
+  const result = runTagStore(["init"]);
+  expect(result.exitCode).toBe(1);
+  const err = JSON.parse(result.stderr.toString());
+  expect(err.error).toBeDefined();
+});
+
+test("init: returns valid JSON with ok and session fields", () => {
+  const result = runTagStore(["init", "--session", sessionId, "--db", dbPath]);
+  expect(result.exitCode).toBe(0);
+  const output = JSON.parse(result.stdout.toString());
+  expect(output.ok).toBe(true);
+  expect(output.session).toBe(sessionId);
+});

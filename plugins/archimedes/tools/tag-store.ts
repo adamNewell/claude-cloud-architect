@@ -58,10 +58,19 @@ const args = parseArgs(rest);
 
 switch (command) {
   case "init": {
-    const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
-    db.exec(SCHEMA);
-    db.close();
-    console.log(JSON.stringify({ ok: true, session: args.session }));
+    if (!args.session && !args.db) {
+      console.error(JSON.stringify({ error: "Either --session or --db is required" }));
+      process.exit(1);
+    }
+    try {
+      const db = openDb(args.db ?? `.archimedes/sessions/${args.session}/tags.db`);
+      db.exec(SCHEMA);
+      db.close();
+      console.log(JSON.stringify({ ok: true, session: args.session }));
+    } catch (e: any) {
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    }
     break;
   }
 
