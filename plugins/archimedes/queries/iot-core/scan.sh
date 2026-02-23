@@ -33,7 +33,7 @@ for rule in "$PACK_DIR/rules"/*.yaml; do
   query=$(yq '.query' "$rule")
   top_k=$(yq '.top_k' "$rule")
 
-  written=$(python3 "$PLUGIN_ROOT/tools/chunkhound-search.py" \
+  written=$("$PLUGIN_ROOT/tools/chunkhound-search.py" \
     --query "$query" \
     --repo "$REPO" \
     --db "$INDEX_DB" \
