@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: dynamodb-query-pattern
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: dynamodb-gsi-query
+query: "DynamoDB query GSI global secondary index key condition expression filter"
+top_k: 6

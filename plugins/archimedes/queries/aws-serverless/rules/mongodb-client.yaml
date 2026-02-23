@@ -1,0 +1,9 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: mongodb-client
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: mongodb-client-usage
+query: "MongoDB database client connection collection operations MongoClient connect"
+top_k: 8

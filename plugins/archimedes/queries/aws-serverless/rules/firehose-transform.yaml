@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: kinesis-firehose-transform
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: firehose-transformation-function
+query: "Kinesis Firehose transformation function record processing base64 encode decode"
+top_k: 5

@@ -1,0 +1,9 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: lambda-powertools
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: aws-lambda-powertools
+query: "AWS Lambda Powertools logger tracer metrics middleware decorator"
+top_k: 6

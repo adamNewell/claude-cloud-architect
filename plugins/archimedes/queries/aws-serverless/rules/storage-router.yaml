@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: storage-router
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: multi-tier-storage-router
+query: "storage router Athena Redshift time resolution PT1M PT1H tier selection query routing"
+top_k: 5

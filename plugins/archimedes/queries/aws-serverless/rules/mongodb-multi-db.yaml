@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: mongodb-multi-db
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: mongodb-multi-db-pattern
+query: "MongoDB multiple databases events-db historical-db snapshots-meta db connection pool"
+top_k: 5

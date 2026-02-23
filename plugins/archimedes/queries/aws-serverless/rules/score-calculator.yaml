@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: score-calculator
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: score-calculator
+query: "score calculator DAQI ITC IVC comfort IEQ air quality index compute"
+top_k: 6

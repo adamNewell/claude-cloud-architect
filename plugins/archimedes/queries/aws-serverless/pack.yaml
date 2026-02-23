@@ -1,0 +1,3 @@
+id: aws-serverless
+description: "AWS Lambda patterns: MongoDB multi-db clients, Athena CTE builders, Redshift COPY loaders, Kinesis Firehose transforms, score calculators, multi-tier storage routers, Secrets Manager injection"
+languages: [typescript, javascript, python]

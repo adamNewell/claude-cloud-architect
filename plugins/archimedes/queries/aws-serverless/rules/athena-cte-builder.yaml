@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: athena-cte-builder
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: athena-cte-query-builder
+query: "Athena CTE common table expression query builder aggregation time series metrics"
+top_k: 5
