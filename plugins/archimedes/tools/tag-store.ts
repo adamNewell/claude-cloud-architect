@@ -74,6 +74,72 @@ switch (command) {
     break;
   }
 
+  case "write": {
+    const dbPath = args.db ?? `.archimedes/sessions/${args.session}/tags.db`;
+
+    if (!args["target-ref"]) {
+      console.error(JSON.stringify({ error: "--target-ref is required" }));
+      process.exit(1);
+    }
+    if (!args["target-repo"]) {
+      console.error(JSON.stringify({ error: "--target-repo is required" }));
+      process.exit(1);
+    }
+    if (!args.kind) {
+      console.error(JSON.stringify({ error: "--kind is required" }));
+      process.exit(1);
+    }
+    if (!args["source-tool"]) {
+      console.error(JSON.stringify({ error: "--source-tool is required" }));
+      process.exit(1);
+    }
+
+    const db = openDb(dbPath);
+    const weight = args.weight ?? "MACHINE";
+    const status = weight === "HUMAN" ? "VALIDATED" : "CANDIDATE";
+    const now = new Date().toISOString();
+    const id = crypto.randomUUID();
+
+    try {
+      const stmt = db.prepare(`
+        INSERT INTO tags
+          (id, target_type, target_ref, target_repo, kind, value, confidence,
+           weight_class, source_tool, source_query, source_evidence,
+           status, session_id, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(target_ref, kind, source_tool, session_id)
+        DO UPDATE SET updated_at = excluded.updated_at,
+                      confidence = MAX(confidence, excluded.confidence)
+        RETURNING id
+      `);
+
+      const row = stmt.get(
+        id,
+        args["target-type"] ?? "FILE",
+        args["target-ref"],
+        args["target-repo"],
+        args.kind,
+        args.value ?? "{}",
+        parseFloat(args.confidence ?? "0.5"),
+        weight,
+        args["source-tool"],
+        args["source-query"] ?? null,
+        args["source-evidence"] ?? null,
+        status,
+        args.session,
+        now, now
+      ) as any;
+
+      db.close();
+      console.log(JSON.stringify({ ok: true, id: row.id }));
+    } catch (e: any) {
+      db.close();
+      console.error(JSON.stringify({ error: e.message }));
+      process.exit(1);
+    }
+    break;
+  }
+
   default:
     console.error(JSON.stringify({ error: `Unknown command: ${command}` }));
     process.exit(1);

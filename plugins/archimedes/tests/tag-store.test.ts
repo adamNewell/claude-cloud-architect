@@ -66,3 +66,64 @@ test("init: returns valid JSON with ok and session fields", () => {
   expect(output.ok).toBe(true);
   expect(output.session).toBe(sessionId);
 });
+
+function initDb(db: string, session: string) {
+  runTagStore(["init", "--session", session, "--db", db]);
+}
+
+function writeTag(db: string, session: string, overrides: string[] = []) {
+  return runTagStore([
+    "write",
+    "--session", session, "--db", db,
+    "--kind", "PATTERN",
+    "--target-ref", "/src/handler.ts",
+    "--target-repo", "/repos/my-service",
+    "--value", '{"pattern_name":"lambda-handler"}',
+    "--confidence", "0.95",
+    "--weight", "HUMAN",
+    "--source-tool", "ast-grep",
+    "--source-query", "lambda-handler",
+    ...overrides,
+  ]);
+}
+
+test("write: creates a tag and returns its id", () => {
+  initDb(dbPath, sessionId);
+  const result = writeTag(dbPath, sessionId);
+  expect(result.exitCode).toBe(0);
+  const output = JSON.parse(result.stdout.toString());
+  expect(output.id).toBeDefined();
+  expect(output.ok).toBe(true);
+});
+
+test("write: deduplication — same target_ref+kind+source_tool returns same id", () => {
+  initDb(dbPath, sessionId);
+  const first = JSON.parse(writeTag(dbPath, sessionId).stdout.toString());
+  const second = JSON.parse(writeTag(dbPath, sessionId).stdout.toString());
+  expect(first.id).toBe(second.id);
+});
+
+test("write: different target_ref creates separate tags", () => {
+  initDb(dbPath, sessionId);
+  const a = JSON.parse(writeTag(dbPath, sessionId, ["--target-ref", "/src/a.ts"]).stdout.toString());
+  const b = JSON.parse(writeTag(dbPath, sessionId, ["--target-ref", "/src/b.ts"]).stdout.toString());
+  expect(a.id).not.toBe(b.id);
+});
+
+test("write: HUMAN weight tags get VALIDATED status immediately", () => {
+  initDb(dbPath, sessionId);
+  writeTag(dbPath, sessionId, ["--weight", "HUMAN"]);
+  const db = new Database(dbPath);
+  const tag = db.query("SELECT status FROM tags WHERE weight_class = 'HUMAN'").get() as any;
+  expect(tag.status).toBe("VALIDATED");
+  db.close();
+});
+
+test("write: MACHINE weight tags get CANDIDATE status", () => {
+  initDb(dbPath, sessionId);
+  writeTag(dbPath, sessionId, ["--weight", "MACHINE"]);
+  const db = new Database(dbPath);
+  const tag = db.query("SELECT status FROM tags WHERE weight_class = 'MACHINE'").get() as any;
+  expect(tag.status).toBe("CANDIDATE");
+  db.close();
+});
