@@ -2,6 +2,20 @@
 
 This file contains the complete step-by-step review workflow for tag store sessions. Load this file at the start of any review session — do not rely on memory for the query sequence or decision logic.
 
+## Pre-Flight: Confirm Session Scope
+
+Before starting a review, verify you're looking at the right session and repo. Cross-session contamination produces silently wrong counts:
+
+```sql
+-- Confirm which sessions and repos are in this DB
+SELECT session_id, target_repo, COUNT(*) as tags
+FROM tags
+GROUP BY session_id, target_repo
+ORDER BY tags DESC
+```
+
+If you see multiple session_ids or repos: use explicit `AND session_id = '<SESSION>' AND target_repo = '<REPO>'` filters in all queries below.
+
 ## The 4-Step Review Sequence
 
 ### Step 1 — Scope Check
@@ -9,7 +23,9 @@ This file contains the complete step-by-step review workflow for tag store sessi
 ```sql
 SELECT kind, COUNT(*) as count, ROUND(AVG(confidence),2) as avg_conf
 FROM tags
-WHERE status NOT IN ('REJECTED')
+WHERE session_id = '<SESSION>'
+  AND target_repo = '<REPO>'
+  AND status NOT IN ('REJECTED')
 GROUP BY kind
 ```
 
@@ -22,7 +38,9 @@ SELECT json_extract(value,'$.pattern_name') as pattern,
        json_extract(value,'$.subkind') as subkind,
        COUNT(*) as count
 FROM tags
-WHERE kind = 'PATTERN'
+WHERE session_id = '<SESSION>'
+  AND target_repo = '<REPO>'
+  AND kind = 'PATTERN'
   AND status NOT IN ('REJECTED')
 GROUP BY 1, 2
 ORDER BY count DESC
@@ -37,7 +55,9 @@ SELECT id, target_ref, kind,
        json_extract(value,'$.subkind') as subkind,
        confidence, source_tool
 FROM tags
-WHERE status = 'CANDIDATE'
+WHERE session_id = '<SESSION>'
+  AND target_repo = '<REPO>'
+  AND status = 'CANDIDATE'
 ORDER BY confidence DESC
 ```
 
@@ -69,7 +89,8 @@ When multiple CANDIDATE tags from the same `source_tool` are all wrong:
 -- First: confirm they're all wrong by sampling a few
 SELECT id, target_ref, source_evidence, confidence
 FROM tags
-WHERE source_tool = '<tool>'
+WHERE session_id = '<SESSION>'
+  AND source_tool = '<tool>'
   AND status = 'CANDIDATE'
 ORDER BY confidence DESC
 LIMIT 10
