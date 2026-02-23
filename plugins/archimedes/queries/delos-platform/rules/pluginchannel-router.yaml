@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: pluginchannel-router
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: pluginchannel-event-router
+query: "PluginChannel event router wildcard pattern topic routing subscription handler"
+top_k: 5

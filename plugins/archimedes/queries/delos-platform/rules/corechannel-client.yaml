@@ -1,0 +1,9 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: corechannel-client
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: corechannel-client
+query: "CoreChannel client connection MQTT channel subscribe publish Darwin platform"
+top_k: 5

@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: nva-parse-match
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: nva-parse-match-pipeline
+query: "NVA parse match pipeline noun verb adverb pattern matching translation"
+top_k: 5

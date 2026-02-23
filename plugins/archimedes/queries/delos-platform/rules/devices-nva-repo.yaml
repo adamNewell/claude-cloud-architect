@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: devices-nva-repo
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: translator-devices-nva-repo
+query: "DevicesNVARepo Translator createDevice updateDevice device management repository"
+top_k: 5

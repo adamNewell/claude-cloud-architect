@@ -1,0 +1,3 @@
+id: delos-platform
+description: "Delos NVA ecosystem: executeNVA commands, CoreChannel/PluginChannel clients, Darwin Capability definitions, DevicesNVARepo device management, Watcher reactive triggers"
+languages: [typescript, javascript]
