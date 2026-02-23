@@ -1,0 +1,9 @@
+name: core
+version: "1.0.0"
+description: Universal architecture patterns applicable across all tech stacks
+languages: [javascript, typescript, python, java, go, rust]
+defaults:
+  kind: PATTERN
+  weight_class: HUMAN
+  confidence: 0.90
+  target_type: FILE

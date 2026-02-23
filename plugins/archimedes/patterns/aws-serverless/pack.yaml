@@ -1,0 +1,9 @@
+name: aws-serverless
+version: "1.0.0"
+description: AWS Serverless patterns — Lambda, API GW, DynamoDB, SQS, SNS, EventBridge, SFN, IAM
+languages: [javascript, typescript, python]
+defaults:
+  kind: PATTERN
+  weight_class: HUMAN
+  confidence: 0.95
+  target_type: FILE

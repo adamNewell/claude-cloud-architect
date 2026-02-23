@@ -1,0 +1,17 @@
+# Archimedes Pattern Pack Registry
+# Add new packs here. Drop a new directory with pack.yaml + scan.sh + rules/ to register.
+packs:
+  - name: core
+    path: patterns/core
+    description: Universal architectural patterns (routes, services, events, HTTP clients, anti-patterns)
+    default: true
+
+  - name: aws-serverless
+    path: patterns/aws-serverless
+    description: AWS Serverless — Lambda, API Gateway, DynamoDB, SQS, SNS, EventBridge, Step Functions, IAM
+    default: false
+
+  - name: iot-core
+    path: patterns/iot-core
+    description: AWS IoT Core — MQTT, Device Shadow, Rules Engine, Greengrass v2, Fleet Provisioning
+    default: false

@@ -1,0 +1,9 @@
+name: iot-core
+version: "1.0.0"
+description: AWS IoT Core — MQTT, Device Shadow, Rules Engine, Greengrass v2, Fleet Provisioning
+languages: [javascript, typescript, python, yaml]
+defaults:
+  kind: PATTERN
+  weight_class: HUMAN
+  confidence: 0.95
+  target_type: FILE
