@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: mqtt-device-shadow
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: iot-device-shadow
+query: "IoT device shadow state reported desired delta update MQTT AWS Shadow"
+top_k: 5

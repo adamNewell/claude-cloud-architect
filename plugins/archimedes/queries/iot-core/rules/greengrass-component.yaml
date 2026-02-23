@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: greengrass-component-deployment
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: greengrass-deployment-pattern
+query: "AWS Greengrass component deployment recipe lifecycle install run configuration"
+top_k: 5
