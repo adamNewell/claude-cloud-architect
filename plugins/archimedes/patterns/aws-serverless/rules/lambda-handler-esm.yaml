@@ -11,3 +11,5 @@ rule:
     - pattern: "export const handler = async ($EVENT, $CTX) => { $$$BODY }"
     - pattern: "export const handler = async ($EVENT: $TYPE, $CTX: $CTXTYPE) => { $$$BODY }"
     - pattern: "export async function handler($EVENT, $CTX) { $$$BODY }"
+    - pattern: "export const $NAME: Handler = async ($EVENT: $EVENTTYPE) => { $$$BODY }"
+    - pattern: "export const $NAME: Handler = async ($EVENT) => { $$$BODY }"

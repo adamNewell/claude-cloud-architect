@@ -7,4 +7,6 @@ archimedes:
 id: aws-sqs-send-message
 language: TypeScript
 rule:
-  pattern: $CLIENT.send(new SendMessageCommand($$$ARGS))
+  any:
+    - pattern: $CLIENT.send(new SendMessageCommand($$$ARGS))
+    - pattern: new SendMessageCommand($$$ARGS)
