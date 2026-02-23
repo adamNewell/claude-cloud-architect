@@ -1,0 +1,14 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: dynamodb-client
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-dynamodb-v3-send
+language: TypeScript
+rule:
+  any:
+    - pattern: $CLIENT.send(new GetItemCommand($$$ARGS))
+    - pattern: $CLIENT.send(new PutItemCommand($$$ARGS))
+    - pattern: $CLIENT.send(new QueryCommand($$$ARGS))
+    - pattern: $CLIENT.send(new UpdateItemCommand($$$ARGS))

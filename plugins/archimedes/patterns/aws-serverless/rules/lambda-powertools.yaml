@@ -1,0 +1,13 @@
+archimedes:
+  kind: PATTERN
+  subkind: lambda-powertools
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-lambda-powertools
+language: TypeScript
+rule:
+  any:
+    - pattern: "import { Logger } from \"@aws-lambda-powertools/logger\""
+    - pattern: "import { Tracer } from \"@aws-lambda-powertools/tracer\""
+    - pattern: "import { Metrics } from \"@aws-lambda-powertools/metrics\""

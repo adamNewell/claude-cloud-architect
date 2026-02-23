@@ -1,0 +1,11 @@
+archimedes:
+  kind: DEBT
+  subkind: dynamodb-full-scan
+  confidence: 0.85
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-dynamodb-scan
+language: TypeScript
+note: "DynamoDB Scan reads entire table — expensive at scale, replace with Query + GSI"
+rule:
+  pattern: $CLIENT.send(new ScanCommand($$$ARGS))

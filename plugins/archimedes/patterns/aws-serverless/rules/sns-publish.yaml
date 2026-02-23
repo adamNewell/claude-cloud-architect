@@ -1,0 +1,10 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: sns-publisher
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-sns-publish
+language: TypeScript
+rule:
+  pattern: $CLIENT.send(new PublishCommand($$$ARGS))

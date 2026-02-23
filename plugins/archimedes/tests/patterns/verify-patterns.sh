@@ -29,6 +29,26 @@ check "$PLUGIN_ROOT/patterns/core/rules/http-client-ts.yaml" \
 check "$PLUGIN_ROOT/patterns/core/rules/event-emit-ts.yaml" \
   "$FIXTURES/sample-express.ts" 1 "Core: EventEmitter emit"
 
+
+echo ""
+echo "=== AWS Serverless Pack ==="
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/lambda-handler-esm.yaml" \
+  "$FIXTURES/sample-lambda.ts" 1 "AWS: Lambda ESM handler"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/lambda-handler-cjs.yaml" \
+  "$FIXTURES/sample-lambda.cjs" 1 "AWS: Lambda CJS handler"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/dynamodb-v3.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: DynamoDB v3 client"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/dynamodb-scan-antipattern.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: DynamoDB Scan anti-pattern"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/sqs-producer.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: SQS SendMessage"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/sns-publish.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: SNS Publish"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/eventbridge-put.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: EventBridge PutEvents"
+check "$PLUGIN_ROOT/patterns/aws-serverless/rules/step-functions-invoke.yaml" \
+  "$FIXTURES/sample-aws-services.ts" 1 "AWS: SFN StartExecution"
+
 echo ""
 echo "Results: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ] || exit 1

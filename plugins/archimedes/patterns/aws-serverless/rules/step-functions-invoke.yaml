@@ -1,0 +1,10 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: step-functions-invoker
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-sfn-start-execution
+language: TypeScript
+rule:
+  pattern: $CLIENT.send(new StartExecutionCommand($$$ARGS))

@@ -1,0 +1,13 @@
+archimedes:
+  kind: PATTERN
+  subkind: lambda-handler
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-lambda-handler-esm
+language: TypeScript
+rule:
+  any:
+    - pattern: "export const handler = async ($EVENT, $CTX) => { $$$BODY }"
+    - pattern: "export const handler = async ($EVENT: $TYPE, $CTX: $CTXTYPE) => { $$$BODY }"
+    - pattern: "export async function handler($EVENT, $CTX) { $$$BODY }"

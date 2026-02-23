@@ -1,0 +1,10 @@
+archimedes:
+  kind: PATTERN
+  subkind: sqs-consumer
+  confidence: 0.90
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-sqs-lambda-trigger
+language: TypeScript
+rule:
+  pattern: $EVENT.Records[0].body

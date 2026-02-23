@@ -1,0 +1,10 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: sqs-producer
+  confidence: 0.95
+  weight_class: HUMAN
+  target_type: FILE
+id: aws-sqs-send-message
+language: TypeScript
+rule:
+  pattern: $CLIENT.send(new SendMessageCommand($$$ARGS))
