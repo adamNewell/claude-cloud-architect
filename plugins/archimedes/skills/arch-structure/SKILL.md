@@ -41,6 +41,14 @@ When uncertain: start with `core` only. Add packs after reviewing what `core` fo
 | DEPENDENCY | HUMAN | VALIDATED | DynamoDB clients, SQS producers, axios calls, MQTT publishers |
 | DEBT | HUMAN | VALIDATED | DynamoDB Scan anti-pattern, MQTT wildcard subscription, hardcoded credentials, GGv2 v1 SDK |
 
+## Pre-flight: Set $SESSION, $REPO, and $DB_PATH
+
+All post-scan queries require `$SESSION` (session ID), `$REPO` (absolute service root path), and `$DB_PATH`. These come from the scan arguments you passed to `run-structure-scan.sh`. Resolve `$DB_PATH` from `meta.json`:
+
+```bash
+DB_PATH=$(cat $REPO/.archimedes/sessions/$SESSION/meta.json | jq -r .db_path)
+```
+
 ## Post-Scan Analysis
 
 After scanning, your role shifts from data collection to interpretation. Run these queries in order — each builds on the previous.
@@ -50,7 +58,7 @@ After scanning, your role shifts from data collection to interpretation. Run the
 **Step 1 — Scope check:**
 ```bash
 bun tools/tag-store.ts query --session $SESSION --db $DB_PATH \
-  --sql "SELECT kind, COUNT(*) as count, ROUND(AVG(confidence),2) as avg_conf FROM tags WHERE target_repo='$REPO' AND status NOT IN ('REJECTED') GROUP BY kind"
+  --sql "SELECT kind, COUNT(*) as count, ROUND(AVG(confidence),2) as avg_conf FROM tags WHERE target_repo='$REPO' AND session_id='$SESSION' AND status NOT IN ('REJECTED') GROUP BY kind"
 ```
 What to look for: DEBT > 20% of PATTERN count = systemic debt, not isolated issues.
 

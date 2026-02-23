@@ -15,7 +15,7 @@ The tag store is shared memory between all Archimedes skills. Every skill reads 
 | A CANDIDATE tag is wrong | `reject` |
 | Deliver findings to a client | `export` |
 | Add a finding no pattern covers | `write` with `--weight MACHINE` |
-| Start a new analysis session | `session-init` (not arch-tags directly) |
+| Start a new analysis session | `bun tools/session-init.ts --session <id> --repo /abs/path` |
 
 > **MANDATORY: READ ENTIRE FILE `references/tag-review-workflow.md` BEFORE querying** when conducting a full review session. Do NOT load it for single targeted queries (e.g., `SELECT COUNT(*) FROM tags`).
 
@@ -32,7 +32,7 @@ All commands require `$SESSION` (session ID) and `$DB_PATH` (database path). Alw
 DB_PATH=$(cat /path/to/repo/.archimedes/sessions/$SESSION/meta.json | jq -r .db_path)
 ```
 
-Default if `meta.json` is absent: `.archimedes/sessions/$SESSION/tags.db` inside the analyzed repo root.
+If `meta.json` does not exist, the session was not initialized — run `bun tools/session-init.ts --session $SESSION --repo /path/to/repo` before any tag operations. Do not guess or construct the path manually.
 
 ## Commands
 
@@ -42,7 +42,7 @@ Default if `meta.json` is absent: `.archimedes/sessions/$SESSION/tags.db` inside
 bun tools/tag-store.ts query \
   --session $SESSION \
   --db $DB_PATH \
-  --sql "SELECT kind, COUNT(*) FROM tags GROUP BY kind"
+  --sql "SELECT kind, COUNT(*) FROM tags WHERE session_id='$SESSION' AND status NOT IN ('REJECTED') GROUP BY kind"
 ```
 
 **MANDATORY before writing custom SQL: read `cookbook/tag-store/queries.md`** (22 ready-to-use templates). Do NOT load `cookbook/tag-store/schema.md` unless troubleshooting a column type or unexpected null value.
