@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS tags (
   confidence REAL NOT NULL DEFAULT 0.5,
   weight_class TEXT NOT NULL DEFAULT 'MACHINE',
   source_tool TEXT NOT NULL,
-  source_query TEXT,
+  source_query TEXT NOT NULL DEFAULT '',
   source_evidence TEXT,
   status TEXT NOT NULL DEFAULT 'CANDIDATE',
   parent_tag_id TEXT,
@@ -31,7 +31,7 @@ CREATE INDEX IF NOT EXISTS idx_tags_kind ON tags(kind);
 CREATE INDEX IF NOT EXISTS idx_tags_status ON tags(status);
 CREATE INDEX IF NOT EXISTS idx_tags_target_ref ON tags(target_ref);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_tags_dedup
-  ON tags(target_ref, kind, source_tool, session_id);
+  ON tags(target_ref, kind, source_tool, session_id, source_query);
 `;
 
 function parseArgs(argv: string[]): Record<string, string> {
@@ -108,7 +108,7 @@ await (async () => {
              weight_class, source_tool, source_query, source_evidence,
              status, session_id, created_at, updated_at)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-          ON CONFLICT(target_ref, kind, source_tool, session_id)
+          ON CONFLICT(target_ref, kind, source_tool, session_id, source_query)
           DO UPDATE SET updated_at = excluded.updated_at,
                         confidence = MAX(confidence, excluded.confidence)
           RETURNING id
@@ -124,7 +124,7 @@ await (async () => {
           parseFloat(args.confidence ?? "0.5"),
           weight,
           args["source-tool"],
-          args["source-query"] ?? null,
+          args["source-query"] ?? "",
           args["source-evidence"] ?? null,
           status,
           args.session,
@@ -247,7 +247,7 @@ await (async () => {
            weight_class, source_tool, source_query, source_evidence,
            status, session_id, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ON CONFLICT(target_ref, kind, source_tool, session_id)
+        ON CONFLICT(target_ref, kind, source_tool, session_id, source_query)
         DO UPDATE SET updated_at = excluded.updated_at,
                       confidence = MAX(confidence, excluded.confidence)
         RETURNING id
