@@ -13,7 +13,7 @@
     {
       "name": "riviere-architect",
       "source": "./plugins/riviere-architect",
-      "description": "Document and capture existing software architecture \u2014 components, data flows, decisions, and diagrams",
+      "description": "Document and capture existing software architecture — components, data flows, decisions, and diagrams",
       "keywords": [
         "architecture",
         "documentation",
@@ -36,6 +36,62 @@
         "security",
         "reliability",
         "cost-optimization"
+      ],
+      "category": "architecture"
+    },
+    {
+      "name": "archimedes",
+      "source": "./plugins/archimedes",
+      "description": "AI-assisted architecture intelligence platform for software modernization — deterministic (ast-grep), semantic (ColGREP/qmd), and agentic (osgrep/Serena) analysis layers connected by a persistent SQLite tag store",
+      "version": "0.2.0",
+      "keywords": [
+        "architecture",
+        "modernization",
+        "technical-debt",
+        "ast-grep",
+        "semantic-search",
+        "tag-store",
+        "migration",
+        "codebase-intelligence"
+      ],
+      "category": "architecture"
+    },
+    {
+      "name": "themis",
+      "source": "./plugins/themis",
+      "description": "AWS Well-Architected Framework best practices for architecture reviews",
+      "version": "0.1.0",
+      "keywords": [
+        "aws",
+        "well-architected",
+        "waf",
+        "architecture-review",
+        "best-practices",
+        "security",
+        "reliability",
+        "performance",
+        "cost-optimization",
+        "sustainability",
+        "devops"
+      ],
+      "category": "architecture"
+    },
+    {
+      "name": "daedalus",
+      "source": "./plugins/daedalus",
+      "description": "Define target architectures and modernize legacy software — migration strategies, technical debt analysis, and refactoring roadmaps",
+      "version": "0.1.0",
+      "keywords": [
+        "modernization",
+        "migration",
+        "technical-debt",
+        "refactoring",
+        "legacy",
+        "cloud-native",
+        "6r-strategy",
+        "strangler-fig",
+        "software-design",
+        "target-architecture"
       ],
       "category": "architecture"
     }
