@@ -142,5 +142,6 @@ find "$REPO/.archimedes/index/" -name "chunkhound.db" -mtime +7 | grep -q . && e
 ## Known Issues (4.0.1)
 
 - `--api-key` alone does not activate the embedding provider; a `.chunkhound.json` config or `--model` flag is also required
-- Embedding batch errors (`_Task object has no attribute 'elapsed'`) can occur on first index run; re-running the index command usually resolves them
+- Embedding batch errors (`_Task object has no attribute 'elapsed'`) occur in non-TTY environments (CI, subprocess). Root cause: `_NoRichProgressManager._Shim._Task` lacks `elapsed`. Workaround: add `self.elapsed = None` to `_Shim._Task` in `rich_output.py`. The `re-running resolves it` advice in earlier versions is incorrect — the issue is systematic in non-TTY contexts.
 - `chunkhound index` with only a single-line file may produce 0 chunks; use files with multiple functions/blocks
+- **Do NOT call `chunkhound-search.py` via `python3 script.py`** — this uses the system Python which lacks chunkhound. Call it directly as `./chunkhound-search.py` or `"$PLUGIN_ROOT/tools/chunkhound-search.py"` so the shebang activates the correct interpreter.

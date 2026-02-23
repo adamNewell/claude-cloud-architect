@@ -1626,4 +1626,4 @@ git commit -m "feat: Phase 2 gate passes — $CANDIDATE_COUNT CANDIDATE tags on 
 - [ ] `skills/arch-map-service/SKILL.md` ≥115/120 skill-judge
 - [ ] **Phase 2 gate**: ≥10 CANDIDATE tags on wellcube-device-data-processing
 
-**Actual gate result:** `____` CANDIDATE tags (fill in when Task 12 completes)
+**Actual gate result:** `98` CANDIDATE tags (82 PATTERN + 16 DEPENDENCY) across 26 distinct subkinds — session `wcdp-20260223` on wellcube-device-data-processing. Gate: PASS ✅
