@@ -17,14 +17,15 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step connect --status
 - Read `.riviere/config/domains.json` — use canonical domain names when resolving cross-repo links.
 
 > **Single-repository codebases:** Follow `steps/connect-subagent.md` directly —
-> you are both orchestrator and subagent. Use `.riviere/connect-checklist.md` as the
-> checklist file, stage to `.riviere/work/link-staged-local.jsonl`, then replay staged
-> commands with `bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"`.
+> you are both orchestrator and subagent. Use `"$PROJECT_ROOT/.riviere/connect-checklist.md"`
+> as the checklist file, stage to `"$PROJECT_ROOT/.riviere/work/link-staged-local.jsonl"`,
+> then replay staged commands with
+> `bun tools/replay-staged-links.ts --project-root "$PROJECT_ROOT"`.
 
 ## Generate Checklist
 
 ```bash
-npx riviere builder component-checklist --output=".riviere/connect-checklist.md"
+npx riviere builder component-checklist --output="$PROJECT_ROOT/.riviere/connect-checklist.md"
 ```
 
 ## Spawn Workers
@@ -62,7 +63,7 @@ After all workers complete:
 1. Merge sub-checklists back into the master checklist:
 
 ```bash
-cat .riviere/work/checklist-*.md > .riviere/connect-checklist.md
+cat "$PROJECT_ROOT/.riviere/work/checklist-"*.md > "$PROJECT_ROOT/.riviere/connect-checklist.md"
 ```
 
 2. Verify all items are checked before proceeding.

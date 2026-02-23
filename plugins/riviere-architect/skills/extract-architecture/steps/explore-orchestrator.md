@@ -16,8 +16,8 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step explore --status
 Create the staging directory and initialize the domain registry:
 
 ```bash
-mkdir -p .riviere/work/ .riviere/config/
-echo '{"domains":[]}' > .riviere/config/domains.json
+mkdir -p "$PROJECT_ROOT/.riviere/work/" "$PROJECT_ROOT/.riviere/config/"
+echo '{"domains":[]}' > "$PROJECT_ROOT/.riviere/config/domains.json"
 ```
 
 ## Domain Boundary Thinking Framework

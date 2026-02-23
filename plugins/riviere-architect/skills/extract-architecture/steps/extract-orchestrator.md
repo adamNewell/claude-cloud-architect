@@ -18,8 +18,10 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step extract --status
 - CLI installed: `npm install @living-architecture/riviere-cli`
 
 > **Single-repository codebases:** Follow `steps/extract-subagent.md` directly —
-> you are both orchestrator and subagent. Call `add-component` directly rather than
-> staging to JSONL.
+> you are both orchestrator and subagent. Stage components to
+> `.riviere/work/extract-{repo}.jsonl` and replay via
+> `bun tools/replay-staged-components.ts --project-root "$PROJECT_ROOT"`.
+> Do not call `add-component` directly.
 
 ## Initialize Graph
 

@@ -15,13 +15,16 @@ bun tools/detect-phase.ts --project-root "$PROJECT_ROOT" --step annotate --statu
 - Graph with linked components from Step 4.
 
 > **Single-repository codebases:** Follow `steps/annotate-subagent.md` directly —
-> you are both orchestrator and subagent. Use `.riviere/step-5-checklist.md` as the
-> checklist file. Call the enrich CLI directly.
+> you are both orchestrator and subagent. Use `"$PROJECT_ROOT/.riviere/step-5-checklist.md"`
+> as the checklist file. Stage enrichment data to
+> `"$PROJECT_ROOT/.riviere/work/enrich-staged-{repo}.jsonl"` and replay via
+> `bun tools/replay-staged-enrichments.ts --project-root "$PROJECT_ROOT"`.
+> Do not call the enrich CLI directly.
 
 ## Generate Checklist
 
 ```bash
-npx riviere builder component-checklist --type=DomainOp --output=".riviere/step-5-checklist.md"
+npx riviere builder component-checklist --type=DomainOp --output="$PROJECT_ROOT/.riviere/step-5-checklist.md"
 ```
 
 ## Spawn Workers
@@ -56,7 +59,7 @@ After all workers complete:
 1. Merge sub-checklists back into the master checklist:
 
 ```bash
-cat .riviere/work/enrich-*.md > .riviere/step-5-checklist.md
+cat "$PROJECT_ROOT/.riviere/work/enrich-"*.md > "$PROJECT_ROOT/.riviere/step-5-checklist.md"
 ```
 
 2. Replay staged enrichment commands sequentially:
