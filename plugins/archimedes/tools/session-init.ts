@@ -15,8 +15,11 @@ function parseArgs(argv: string[]): Record<string, string> {
 
 const args = parseArgs(Bun.argv.slice(2));
 const sessionId = args.session ?? crypto.randomUUID().slice(0, 8);
-const root = args.root ?? ".archimedes";
-const repos = (args.repos ?? "").split(",").map(r => r.trim()).filter(Boolean);
+// Single-repo mode: session data lives in {repo}/.archimedes/ so analysis
+// artifacts are co-located with the codebase being analyzed, not the plugin.
+const repoArg = args.repo;
+const root = args.root ?? (repoArg ? join(repoArg, ".archimedes") : ".archimedes");
+const repos = (args.repos ?? repoArg ?? "").split(",").map(r => r.trim()).filter(Boolean);
 const packs = (args.packs ?? "core").split(",").map(p => p.trim()).filter(Boolean);
 const timeLimit = parseInt(args["time-limit"] ?? "60", 10);
 
