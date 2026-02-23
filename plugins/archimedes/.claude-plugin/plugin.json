@@ -1,0 +1,25 @@
+{
+  "name": "archimedes",
+  "version": "0.2.0",
+  "description": "AI-assisted architecture intelligence platform for software modernization — multi-layer analysis using deterministic (ast-grep), semantic (ColGREP/qmd), and agentic (osgrep/Serena) tools connected by a persistent SQLite tag store",
+  "author": {
+    "name": "Adam Newell",
+    "email": "adamdouglasnewell@gmail.com"
+  },
+  "keywords": [
+    "architecture",
+    "modernization",
+    "technical-debt",
+    "ast-grep",
+    "semantic-search",
+    "tag-store",
+    "migration",
+    "codebase-intelligence"
+  ],
+  "agents": [
+    
+  ],
+  "commands": "./commands/",
+  "skills": "./skills/",
+  "license": "MIT"
+}

@@ -1,0 +1,296 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A1628"/>
+      <stop offset="50%" stop-color="#0D1F3C"/>
+      <stop offset="100%" stop-color="#0A1628"/>
+    </linearGradient>
+
+    <!-- Tier gradients -->
+    <linearGradient id="tier1-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1B6B7D" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#1B6B7D" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#1B6B7D" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="tier2-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4A7BA7" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#4A7BA7" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#4A7BA7" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="tier3-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7EB5E0" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#7EB5E0" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#7EB5E0" stop-opacity="0.3"/>
+    </linearGradient>
+
+    <!-- Tag Store glow -->
+    <radialGradient id="tagstore-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4A7BA7" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#4A7BA7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#4A7BA7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1A2A44" stroke-width="0.5" opacity="0.4"/>
+    </pattern>
+
+    <!-- Flow line glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="glow-strong" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Node glow -->
+    <filter id="node-glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Subtle radial glow behind center -->
+  <ellipse cx="600" cy="380" rx="300" ry="200" fill="url(#tagstore-glow)" opacity="0.15"/>
+
+  <!-- ===== HEADER TEXT ===== -->
+  <text x="600" y="72" text-anchor="middle" font-family="'SF Pro Display', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="52" font-weight="700" fill="#FFFFFF" letter-spacing="8">ARCHIMEDES</text>
+  <text x="600" y="105" text-anchor="middle" font-family="'SF Pro Display', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="16" font-weight="500" fill="#4A7BA7" letter-spacing="3">AI-ASSISTED ARCHITECTURE INTELLIGENCE PLATFORM</text>
+
+  <!-- Divider line -->
+  <line x1="400" y1="122" x2="800" y2="122" stroke="#4A7BA7" stroke-width="1" opacity="0.4"/>
+
+  <text x="600" y="145" text-anchor="middle" font-family="'SF Pro Display', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="13" font-weight="400" fill="#6B8DB5" font-style="italic" letter-spacing="1">Composable Codebase Intelligence for Software Modernization</text>
+
+  <!-- ===== THREE TIERS VISUALIZATION ===== -->
+
+  <!-- Tier 3: Agentic (top) -->
+  <g transform="translate(0, 0)">
+    <!-- Tier background bar -->
+    <rect x="120" y="175" width="960" height="95" rx="4" fill="url(#tier3-grad)" opacity="0.4"/>
+
+    <!-- Tier label -->
+    <text x="145" y="200" font-family="'SF Mono', 'JetBrains Mono', 'Fira Code', monospace" font-size="10" fill="#7EB5E0" opacity="0.8" letter-spacing="2">TIER 3</text>
+    <text x="145" y="218" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#7EB5E0">Agentic Search</text>
+    <text x="145" y="234" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="11" fill="#5A9BC5" opacity="0.8">Autonomous investigation</text>
+
+    <!-- Agentic branching nodes -->
+    <g filter="url(#node-glow)">
+      <!-- Central investigation node -->
+      <circle cx="450" cy="222" r="8" fill="none" stroke="#7EB5E0" stroke-width="1.5" opacity="0.9"/>
+      <circle cx="450" cy="222" r="3" fill="#7EB5E0" opacity="0.8"/>
+
+      <!-- Branching paths -->
+      <line x1="458" y1="218" x2="510" y2="198" stroke="#7EB5E0" stroke-width="1" opacity="0.5"/>
+      <line x1="458" y1="222" x2="520" y2="222" stroke="#7EB5E0" stroke-width="1" opacity="0.5"/>
+      <line x1="458" y1="226" x2="510" y2="246" stroke="#7EB5E0" stroke-width="1" opacity="0.5"/>
+
+      <!-- Branch endpoints -->
+      <circle cx="515" cy="196" r="5" fill="none" stroke="#7EB5E0" stroke-width="1" opacity="0.7"/>
+      <circle cx="525" cy="222" r="5" fill="none" stroke="#7EB5E0" stroke-width="1" opacity="0.7"/>
+      <circle cx="515" cy="248" r="5" fill="none" stroke="#7EB5E0" stroke-width="1" opacity="0.7"/>
+
+      <!-- Secondary branches -->
+      <line x1="520" y1="196" x2="560" y2="188" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+      <line x1="520" y1="196" x2="555" y2="204" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+      <line x1="530" y1="222" x2="570" y2="215" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+      <line x1="530" y1="222" x2="570" y2="229" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+      <line x1="520" y1="248" x2="560" y2="240" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+      <line x1="520" y1="248" x2="555" y2="256" stroke="#7EB5E0" stroke-width="0.8" opacity="0.3"/>
+
+      <!-- Tertiary dots -->
+      <circle cx="563" cy="187" r="3" fill="#7EB5E0" opacity="0.3"/>
+      <circle cx="558" cy="204" r="3" fill="#7EB5E0" opacity="0.3"/>
+      <circle cx="573" cy="214" r="3" fill="#7EB5E0" opacity="0.3"/>
+      <circle cx="573" cy="230" r="3" fill="#7EB5E0" opacity="0.3"/>
+      <circle cx="563" cy="240" r="3" fill="#7EB5E0" opacity="0.3"/>
+      <circle cx="558" cy="257" r="3" fill="#7EB5E0" opacity="0.3"/>
+    </g>
+
+    <!-- Tool labels for Tier 3 -->
+    <g font-family="'SF Mono', 'JetBrains Mono', monospace" font-size="9" fill="#5A9BC5" opacity="0.6">
+      <text x="650" y="202">osgrep</text>
+      <text x="730" y="202">Serena</text>
+      <text x="810" y="202">rlmgrep</text>
+      <text x="900" y="202">ChunkHound</text>
+      <!-- Dots between -->
+      <circle cx="720" cy="199" r="1.5" fill="#5A9BC5" opacity="0.4"/>
+      <circle cx="800" cy="199" r="1.5" fill="#5A9BC5" opacity="0.4"/>
+      <circle cx="892" cy="199" r="1.5" fill="#5A9BC5" opacity="0.4"/>
+    </g>
+
+    <!-- Tier 3 descriptor -->
+    <rect x="640" y="215" width="400" height="36" rx="3" fill="#7EB5E0" fill-opacity="0.06" stroke="#7EB5E0" stroke-width="0.5" stroke-opacity="0.2"/>
+    <text x="660" y="232" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#7EB5E0" opacity="0.7">Follows threads of investigation to find what you</text>
+    <text x="660" y="245" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#7EB5E0" opacity="0.7">didn't know to ask about</text>
+  </g>
+
+  <!-- Tier 2: Semantic (middle) -->
+  <g transform="translate(0, 0)">
+    <rect x="120" y="280" width="960" height="95" rx="4" fill="url(#tier2-grad)" opacity="0.4"/>
+
+    <text x="145" y="305" font-family="'SF Mono', 'JetBrains Mono', 'Fira Code', monospace" font-size="10" fill="#4A7BA7" opacity="0.8" letter-spacing="2">TIER 2</text>
+    <text x="145" y="323" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#4A7BA7">Semantic Retrieval</text>
+    <text x="145" y="339" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="11" fill="#3D6B94" opacity="0.8">Conceptual similarity</text>
+
+    <!-- Semantic vector connections -->
+    <g filter="url(#node-glow)">
+      <!-- Embedding dots in a flowing pattern -->
+      <circle cx="430" cy="310" r="4" fill="#4A7BA7" opacity="0.6"/>
+      <circle cx="465" cy="325" r="5" fill="#4A7BA7" opacity="0.7"/>
+      <circle cx="500" cy="315" r="4" fill="#4A7BA7" opacity="0.5"/>
+      <circle cx="535" cy="335" r="6" fill="#4A7BA7" opacity="0.8"/>
+      <circle cx="570" cy="320" r="4" fill="#4A7BA7" opacity="0.6"/>
+      <circle cx="490" cy="345" r="3" fill="#4A7BA7" opacity="0.4"/>
+      <circle cx="550" cy="305" r="3" fill="#4A7BA7" opacity="0.4"/>
+
+      <!-- Connection lines -->
+      <line x1="434" y1="312" x2="461" y2="323" stroke="#4A7BA7" stroke-width="0.8" opacity="0.3"/>
+      <line x1="469" y1="327" x2="496" y2="317" stroke="#4A7BA7" stroke-width="0.8" opacity="0.3"/>
+      <line x1="504" y1="317" x2="531" y2="333" stroke="#4A7BA7" stroke-width="0.8" opacity="0.3"/>
+      <line x1="539" y1="335" x2="566" y2="322" stroke="#4A7BA7" stroke-width="0.8" opacity="0.3"/>
+      <line x1="467" y1="328" x2="488" y2="343" stroke="#4A7BA7" stroke-width="0.5" opacity="0.2"/>
+      <line x1="502" y1="316" x2="548" y2="307" stroke="#4A7BA7" stroke-width="0.5" opacity="0.2"/>
+      <line x1="537" y1="333" x2="492" y2="344" stroke="#4A7BA7" stroke-width="0.5" opacity="0.2"/>
+    </g>
+
+    <!-- Tool labels for Tier 2 -->
+    <g font-family="'SF Mono', 'JetBrains Mono', monospace" font-size="9" fill="#3D6B94" opacity="0.6">
+      <text x="650" y="307">code-chunk</text>
+      <text x="750" y="307">ColGREP</text>
+      <text x="840" y="307">qmd</text>
+      <circle cx="740" cy="304" r="1.5" fill="#3D6B94" opacity="0.4"/>
+      <circle cx="832" cy="304" r="1.5" fill="#3D6B94" opacity="0.4"/>
+    </g>
+
+    <rect x="640" y="320" width="400" height="36" rx="3" fill="#4A7BA7" fill-opacity="0.06" stroke="#4A7BA7" stroke-width="0.5" stroke-opacity="0.2"/>
+    <text x="660" y="337" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#4A7BA7" opacity="0.7">Discovers relationships and patterns that</text>
+    <text x="660" y="350" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#4A7BA7" opacity="0.7">deterministic tools cannot see</text>
+  </g>
+
+  <!-- Tier 1: Deterministic (bottom) -->
+  <g transform="translate(0, 0)">
+    <rect x="120" y="385" width="960" height="95" rx="4" fill="url(#tier1-grad)" opacity="0.4"/>
+
+    <text x="145" y="410" font-family="'SF Mono', 'JetBrains Mono', 'Fira Code', monospace" font-size="10" fill="#1B9BAF" opacity="0.8" letter-spacing="2">TIER 1</text>
+    <text x="145" y="428" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="14" font-weight="600" fill="#1B9BAF">Deterministic Intelligence</text>
+    <text x="145" y="444" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="11" fill="#178A9C" opacity="0.8">Zero false positives</text>
+
+    <!-- AST node tree -->
+    <g filter="url(#node-glow)">
+      <!-- Root -->
+      <rect x="470" y="400" width="50" height="20" rx="3" fill="none" stroke="#1B9BAF" stroke-width="1.5" opacity="0.8"/>
+      <text x="495" y="414" text-anchor="middle" font-family="'SF Mono', monospace" font-size="8" fill="#1B9BAF" opacity="0.7">AST</text>
+
+      <!-- Branches -->
+      <line x1="483" y1="420" x2="455" y2="440" stroke="#1B9BAF" stroke-width="1" opacity="0.5"/>
+      <line x1="495" y1="420" x2="495" y2="440" stroke="#1B9BAF" stroke-width="1" opacity="0.5"/>
+      <line x1="507" y1="420" x2="535" y2="440" stroke="#1B9BAF" stroke-width="1" opacity="0.5"/>
+
+      <!-- Child nodes -->
+      <rect x="435" y="440" width="40" height="16" rx="2" fill="none" stroke="#1B9BAF" stroke-width="1" opacity="0.6"/>
+      <text x="455" y="451" text-anchor="middle" font-family="'SF Mono', monospace" font-size="7" fill="#1B9BAF" opacity="0.6">fn</text>
+
+      <rect x="477" y="440" width="36" height="16" rx="2" fill="none" stroke="#1B9BAF" stroke-width="1" opacity="0.6"/>
+      <text x="495" y="451" text-anchor="middle" font-family="'SF Mono', monospace" font-size="7" fill="#1B9BAF" opacity="0.6">cls</text>
+
+      <rect x="519" y="440" width="36" height="16" rx="2" fill="none" stroke="#1B9BAF" stroke-width="1" opacity="0.6"/>
+      <text x="537" y="451" text-anchor="middle" font-family="'SF Mono', monospace" font-size="7" fill="#1B9BAF" opacity="0.6">mod</text>
+
+      <!-- Leaf nodes -->
+      <line x1="445" y1="456" x2="435" y2="466" stroke="#1B9BAF" stroke-width="0.8" opacity="0.3"/>
+      <line x1="455" y1="456" x2="460" y2="466" stroke="#1B9BAF" stroke-width="0.8" opacity="0.3"/>
+      <circle cx="433" cy="468" r="2.5" fill="#1B9BAF" opacity="0.4"/>
+      <circle cx="462" cy="468" r="2.5" fill="#1B9BAF" opacity="0.4"/>
+    </g>
+
+    <!-- Tool labels for Tier 1 -->
+    <g font-family="'SF Mono', 'JetBrains Mono', monospace" font-size="9" fill="#178A9C" opacity="0.6">
+      <text x="650" y="412">ast-grep</text>
+      <text x="740" y="412">Riviere</text>
+      <text x="830" y="412">IaC Parser</text>
+      <circle cx="730" cy="409" r="1.5" fill="#178A9C" opacity="0.4"/>
+      <circle cx="822" cy="409" r="1.5" fill="#178A9C" opacity="0.4"/>
+    </g>
+
+    <rect x="640" y="425" width="400" height="36" rx="3" fill="#1B9BAF" fill-opacity="0.06" stroke="#1B9BAF" stroke-width="0.5" stroke-opacity="0.2"/>
+    <text x="660" y="442" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#1B9BAF" opacity="0.7">Structural pattern matching produces high-confidence,</text>
+    <text x="660" y="455" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="10" fill="#1B9BAF" opacity="0.7">zero-false-positive findings</text>
+  </g>
+
+  <!-- ===== CENTRAL TAG STORE ===== -->
+  <g transform="translate(600, 530)" filter="url(#glow-soft)">
+    <!-- Outer glow ring -->
+    <circle cx="0" cy="0" r="42" fill="none" stroke="#4A7BA7" stroke-width="1" opacity="0.2"/>
+
+    <!-- Hexagon shape for Tag Store -->
+    <polygon points="0,-35 30,-17.5 30,17.5 0,35 -30,17.5 -30,-17.5" fill="#0D1F3C" stroke="#4A7BA7" stroke-width="1.5" opacity="0.9"/>
+    <polygon points="0,-28 24,-14 24,14 0,28 -24,14 -24,-14" fill="none" stroke="#4A7BA7" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- Inner icon - database/store symbol -->
+    <ellipse cx="0" cy="-8" rx="12" ry="5" fill="none" stroke="#7EB5E0" stroke-width="1" opacity="0.8"/>
+    <line x1="-12" y1="-8" x2="-12" y2="8" stroke="#7EB5E0" stroke-width="1" opacity="0.8"/>
+    <line x1="12" y1="-8" x2="12" y2="8" stroke="#7EB5E0" stroke-width="1" opacity="0.8"/>
+    <ellipse cx="0" cy="8" rx="12" ry="5" fill="none" stroke="#7EB5E0" stroke-width="1" opacity="0.8"/>
+    <ellipse cx="0" cy="0" rx="12" ry="5" fill="none" stroke="#7EB5E0" stroke-width="0.5" opacity="0.4"/>
+
+    <!-- Label -->
+    <text x="0" y="55" text-anchor="middle" font-family="'SF Mono', 'JetBrains Mono', monospace" font-size="10" font-weight="600" fill="#4A7BA7" letter-spacing="2">TAG STORE</text>
+    <text x="0" y="68" text-anchor="middle" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="9" fill="#3D6B94" opacity="0.7">Persistent Knowledge Model</text>
+  </g>
+
+  <!-- Flow lines from tiers to Tag Store -->
+  <g opacity="0.4">
+    <!-- From Tier 3 -->
+    <path d="M 500 270 Q 550 490 600 495" fill="none" stroke="#7EB5E0" stroke-width="1" stroke-dasharray="4,4"/>
+    <!-- From Tier 2 -->
+    <path d="M 535 375 Q 565 470 600 495" fill="none" stroke="#4A7BA7" stroke-width="1.2" stroke-dasharray="3,3"/>
+    <!-- From Tier 1 -->
+    <path d="M 495 480 Q 545 500 600 510" fill="none" stroke="#1B9BAF" stroke-width="1" stroke-dasharray="4,4"/>
+
+    <!-- Right side flow lines -->
+    <path d="M 700 270 Q 650 490 600 495" fill="none" stroke="#7EB5E0" stroke-width="1" stroke-dasharray="4,4"/>
+    <path d="M 665 375 Q 635 470 600 495" fill="none" stroke="#4A7BA7" stroke-width="1.2" stroke-dasharray="3,3"/>
+    <path d="M 705 480 Q 655 500 600 510" fill="none" stroke="#1B9BAF" stroke-width="1" stroke-dasharray="4,4"/>
+  </g>
+
+  <!-- Flow direction arrows (tiny triangles) -->
+  <g fill="#4A7BA7" opacity="0.5">
+    <polygon points="585,498 590,492 595,498" transform="rotate(-20, 590, 495)"/>
+    <polygon points="605,498 610,492 615,498" transform="rotate(20, 610, 495)"/>
+  </g>
+
+  <!-- ===== BOTTOM TAGLINE ===== -->
+  <text x="600" y="618" text-anchor="middle" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="11" fill="#3D5575" letter-spacing="1">WEEKS OF DISCOVERY IN HOURS  &#x2022;  EVIDENCE-BASED  &#x2022;  CUMULATIVE KNOWLEDGE</text>
+
+  <!-- Corner accents -->
+  <line x1="20" y1="20" x2="60" y2="20" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="20" y1="20" x2="20" y2="60" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="1180" y1="20" x2="1140" y2="20" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="1180" y1="20" x2="1180" y2="60" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="20" y1="610" x2="60" y2="610" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="20" y1="610" x2="20" y2="570" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="1180" y1="610" x2="1140" y2="610" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+  <line x1="1180" y1="610" x2="1180" y2="570" stroke="#4A7BA7" stroke-width="1" opacity="0.3"/>
+
+  <!-- Version badge -->
+  <rect x="1080" y="138" width="50" height="18" rx="9" fill="none" stroke="#3D6B94" stroke-width="0.8" opacity="0.5"/>
+  <text x="1105" y="150" text-anchor="middle" font-family="'SF Mono', monospace" font-size="9" fill="#3D6B94" opacity="0.6">v1.0</text>
+</svg>
