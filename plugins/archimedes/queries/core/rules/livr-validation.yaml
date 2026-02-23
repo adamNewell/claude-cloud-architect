@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: livr-validation
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: livr-validation-schema
+query: "LIVR validation schema rules required string integer nested object"
+top_k: 8

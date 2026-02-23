@@ -1,0 +1,9 @@
+archimedes:
+  kind: DEPENDENCY
+  subkind: http-client
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: http-client-usage
+query: "HTTP client axios fetch request GET POST API external service call"
+top_k: 6

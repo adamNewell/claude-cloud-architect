@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: express-route
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: express-route-handler
+query: "Express router get post put delete middleware route handler request response"
+top_k: 10

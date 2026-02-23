@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: sequelize-model
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: sequelize-model-definition
+query: "Sequelize model definition with DataTypes associations belongsTo hasMany"
+top_k: 10

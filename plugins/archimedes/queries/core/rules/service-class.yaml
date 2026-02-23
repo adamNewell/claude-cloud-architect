@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: service-class
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: service-class-pattern
+query: "service class business logic orchestration domain operation"
+top_k: 8

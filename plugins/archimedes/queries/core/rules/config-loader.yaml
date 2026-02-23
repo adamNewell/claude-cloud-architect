@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: config-loader
+  confidence: 0.45
+  weight_class: MACHINE
+  target_type: FILE
+id: config-loader-pattern
+query: "configuration loader environment variables process.env dotenv settings"
+top_k: 5

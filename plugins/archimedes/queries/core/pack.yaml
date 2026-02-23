@@ -1,0 +1,3 @@
+id: core
+description: "General TypeScript/Node.js patterns: Sequelize models, LIVR validation, chista services, Poller background tasks, Express routes, Repository/Service classes"
+languages: [typescript, javascript, python]

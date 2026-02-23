@@ -1,0 +1,9 @@
+archimedes:
+  kind: PATTERN
+  subkind: event-handler
+  confidence: 0.50
+  weight_class: MACHINE
+  target_type: FILE
+id: event-handler-pattern
+query: "event emitter on emit listener subscribe publish handler callback"
+top_k: 6
