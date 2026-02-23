@@ -96,7 +96,7 @@ ORDER BY confidence DESC
 LIMIT 10
 ```
 
-If the pattern is consistently wrong, batch-reject by running: `bun tools/tag-store.ts reject --db <db_path> --id <id>` for each one. Do not promote any from a batch where the majority are wrong — the source_tool's output is unreliable for this repo.
+If the pattern is consistently wrong, batch-reject by running: `bun tools/tag-store.ts reject --db <db_path> --tag-id <tag_id>` for each one. Do not promote any from a batch where the majority are wrong — the source_tool's output is unreliable for this repo.
 
 ## When to Re-Scan vs Trust Existing PROMOTED Tags
 
