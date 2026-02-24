@@ -17,7 +17,12 @@
     "codebase-intelligence"
   ],
   "agents": [
-    
+    "./agents/search-agent.md",
+    "./agents/structure-agent.md",
+    "./agents/observe-agent.md",
+    "./agents/navigate-agent.md",
+    "./agents/flow-agent.md",
+    "./agents/docs-agent.md"
   ],
   "commands": "./commands/",
   "skills": "./skills/",
