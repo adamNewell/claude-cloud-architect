@@ -9,6 +9,7 @@
 **Tech Stack:** osgrep v0.5.16 (npm, role classification + call chains), Serena MCP (uvx, LSP symbol navigation), Rivière CLI v0.8.9 (flow synthesis), qmd v1.0.7 (doc search), Bun + TypeScript (tools), bash (install + hook scripts), SQLite (tag store)
 
 **Tool Reality Check (verified 2026-02-25):**
+
 - ✅ `riviere` v0.8.9 — installed
 - ✅ `qmd` v1.0.7 — installed
 - ✅ `uvx` v0.8.22 — installed (used to run Serena)
@@ -18,6 +19,7 @@
 - ⬇️ `colgrep` — not yet installed; cookbook and skill written regardless (install in Task 1)
 
 **Marketplace stubs available at:** `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/`
+
 - Skills: arch-observe, arch-navigate, arch-flows, arch-docs
 - Agents: observe-agent, navigate-agent, flow-agent, docs-agent
 - Cookbooks: osgrep/cli.md, serena/cli.md
@@ -26,11 +28,11 @@
 
 ## Phase Overview
 
-| Phase | Gate |
-|-------|------|
-| 1 ✅ | ast-grep patterns → 65 HUMAN tags on wellcube-device-data-processing |
-| 2 ✅ | chunkhound semantic → 98 CANDIDATE tags (26 subkinds) on wellcube-device-data-processing |
-| 3 (this plan) | `arch-trace-flow` produces valid Rivière schema for ≥1 operation flow in Delos |
+| Phase         | Gate                                                                                     |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| 1             | ast-grep patterns → 65 HUMAN tags on wellcube-device-data-processing                     |
+| 2             | chunkhound semantic → 98 CANDIDATE tags (26 subkinds) on wellcube-device-data-processing |
+| 3 (this plan) | `arch-trace-flow` produces valid Rivière schema for ≥1 operation flow in Delos           |
 
 ---
 
@@ -78,6 +80,7 @@ plugins/archimedes/
 ### Task 1: Dependency Install Script
 
 **Files:**
+
 - Create: `tools/install-phase3-deps.sh`
 
 This script installs all Phase 3 tools that aren't already present and configures Serena MCP. Running it again is safe (idempotent checks).
@@ -207,6 +210,7 @@ git commit -m "feat(archimedes): add install-phase3-deps.sh for osgrep, riviere,
 ### Task 2: SessionStart Tool Guard Hook
 
 **Files:**
+
 - Create: `hooks/check-phase3-tools.sh`
 
 A `SessionStart` hook that runs at the beginning of every Claude Code session and warns if any Phase 3 tools are missing. Fires unconditionally on session start — not gated on a skill name or prompt content. Does NOT block execution (always exits 0).
@@ -310,6 +314,7 @@ git commit -m "feat(archimedes): add SessionStart hook to warn on missing Phase 
 ### Task 3: osgrep CLI Cookbook
 
 **Files:**
+
 - Create: `cookbook/osgrep/cli.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/cookbook/osgrep/cli.md`
 
@@ -339,6 +344,7 @@ Expected: JSON output with `role`, `confidence`, and `call_chain` fields.
 - [ ] **Step 3: Write cookbook/osgrep/cli.md**
 
 Copy the marketplace stub, applying corrections from Step 2. Add:
+
 - Verified version: `osgrep vX.X.X` (from `osgrep --version`)
 - Corrections to any commands that don't match actual CLI flags
 - Known issues observed during Step 2
@@ -360,6 +366,7 @@ git commit -m "docs(archimedes): add osgrep CLI cookbook"
 ### Task 4: Serena LSP Cookbook
 
 **Files:**
+
 - Create: `cookbook/serena/cli.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/cookbook/serena/cli.md`
 
@@ -385,6 +392,7 @@ Note: Actual MCP tool verification (`find_symbol`, etc.) requires Claude Code to
 - [ ] **Step 3: Write cookbook/serena/cli.md**
 
 Copy marketplace stub. Add:
+
 - Installation note: `uvx --from serena serena-mcp-server` (no separate install needed)
 - MCP config block (exact JSON for `.claude/settings.json`)
 - Note that MCP tools are invoked via Claude Code's tool-use interface, not CLI
@@ -406,6 +414,7 @@ git commit -m "docs(archimedes): add Serena LSP MCP cookbook"
 ### Task 5: qmd CLI Cookbook
 
 **Files:**
+
 - Create: `cookbook/qmd/cli.md`
 
 No marketplace stub — write from scratch based on `qmd --help` output (already verified installed).
@@ -433,6 +442,7 @@ qmd collection remove arch-test 2>/dev/null || true
 - [ ] **Step 3: Write cookbook/qmd/cli.md**
 
 Structure:
+
 ```
 ## Installation
 Binary: qmd (version X.X.X)
@@ -463,6 +473,7 @@ git commit -m "docs(archimedes): add qmd CLI cookbook for arch-docs documentatio
 ### Task 5b: colgrep CLI Cookbook
 
 **Files:**
+
 - Create: `cookbook/colgrep/cli.md`
 
 colgrep was planned in the v1 spec but not yet installed. Write the cookbook now — installation is handled by `install-phase3-deps.sh`. The cookbook is written from scratch based on the colgrep API contract.
@@ -491,6 +502,7 @@ Note output format (JSON vs text) and verify field names.
 - [ ] **Step 3: Write cookbook/colgrep/cli.md**
 
 Structure:
+
 ```
 ## Installation
 ## Index Command
@@ -520,6 +532,7 @@ git commit -m "docs(archimedes): add colgrep CLI cookbook"
 ### Task 6: arch-observe SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-observe/SKILL.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-observe/SKILL.md`
 
@@ -532,6 +545,7 @@ cat ~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-
 ```
 
 Review for:
+
 - Osgrep commands that match the actual installed binary
 - Daemon lifecycle (start/stop at skill invocation, not session-init)
 - Tag schema alignment (ROLE tags, DEPENDENCY tags, confidence=0.70 MACHINE CANDIDATE)
@@ -556,11 +570,13 @@ Record score and all feedback.
 - [ ] **Step 4: Iterate until ≥115/120**
 
 For each round of feedback:
+
 - Fix specific issues flagged by skill-judge
 - Re-run skill-judge
 - Stop when score ≥115/120
 
 Common issues to watch for:
+
 - D1 (Knowledge Delta): Remove any osgrep basics Claude already knows; keep expert decision trees
 - D3 (Anti-Patterns): Add NEVER list (e.g., never run classify on generated/vendor dirs, never treat 0.70 confidence as VALIDATED)
 - D4 (Description): Ensure description has WHAT + WHEN + trigger keywords
@@ -578,6 +594,7 @@ git commit -m "feat(archimedes): add arch-observe skill (osgrep role classificat
 ### Task 7: arch-navigate SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-navigate/SKILL.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-navigate/SKILL.md`
 
@@ -590,6 +607,7 @@ cat ~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-
 ```
 
 Review for:
+
 - MCP tool names (`find_symbol`, `find_references`, `type_hierarchy`, `get_document_symbols`, `workspace_symbols`)
 - These are invoked as Claude Code tool calls, NOT bash commands
 - Tag schema: DEPENDENCY and ROLE tags at confidence=0.70 MACHINE CANDIDATE
@@ -602,6 +620,7 @@ mkdir -p plugins/archimedes/skills/arch-navigate
 ```
 
 Key adaptations:
+
 - Clarify that Serena MCP tools are used as native Claude Code tool calls (not shell commands)
 - Add workspace configuration note (Serena MCP needs `--workspace` arg or auto-detects from project root)
 - Add NEVER list: never use Serena for pattern matching (use ast-grep), never treat dynamic dispatch results as confirmed
@@ -615,6 +634,7 @@ Use skill-judge skill to evaluate plugins/archimedes/skills/arch-navigate/SKILL.
 - [ ] **Step 4: Iterate until ≥115/120**
 
 Watch for:
+
 - D1: The unique value of arch-navigate is exact LSP results vs probabilistic osgrep — make this contrast explicit
 - D2: Include thinking framework: "Before navigating — what symbol am I looking for? Where should it be defined? What would I do if it's dynamically dispatched?"
 - D5: Progressive disclosure — load `cookbook/serena/cli.md` only when setting up Serena for the first time
@@ -633,6 +653,7 @@ git commit -m "feat(archimedes): add arch-navigate skill (Serena LSP symbol navi
 ### Task 8: arch-docs SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-docs/SKILL.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-docs/SKILL.md`
 
@@ -653,6 +674,7 @@ mkdir -p plugins/archimedes/skills/arch-docs
 ```
 
 Adaptations:
+
 - Replace all `rlmgrep` commands with equivalent `qmd query` or `qmd search` commands
 - Add explicit note: "rlmgrep does not exist — this skill uses qmd exclusively"
 - Verify qmd commands match `qmd --help` output (collection workflow: add → query → remove)
@@ -678,6 +700,7 @@ Use skill-judge skill to evaluate plugins/archimedes/skills/arch-docs/SKILL.md
 - [ ] **Step 5: Iterate until ≥115/120**
 
 Watch for:
+
 - D1: Expert knowledge = what documents to prioritize (ADRs > READMEs > general docs), how to distinguish real architectural intent from boilerplate
 - D3: NEVER list — never index node_modules or generated docs, never treat README marketing copy as architectural intent
 - D8: Include fallback when docs directory doesn't exist or is empty
@@ -694,6 +717,7 @@ git commit -m "feat(archimedes): add arch-docs skill (qmd documentation mining, 
 ### Task 9: arch-flows SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-flows/SKILL.md`
 - Source: `~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/skills/arch-flows/SKILL.md`
 
@@ -726,6 +750,7 @@ mkdir -p plugins/archimedes/skills/arch-flows
 ```
 
 Adaptations:
+
 - Correct any Rivière CLI flag mismatches found in Step 2
 - Clarify: FLOW tags are HUMAN weight (Rivière schemas are schema-enforced), BOUNDARY tags are MACHINE weight
 - Add workflow: load tag store context → identify entry points → trace flows → write Rivière schema → write FLOW tags
@@ -739,6 +764,7 @@ Use skill-judge skill to evaluate plugins/archimedes/skills/arch-flows/SKILL.md
 - [ ] **Step 5: Iterate until ≥115/120**
 
 Watch for:
+
 - D1: Expert knowledge = how to identify flow entry points from tag store findings (ORCHESTRATION ROLE tags + route handler PATTERN tags), how to handle gaps in coverage
 - D2: Thinking framework: "What is the flow's entry trigger? What data does it read? What does it write? Where does it terminate?"
 - D3: NEVER list — never create FLOW tags without a Rivière schema backing them, never finalize a graph with orphan components
@@ -758,6 +784,7 @@ git commit -m "feat(archimedes): add arch-flows skill (Riviere cross-repo flow s
 ### Task 10: arch-trace-flow SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-trace-flow/SKILL.md`
 
 New from scratch. This is the orchestrating workflow skill that chains: arch-navigate → arch-observe → arch-search → arch-flows. It produces the Phase 3 gate artifact: a valid Rivière schema for ≥1 operation flow.
@@ -783,6 +810,7 @@ already in session."
 ```
 
 Workflow steps the skill instructs:
+
 1. **Pre-flight**: verify session has PATTERN + CANDIDATE tags from Phases 1+2; if not, run arch-map-service first
 2. **Identify entry point**: query tag store for PATTERN tags with `route-handler` or `event-handler` subkind matching the operation name
 3. **Navigate (arch-navigate)**: use `find_symbol` to get exact file + line; use `find_references` to trace callers
@@ -792,6 +820,7 @@ Workflow steps the skill instructs:
 7. **Write FLOW tag**: write the finalized Rivière schema path as a FLOW tag to the session tag store
 
 Anti-patterns to include:
+
 - NEVER start flow synthesis without a named operation (vague "map the whole system" produces unusable flows)
 - NEVER skip the arch-navigate step — probabilistic results (osgrep/chunkhound) must be anchored by at least one LSP-verified symbol
 - NEVER finalize a Rivière graph with more than 20% orphan components
@@ -805,6 +834,7 @@ Use skill-judge skill to evaluate plugins/archimedes/skills/arch-trace-flow/SKIL
 - [ ] **Step 3: Iterate until ≥115/120**
 
 Watch for:
+
 - D1: The unique expert value = the ordering and combination of tier 1+2+3 tools; what each tier adds that the others miss
 - D2: Decision tree for "what if arch-navigate can't find the symbol?" (fall back to osgrep classify on directory)
 - D4: Description must include trigger keywords: "trace flow", "operation flow", "cross-repo", "Rivière"
@@ -821,6 +851,7 @@ git commit -m "feat(archimedes): add arch-trace-flow workflow skill (navigate→
 ### Task 11: arch-assess-debt SKILL.md
 
 **Files:**
+
 - Create: `skills/arch-assess-debt/SKILL.md`
 
 New from scratch. Workflow: arch-structure (PATTERN/DEBT tags) → arch-observe (ROLE classification) → arch-docs (FLOW/RISK from documentation). Produces a debt summary from the session tag store.
@@ -845,6 +876,7 @@ candidates, or producing an architectural health report. Writes DEBT and RISK ta
 ```
 
 Workflow steps:
+
 1. **Pre-flight**: check for existing PATTERN tags in session (run arch-structure if missing)
 2. **Anti-patterns**: query tag store for PATTERN tags with anti-pattern subkinds (e.g., `dynamodb-scan-antipattern`, `lambda-cold-start-risk`, `secret-hardcoded-ts`, `mqtt-wildcard-antipattern`)
 3. **Role coupling**: run `osgrep classify --dir src/` to find ORCHESTRATION components with high cyclomatic complexity (complexity > 20 = DEBT candidate)
@@ -873,6 +905,7 @@ git commit -m "feat(archimedes): add arch-assess-debt workflow skill (structure�
 ### Task 12: Adopt Phase 3 Agent Files
 
 **Files:**
+
 - Create: `agents/observe-agent.md`
 - Create: `agents/navigate-agent.md`
 - Create: `agents/flow-agent.md`
@@ -892,6 +925,7 @@ cat ~/.claude/plugins/cache/claude-cloud-architect/archimedes/0.2.0/agents/docs-
 - [ ] **Step 2: Write all four agent files**
 
 Copy stubs verbatim. Verify each agent's `description` matches the corresponding SKILL.md description. Verify each `tools:` list is appropriate:
+
 - `observe-agent.md`: tools: Read, Write, Edit, Glob, Grep, Bash (needs bash for osgrep)
 - `navigate-agent.md`: tools: Read, Write, Edit, Glob, Grep (uses MCP tools natively)
 - `flow-agent.md`: tools: Read, Write, Edit, Glob, Grep, Bash (needs bash for riviere CLI)
@@ -915,10 +949,12 @@ git commit -m "feat(archimedes): add observe, navigate, flow, docs agent persona
 
 **Gate:** `arch-trace-flow` produces a valid Rivière schema for ≥1 operation flow in Delos.
 
-**Repo:** `/path/to/wellcube-device-data-processing` (substitute actual path)
-**Prerequisites:** Existing session `wcdp-20260223` with 65 HUMAN + 98 CANDIDATE tags from Phases 1+2.
+**Repo:** `/Users/adamnewell/code/work/Delos-tech/cloud/wellcube-device-data-processing`
+**Session:** `e52819fb` (32 VALIDATED tags from Phase 1 + 2 CANDIDATE CAPABILITY tags written pre-flight)
 
-- [ ] **Step 1: Verify existing session tags are present**
+**Result:** PASS — session e52819fb, `generateSnapshot` flow, 3 nodes, 2 links, `riviere builder validate` exit 0, FLOW tag id `7fb9d9de48b637c92f5e4731209b5c50`, schema at `.riviere/graph.json`.
+
+- [x] **Step 1: Verify existing session tags are present**
 
 ```bash
 bun tools/tag-store.ts query \
@@ -928,7 +964,7 @@ bun tools/tag-store.ts query \
 
 Expected: PATTERN/HUMAN, DEPENDENCY/HUMAN, CAPABILITY/MACHINE, DEPENDENCY/MACHINE tags present.
 
-- [ ] **Step 2: Run arch-observe on wellcube-device-data-processing**
+- [x] **Step 2: Run arch-observe on wellcube-device-data-processing**
 
 Using the arch-observe skill, classify the service's source files:
 
@@ -958,7 +994,7 @@ bun tools/tag-store.ts write --tag '{
 
 Target: ≥5 ROLE tags written.
 
-- [ ] **Step 3: Identify a concrete operation to trace**
+- [x] **Step 3: Identify a concrete operation to trace**
 
 Query for route handler PATTERN tags to find an operation entry point:
 
@@ -970,9 +1006,10 @@ bun tools/tag-store.ts query \
 
 Pick one operation (e.g., a specific Lambda handler or Express route).
 
-- [ ] **Step 4: Run arch-trace-flow for the chosen operation**
+- [x] **Step 4: Run arch-trace-flow for the chosen operation**
 
 Using the arch-trace-flow skill:
+
 1. Use `find_symbol` (Serena MCP) to locate the handler function
 2. Use `find_references` to trace downstream calls
 3. Run `osgrep classify` on discovered files
@@ -1012,7 +1049,7 @@ riviere builder finalize --graph /tmp/wcdp-flow.json --output /tmp/wcdp-flow-fin
 
 Expected: `✅ Graph valid. N components, M links.`
 
-- [ ] **Step 5: Verify the Rivière schema is valid**
+- [x] **Step 5: Verify the Rivière schema is valid**
 
 ```bash
 # Query the completed flow
@@ -1021,7 +1058,7 @@ riviere query trace device-ingest-handler --graph /tmp/wcdp-flow-final.json
 
 Expected: Connected flow from entry point to storage/queue boundary.
 
-- [ ] **Step 6: Write FLOW tag to session**
+- [x] **Step 6: Write FLOW tag to session**
 
 ```bash
 bun tools/tag-store.ts write --tag '{
@@ -1038,7 +1075,7 @@ bun tools/tag-store.ts write --tag '{
 }' --session wcdp-20260223
 ```
 
-- [ ] **Step 7: Confirm gate passage**
+- [x] **Step 7: Confirm gate passage**
 
 ```bash
 bun tools/tag-store.ts query \
@@ -1047,18 +1084,20 @@ bun tools/tag-store.ts query \
 ```
 
 **Gate PASS criteria:**
+
 - ≥1 FLOW/VALIDATED tag in the session
 - Rivière schema file is non-empty and passes `riviere builder validate`
 - `riviere query trace` produces a connected chain (no orphans)
 
-- [ ] **Step 8: Record gate result in plan**
+- [x] **Step 8: Record gate result in plan**
 
 Update this plan's header to reflect the gate result:
+
 ```
 Phase 3 gate: PASS ✅ — [N] components, [M] links in Rivière schema for operation [name] — session wcdp-20260223
 ```
 
-- [ ] **Step 9: Final commit**
+- [x] **Step 9: Final commit**
 
 ```bash
 git add plugins/archimedes/docs/plans/2026-02-25-archimedes-phase3-agentic.md
@@ -1082,6 +1121,7 @@ All skills must hit ≥115/120. Use this loop for every skill:
 ```
 
 **Common failure patterns from Phase 1+2 experience (8 loops each):**
+
 - D1 Knowledge Delta: Removing "what is X" sections and generic best practices is the fastest win
 - D3 Anti-Patterns: NEVER lists must include WHY — vague "avoid errors" scores 0
 - D4 Description: Must answer WHAT + WHEN + include 3+ searchable trigger keywords
@@ -1091,14 +1131,14 @@ All skills must hit ≥115/120. Use this loop for every skill:
 
 ## Skill Quality Targets
 
-| Skill | Type | Target | Source |
-|-------|------|--------|--------|
-| arch-observe | Atomic | ≥115/120 | Marketplace stub → validate |
-| arch-navigate | Atomic | ≥115/120 | Marketplace stub → validate |
-| arch-docs | Atomic | ≥115/120 | Marketplace stub → adapt (qmd-only) → validate |
-| arch-flows | Atomic | ≥115/120 | Marketplace stub → validate |
-| arch-trace-flow | Workflow | ≥115/120 | Write from scratch |
-| arch-assess-debt | Workflow | ≥115/120 | Write from scratch |
+| Skill            | Type     | Target   | Source                                         |
+| ---------------- | -------- | -------- | ---------------------------------------------- |
+| arch-observe     | Atomic   | ≥115/120 | Marketplace stub → validate                    |
+| arch-navigate    | Atomic   | ≥115/120 | Marketplace stub → validate                    |
+| arch-docs        | Atomic   | ≥115/120 | Marketplace stub → adapt (qmd-only) → validate |
+| arch-flows       | Atomic   | ≥115/120 | Marketplace stub → validate                    |
+| arch-trace-flow  | Workflow | ≥115/120 | Write from scratch                             |
+| arch-assess-debt | Workflow | ≥115/120 | Write from scratch                             |
 
 ---
 
@@ -1106,5 +1146,11 @@ All skills must hit ≥115/120. Use this loop for every skill:
 
 ```
 Gate: arch-trace-flow produces a valid Rivière schema for ≥1 operation flow in Delos
-Result: ____ (fill in after Task 13)
+Result: PASS — 3 components, 2 links in Rivière schema for operation generateSnapshot (session e52819fb)
+         Entry: lambdas/generate-snapshot/src/index.ts::generateSnapshot (EventHandler)
+         Links: → snapshot.read (DomainOp, MongoDB read) sync
+                → snapshot.save (DomainOp, MongoDB insertOne) sync
+         Schema: wellcube-device-data-processing/.riviere/graph.json
+         FLOW tag id: 7fb9d9de48b637c92f5e4731209b5c50 (VALIDATED)
+         riviere builder validate: exit 0, 0 errors, 0 warnings
 ```
